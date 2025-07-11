@@ -20,74 +20,103 @@ export function CodeModal({ isOpen, onClose, svgContent, config, fileName }: Cod
   const componentName = fileName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]/g, '');
   const capitalizedName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
 
-  const generateReactComponent = () => {
-    // SVG에서 고정 색상을 제거하고 동적으로 적용할 수 있게 처리
-    let processedSVG = svgContent
-      .replace(/fill="currentColor"/g, `fill={color}`)
-      .replace(/stroke="currentColor"/g, `stroke={color}`)
-      .replace(/fill="#[a-fA-F0-9]{6}"/g, `fill={color}`)
-      .replace(/fill="#[a-fA-F0-9]{3}"/g, `fill={color}`);
+  const generateHoverFunction = () => {
+    const baseTransform = `rotate(${config.rotation}deg)`;
     
-    // SVG 태그에 기본 fill 속성이 없으면 추가
-    if (!processedSVG.includes('fill=') && !processedSVG.includes('foreignObject') && !processedSVG.includes('<image')) {
-      processedSVG = processedSVG.replace(/<svg/, `<svg fill={color}`);
+    if (config.hoverEffect === 'scale') {
+      return `const getHoverStyle = () => {
+    if (!isHovered) return {};
+    
+    const baseTransform = \`${baseTransform}\`;
+    
+    return { transform: \`scale(1.1) \${baseTransform}\` };
+  };`;
+    } else if (config.hoverEffect === 'rotate') {
+      return `const getHoverStyle = () => {
+    if (!isHovered) return {};
+    
+    return { animation: 'hover-rotate 1s linear infinite' };
+  };`;
+    } else if (config.hoverEffect === 'opacity') {
+      return `const getHoverStyle = () => {
+    if (!isHovered) return {};
+    
+    const baseTransform = \`${baseTransform}\`;
+    
+    return { 
+      opacity: 0.8,
+      transform: baseTransform 
+    };
+  };`;
     }
+    return '';
+  };
 
-    const getAnimationClass = () => {
-      switch (config.animation) {
-        case 'spin': return 'animate-spin';
-        case 'pulse': return 'animate-pulse';
-        case 'scale': return 'animate-scale';
-        case 'bounce': return 'animate-bounce';
-        default: return '';
-      }
-    };
+  const generateReactComponent = () => {
+    // 간단한 SVG 처리
+    let processedSVG = svgContent
+      .replace(/<\?xml[^>]*\?>/g, '')
+      .replace(/<!--[^>]*-->/g, '')
+      .replace(/stroke-width/g, 'strokeWidth')
+      .replace(/fill="[^"]*"/g, `fill="${config.fillColor}"`)
+      .replace(/stroke="[^"]*"/g, `stroke="${config.color}"`)
+      .replace(/width="[^"]*"/g, 'width="100%"')
+      .replace(/height="[^"]*"/g, 'height="100%"')
+      .trim();
 
-    const getHoverEffectClass = () => {
-      switch (config.hoverEffect) {
-        case 'scale': return `hover:scale-[${config.hoverScale || 1.1}]`;
-        case 'rotate': return `hover:rotate-[${config.hoverRotation || 15}deg]`;
-        case 'opacity': return `hover:opacity-[${config.hoverOpacity || 0.8}]`;
-        case 'color': return 'hover:brightness-110';
-        default: return '';
-      }
-    };
+    return `import React${config.hoverEffect !== 'none' ? ', { useState }' : ''} from 'react';
 
-    const classes = [
-      'transition-all duration-300 ease-in-out',
-      getAnimationClass(),
-      getHoverEffectClass()
-    ].filter(Boolean).join(' ');
+${config.hoverEffect === 'rotate' ? `
+// CSS for hover-rotate animation
+const hoverRotateStyle = \`
+  @keyframes hover-rotate {
+    from { transform: rotate(${config.rotation}deg); }
+    to { transform: rotate(${config.rotation + 360}deg); }
+  }
+\`;
 
-    return `import React from 'react';
-
-interface ${capitalizedName}Props {
-  size?: number;
-  color?: string;
-  rotation?: number;
-  opacity?: number;
-  className?: string;
+// Insert the style into the document head
+if (typeof document !== 'undefined') {
+  const existingStyle = document.getElementById('hover-rotate-style');
+  if (existingStyle) {
+    existingStyle.textContent = hoverRotateStyle;
+  } else {
+    const style = document.createElement('style');
+    style.id = 'hover-rotate-style';
+    style.textContent = hoverRotateStyle;
+    document.head.appendChild(style);
+  }
 }
+` : ''}
+export function ${capitalizedName}() {
+  ${config.hoverEffect !== 'none' ? 'const [isHovered, setIsHovered] = useState(false);' : ''}
 
-export function ${capitalizedName}({ 
-  size = ${config.size},
-  color = "${config.color}",
-  rotation = ${config.rotation},
-  opacity = ${config.opacity},
-  className = ""
-}: ${capitalizedName}Props) {
+  ${config.hoverEffect !== 'none' ? generateHoverFunction() : ''}
+
+  const baseStyle = {
+    // Size property
+    width: '${config.size}px',
+    height: '${config.size}px',
+    
+    // Rotation property
+    transform: 'rotate(${config.rotation}deg)',
+    
+    // Opacity property
+    opacity: ${config.opacity},
+    
+    // Transition for smooth hover effects
+    transition: 'all 0.3s ease-in-out',
+    
+    // Animation property
+    ${config.animation !== 'none' ? `animation: '${config.animation} 2s infinite'` : ''}
+  };
+
   return (
     <div
-      className={\`${classes} \${className}\`}
+      ${config.hoverEffect !== 'none' ? `onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}` : ''}
       style={{
-        width: \`\${size}px\`,
-        height: \`\${size}px\`,
-        transform: \`rotate(\${rotation}deg)\`,
-        opacity: opacity,
-        ${config.hoverEffect === 'color' && config.hoverColor ? `
-        ':hover': {
-          fill: '${config.hoverColor}'
-        }` : ''}
+        ...baseStyle${config.hoverEffect !== 'none' ? ',\n        ...getHoverStyle()' : ''}
       }}
     >
       ${processedSVG}
@@ -97,81 +126,170 @@ export function ${capitalizedName}({
   };
 
   const generateInlineSVG = () => {
-    // SVG에서 동적 색상 적용
+    // JSX 형식으로 SVG 처리
     let processedSVG = svgContent
-      .replace(/fill="currentColor"/g, `fill="${config.color}"`)
-      .replace(/stroke="currentColor"/g, `stroke="${config.color}"`)
-      .replace(/fill="#[a-fA-F0-9]{6}"/g, `fill="${config.color}"`)
-      .replace(/fill="#[a-fA-F0-9]{3}"/g, `fill="${config.color}"`);
+      .replace(/<\?xml[^>]*\?>/g, '')
+      .replace(/<!--[^>]*-->/g, '')
+      .trim();
+
+    // JSX 속성 변환 (React에서 요구하는 camelCase)
+    processedSVG = processedSVG.replace(/stroke-width="([^"]*)"/g, `strokeWidth="$1"`);
+    processedSVG = processedSVG.replace(/stroke-linecap="([^"]*)"/g, `strokeLinecap="$1"`);
+    processedSVG = processedSVG.replace(/stroke-linejoin="([^"]*)"/g, `strokeLinejoin="$1"`);
+    processedSVG = processedSVG.replace(/stroke-dasharray="([^"]*)"/g, `strokeDasharray="$1"`);
+    processedSVG = processedSVG.replace(/stroke-dashoffset="([^"]*)"/g, `strokeDashoffset="$1"`);
+    processedSVG = processedSVG.replace(/fill-rule="([^"]*)"/g, `fillRule="$1"`);
+    processedSVG = processedSVG.replace(/clip-rule="([^"]*)"/g, `clipRule="$1"`);
+    processedSVG = processedSVG.replace(/xml-space="([^"]*)"/g, `xmlSpace="$1"`);
     
-    // SVG 태그에 기본 fill 속성이 없으면 추가
+    // currentColor를 실제 색상으로 변경
+    processedSVG = processedSVG.replace(/fill="currentColor"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="currentColor"/g, `stroke="${config.color}"`);
+    
+    // 색상 코드를 새 색상으로 교체
+    processedSVG = processedSVG.replace(/fill="#[a-fA-F0-9]{6}"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#[a-fA-F0-9]{3}"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="#[a-fA-F0-9]{6}"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#[a-fA-F0-9]{3}"/g, `stroke="${config.color}"`);
+    
+    // 검은색과 흰색 등 색상 이름도 교체
+    processedSVG = processedSVG.replace(/fill="black"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="white"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#000000"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#000"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#ffffff"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#fff"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="black"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="white"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#000000"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#000"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#ffffff"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#fff"/g, `stroke="${config.color}"`);
+    
+    // 기존의 다른 색상 이름들도 교체 (none, transparent, url 제외)
+    processedSVG = processedSVG.replace(/fill="(?!none|transparent|url\()[^"]*"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="(?!none|transparent|url\()[^"]*"/g, `stroke="${config.color}"`);
+    
+    // style 속성 내의 fill과 stroke도 교체
+    processedSVG = processedSVG.replace(/style="([^"]*)"/g, (match, styleContent) => {
+      let newStyle = styleContent;
+      newStyle = newStyle.replace(/fill:\\s*[^;]*(;|$)/g, `fill:${config.fillColor}$1`);
+      newStyle = newStyle.replace(/stroke:\\s*[^;]*(;|$)/g, `stroke:${config.color}$1`);
+      return `style="${newStyle}"`;
+    });
+    
+    // SVG 요소에 기본 색상 적용
     if (!processedSVG.includes('fill=') && !processedSVG.includes('foreignObject') && !processedSVG.includes('<image')) {
-      processedSVG = processedSVG.replace(/<svg/, `<svg fill="${config.color}"`);
+      processedSVG = processedSVG.replace(/<svg/, `<svg fill="${config.fillColor}"`);
+    }
+    
+    // 이미 SVG 태그에 fill이나 stroke가 있으면 업데이트
+    processedSVG = processedSVG.replace(/<svg([^>]*)\sfill="[^"]*"([^>]*)>/i, `<svg$1 fill="${config.fillColor}"$2>`);
+    processedSVG = processedSVG.replace(/<svg([^>]*)\sstroke="[^"]*"([^>]*)>/i, `<svg$1 stroke="${config.color}"$2>`);
+    
+    // CSS 내부 스타일도 처리
+    processedSVG = processedSVG.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, (match, cssContent) => {
+      let newCSS = cssContent;
+      newCSS = newCSS.replace(/fill:\s*[^;}]*(;|})/g, `fill:${config.fillColor}$1`);
+      newCSS = newCSS.replace(/stroke:\s*[^;}]*(;|})/g, `stroke:${config.color}$1`);
+      return `<style>${newCSS}</style>`;
+    });
+    
+    // 크기를 100%로 설정
+    processedSVG = processedSVG.replace(/width="[^"]*"/g, 'width="100%"');
+    processedSVG = processedSVG.replace(/height="[^"]*"/g, 'height="100%"');
+
+    // Generate hover handlers only if hover effect is enabled
+    let hoverHandlers = '';
+    const baseTransform = `rotate(${config.rotation}deg)`;
+    
+    if (config.hoverEffect === 'scale') {
+      hoverHandlers = `onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1) ${baseTransform}'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = '${baseTransform}'}`;
+    } else if (config.hoverEffect === 'rotate') {
+      hoverHandlers = `onMouseEnter={(e) => e.currentTarget.style.transform = 'rotate(${config.rotation + 360}deg)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = '${baseTransform}'}`;
+    } else if (config.hoverEffect === 'opacity') {
+      hoverHandlers = `onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+        onMouseLeave={(e) => e.currentTarget.style.opacity = '${config.opacity}'}`;
     }
 
-    const getAnimationClass = () => {
-      switch (config.animation) {
-        case 'spin': return 'animate-spin';
-        case 'pulse': return 'animate-pulse';
-        case 'scale': return 'animate-scale';
-        case 'bounce': return 'animate-bounce';
-        default: return '';
-      }
-    };
-
-    const getHoverEffectClass = () => {
-      switch (config.hoverEffect) {
-        case 'scale': return `hover:scale-[${config.hoverScale || 1.1}]`;
-        case 'rotate': return `hover:rotate-[${config.hoverRotation || 15}deg]`;
-        case 'opacity': return `hover:opacity-[${config.hoverOpacity || 0.8}]`;
-        case 'color': return 'hover:brightness-110';
-        default: return '';
-      }
-    };
-
-    const classes = [
-      'transition-all duration-300 ease-in-out',
-      getAnimationClass(),
-      getHoverEffectClass()
-    ].filter(Boolean).join(' ');
-
     return `<div
-  className="${classes}"
-  style={{
-    width: '${config.size}px',
-    height: '${config.size}px',
-    transform: 'rotate(${config.rotation}deg)',
-    opacity: ${config.opacity}
-  }}
->
-  ${processedSVG}
-</div>`;
+        style={{
+          // Size property
+          width: '${config.size}px',
+          height: '${config.size}px',
+          
+          // Rotation property  
+          transform: '${baseTransform}',
+          
+          // Opacity property
+          opacity: ${config.opacity},
+          
+          // Transition for smooth hover effects
+          transition: 'all 1.5s ease-in-out',
+          
+          // Animation property
+          ${config.animation !== 'none' ? `animation: '${config.animation} 2s infinite'` : ''}
+        }}
+        ${hoverHandlers}
+      >
+        ${processedSVG}
+      </div>`;
   };
 
   const generateCSS = () => {
-    const animationDuration = config.animationDuration || 2;
-    const animationSpeed = config.animationSpeed || 5;
-    const actualDuration = animationDuration / animationSpeed;
+    // 간단한 SVG 처리
+    let processedSVG = svgContent
+      .replace(/<\?xml[^>]*\?>/g, '')
+      .replace(/<!--[^>]*-->/g, '')
+      .replace(/fill="[^"]*"/g, `fill="${config.fillColor}"`)
+      .replace(/stroke="[^"]*"/g, `stroke="${config.color}"`)
+      .replace(/width="[^"]*"/g, 'width="100%"')
+      .replace(/height="[^"]*"/g, 'height="100%"')
+      .trim();
+
+    const className = componentName.toLowerCase();
+    const baseTransform = `rotate(${config.rotation}deg)`;
     
-    return `.${componentName.toLowerCase()} {
+    // Generate hover CSS only if hover effect is enabled
+    let hoverCSS = '';
+    if (config.hoverEffect === 'scale') {
+      hoverCSS = `.${className}:hover {
+  transform: scale(1.1) ${baseTransform};
+}`;
+    } else if (config.hoverEffect === 'rotate') {
+      hoverCSS = `.${className}:hover {
+  animation: hover-rotate 1s linear infinite;
+}`;
+    } else if (config.hoverEffect === 'opacity') {
+      hoverCSS = `.${className}:hover {
+  opacity: 0.8;
+  transform: ${baseTransform};
+}`;
+    }
+
+    return `.${className} {
+  /* Size property */
   width: ${config.size}px;
   height: ${config.size}px;
-  transform: rotate(${config.rotation}deg);
+  
+  /* Rotation property */
+  transform: ${baseTransform};
+  
+  /* Opacity property */
   opacity: ${config.opacity};
-  transition: all ${config.hoverDuration || 0.3}s ease-in-out;
-  ${config.animation === 'spin' ? `animation: spin ${actualDuration}s linear infinite;` : ''}
-  ${config.animation === 'pulse' ? `animation: pulse ${actualDuration}s ease-in-out infinite;` : ''}
-  ${config.animation === 'scale' ? `animation: scale ${actualDuration}s ease-in-out infinite;` : ''}
-  ${config.animation === 'bounce' ? `animation: bounce ${actualDuration}s infinite;` : ''}
+  
+  /* Transition for smooth hover effects */
+  transition: all 0.3s ease-in-out;
+  
+  /* Animation property */
+  ${config.animation !== 'none' ? `animation: ${config.animation} 2s infinite;` : ''}
 }
 
-.${componentName.toLowerCase()}:hover {
-  ${config.hoverEffect === 'scale' ? `transform: scale(${config.hoverScale || 1.1}) rotate(${config.rotation}deg);` : ''}
-  ${config.hoverEffect === 'rotate' ? `transform: rotate(${config.rotation + (config.hoverRotation || 15)}deg);` : ''}
-  ${config.hoverEffect === 'opacity' ? `opacity: ${config.hoverOpacity || 0.8};` : ''}
-  ${config.hoverEffect === 'color' && config.hoverColor ? `fill: ${config.hoverColor};` : ''}
-}
+${hoverCSS}
 
+/* Animation keyframes */
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -191,7 +309,17 @@ export function ${capitalizedName}({
   0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
   40%, 43% { transform: translateY(-30px); }
   70% { transform: translateY(-15px); }
-}`;
+}
+
+${config.hoverEffect === 'rotate' ? `@keyframes hover-rotate {
+  from { transform: rotate(${config.rotation}deg); }
+  to { transform: rotate(${config.rotation + 360}deg); }
+}` : ''}
+
+/* HTML */
+<div class="${className}">
+  ${processedSVG}
+</div>`;
   };
 
   const copyToClipboard = async (text: string, section: string) => {

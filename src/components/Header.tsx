@@ -1,5 +1,6 @@
 import { Code2, Github, Twitter, Sun, Moon, Download, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { Cloudssvgrepocom } from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
@@ -7,21 +8,27 @@ interface HeaderProps {
   onDownloadGIF: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
+  onOpenExportTest?: () => void;
 }
 
-export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme }: HeaderProps) {
+export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme, onOpenExportTest }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className={`w-8 h-8 ${isDarkMode ? 'bg-white' : 'bg-black'} rounded-lg flex items-center justify-center`}>
-            <Code2 className={`w-5 h-5 ${isDarkMode ? 'text-black' : 'text-white'}`} />
+        <button
+          onClick={() => window.location.href = '/'}
+          className="cursor-pointer"
+        >
+          <div className="flex items-center space-x-2">
+            <div className={`w-8 h-8 ${isDarkMode ? 'bg-white' : 'bg-black'} rounded-lg flex items-center justify-center`}>
+              <Code2 className={`w-5 h-5 ${isDarkMode ? 'text-black' : 'text-white'}`} />
+            </div>
+            <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>SVG Studio</h1>
           </div>
-          <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>SVG Studio</h1>
-        </div>
-        
+        </button>
+
         {/* Center buttons */}
         <div className="flex items-center space-x-4">
           <button
@@ -31,7 +38,22 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
             <Code2 className="w-4 h-4" />
             <span>Export Code</span>
           </button>
-          
+
+          <Cloudssvgrepocom />
+
+
+
+          {/* Export Test button
+          {onOpenExportTest && (
+            <button
+              onClick={onOpenExportTest}
+              className={`px-4 py-2 ${isDarkMode ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-green-600 text-white hover:bg-green-700'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
+            >
+              <Code2 className="w-4 h-4" />
+              <span>Export Test</span>
+            </button>
+          )} */}
+
           {/* Download dropdown */}
           <div className="relative">
             <button
@@ -42,7 +64,7 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
               <span>Download</span>
               <ChevronDown className="w-4 h-4" />
             </button>
-            
+
             {isDropdownOpen && (
               <div className={`absolute top-full right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border rounded-lg shadow-lg z-10`}>
                 <button
@@ -68,7 +90,7 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
               </div>
             )}
           </div>
-          
+
           {/* Theme Toggle */}
           <button
             onClick={onToggleTheme}
@@ -78,7 +100,7 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
             {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <a

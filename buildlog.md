@@ -1,83 +1,85 @@
-2025-07-11T13:18:33.04939Z	Cloning repository...
-2025-07-11T13:18:34.036533Z	From https://github.com/minsun1231/svgconverter
-2025-07-11T13:18:34.036997Z	 * branch            82e162bd2c62550710eee9bf4832515160a96d96 -> FETCH_HEAD
-2025-07-11T13:18:34.037092Z	
-2025-07-11T13:18:34.067102Z	HEAD is now at 82e162b 20250711_v1
-2025-07-11T13:18:34.067616Z	
-2025-07-11T13:18:34.146152Z	
-2025-07-11T13:18:34.146649Z	Using v2 root directory strategy
-2025-07-11T13:18:34.167228Z	Success: Finished cloning repository files
-2025-07-11T13:18:35.900504Z	Checking for configuration in a Wrangler configuration file (BETA)
-2025-07-11T13:18:35.90127Z	
-2025-07-11T13:18:37.010134Z	No wrangler.toml file found. Continuing.
-2025-07-11T13:18:37.078487Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
-2025-07-11T13:18:37.079267Z	Installing project dependencies: npm clean-install --progress=false
-2025-07-11T13:18:40.477779Z	npm warn deprecated path-match@1.2.4: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
-2025-07-11T13:18:40.537736Z	npm warn deprecated phin@2.9.3: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-2025-07-11T13:18:55.691635Z	
-2025-07-11T13:18:55.691962Z	added 741 packages, and audited 742 packages in 18s
-2025-07-11T13:18:55.692136Z	
-2025-07-11T13:18:55.692262Z	184 packages are looking for funding
-2025-07-11T13:18:55.692391Z	  run `npm fund` for details
-2025-07-11T13:18:55.719911Z	
-2025-07-11T13:18:55.720208Z	15 vulnerabilities (1 low, 10 moderate, 4 high)
-2025-07-11T13:18:55.720368Z	
-2025-07-11T13:18:55.720489Z	To address issues that do not require attention, run:
-2025-07-11T13:18:55.720597Z	  npm audit fix
-2025-07-11T13:18:55.720703Z	
-2025-07-11T13:18:55.720912Z	Some issues need review, and may require choosing
-2025-07-11T13:18:55.721043Z	a different dependency.
-2025-07-11T13:18:55.721169Z	
-2025-07-11T13:18:55.721315Z	Run `npm audit` for details.
-2025-07-11T13:18:55.751995Z	Executing user command: npm run build
-2025-07-11T13:18:56.141949Z	
-2025-07-11T13:18:56.142251Z	> svgconverter@0.1.0 build
-2025-07-11T13:18:56.142476Z	> next build
-2025-07-11T13:18:56.142614Z	
-2025-07-11T13:18:56.893751Z	⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
-2025-07-11T13:18:56.898077Z	Attention: Next.js now collects completely anonymous telemetry regarding usage.
-2025-07-11T13:18:56.898266Z	This information is used to shape Next.js' roadmap and prioritize features.
-2025-07-11T13:18:56.898445Z	You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-2025-07-11T13:18:56.898625Z	https://nextjs.org/telemetry
-2025-07-11T13:18:56.898765Z	
-2025-07-11T13:18:57.003549Z	   ▲ Next.js 15.3.5
-2025-07-11T13:18:57.003818Z	
-2025-07-11T13:18:57.022035Z	   Creating an optimized production build ...
-2025-07-11T13:19:03.934074Z	
-2025-07-11T13:19:03.934392Z	
-2025-07-11T13:19:03.934543Z	Retrying 1/3...
-2025-07-11T13:19:03.93516Z	
-2025-07-11T13:19:03.935368Z	
-2025-07-11T13:19:03.935505Z	Retrying 1/3...
-2025-07-11T13:19:05.658574Z	 ✓ Compiled successfully in 4.0s
-2025-07-11T13:19:05.664314Z	   Linting and checking validity of types ...
-2025-07-11T13:19:08.710043Z	   Collecting page data ...
-2025-07-11T13:19:10.285551Z	   Generating static pages (0/5) ...
-2025-07-11T13:19:10.980341Z	   Generating static pages (1/5) 
-2025-07-11T13:19:10.980582Z	   Generating static pages (2/5) 
-2025-07-11T13:19:10.981588Z	   Generating static pages (3/5) 
-2025-07-11T13:19:10.981704Z	 ✓ Generating static pages (5/5)
-2025-07-11T13:19:11.306376Z	   Finalizing page optimization ...
-2025-07-11T13:19:11.306715Z	   Collecting build traces ...
-2025-07-11T13:19:17.484784Z	   Exporting (0/3) ...
-2025-07-11T13:19:18.01955Z	 ✓ Exporting (3/3)
-2025-07-11T13:19:18.03383Z	
-2025-07-11T13:19:18.036749Z	Route (app)                                 Size  First Load JS
-2025-07-11T13:19:18.037225Z	┌ ○ /                                    31.9 kB         133 kB
-2025-07-11T13:19:18.037408Z	└ ○ /_not-found                            977 B         102 kB
-2025-07-11T13:19:18.037545Z	+ First Load JS shared by all             101 kB
-2025-07-11T13:19:18.037631Z	  ├ chunks/4bd1b696-ff9d18f87f13a0de.js  53.2 kB
-2025-07-11T13:19:18.037717Z	  ├ chunks/684-b4e4944b7740d19e.js       46.1 kB
-2025-07-11T13:19:18.037799Z	  └ other shared chunks (total)           1.9 kB
-2025-07-11T13:19:18.037879Z	
-2025-07-11T13:19:18.037957Z	
-2025-07-11T13:19:18.038316Z	○  (Static)  prerendered as static content
-2025-07-11T13:19:18.038473Z	
-2025-07-11T13:19:18.08659Z	Finished
-2025-07-11T13:19:19.017577Z	Checking for configuration in a Wrangler configuration file (BETA)
-2025-07-11T13:19:19.018128Z	
-2025-07-11T13:19:20.128017Z	No wrangler.toml file found. Continuing.
-2025-07-11T13:19:20.128934Z	Note: No functions dir at /functions found. Skipping.
-2025-07-11T13:19:20.129124Z	Validating asset output directory
-2025-07-11T13:19:20.129325Z	Error: Output directory ".vercel/output/static" not found.
-2025-07-11T13:19:21.064194Z	Failed: build output directory not found
+2025-07-11T13:21:59.420008051Z	Cloning repository...
+2025-07-11T13:22:00.405433861Z	From https://github.com/minsun1231/svgconverter
+2025-07-11T13:22:00.405672736Z	 * branch            11bae414aa3c03d300adb6e1ae42eefbb6628209 -> FETCH_HEAD
+2025-07-11T13:22:00.405773469Z	
+2025-07-11T13:22:00.438257987Z	HEAD is now at 11bae41 20250711_v1
+2025-07-11T13:22:00.438585816Z	
+2025-07-11T13:22:00.519883437Z	
+2025-07-11T13:22:00.520199479Z	Using v2 root directory strategy
+2025-07-11T13:22:00.540885833Z	Success: Finished cloning repository files
+2025-07-11T13:22:02.216592476Z	Checking for configuration in a Wrangler configuration file (BETA)
+2025-07-11T13:22:02.216891115Z	
+2025-07-11T13:22:03.312866592Z	No wrangler.toml file found. Continuing.
+2025-07-11T13:22:03.38040664Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
+2025-07-11T13:22:03.380683529Z	Installing project dependencies: npm clean-install --progress=false
+2025-07-11T13:22:06.829588614Z	npm warn deprecated path-match@1.2.4: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+2025-07-11T13:22:06.892630396Z	npm warn deprecated phin@2.9.3: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2025-07-11T13:22:21.849088581Z	
+2025-07-11T13:22:21.849174516Z	added 741 packages, and audited 742 packages in 18s
+2025-07-11T13:22:21.849640459Z	
+2025-07-11T13:22:21.84974892Z	184 packages are looking for funding
+2025-07-11T13:22:21.850363823Z	  run `npm fund` for details
+2025-07-11T13:22:21.878096789Z	
+2025-07-11T13:22:21.878467279Z	15 vulnerabilities (1 low, 10 moderate, 4 high)
+2025-07-11T13:22:21.878637669Z	
+2025-07-11T13:22:21.878651132Z	To address issues that do not require attention, run:
+2025-07-11T13:22:21.878790801Z	  npm audit fix
+2025-07-11T13:22:21.878800773Z	
+2025-07-11T13:22:21.878898521Z	Some issues need review, and may require choosing
+2025-07-11T13:22:21.878962507Z	a different dependency.
+2025-07-11T13:22:21.879053659Z	
+2025-07-11T13:22:21.87915511Z	Run `npm audit` for details.
+2025-07-11T13:22:21.911418429Z	Executing user command: npm run build
+2025-07-11T13:22:22.340556891Z	
+2025-07-11T13:22:22.340756291Z	> svgconverter@0.1.0 build
+2025-07-11T13:22:22.340949074Z	> next build
+2025-07-11T13:22:22.341116773Z	
+2025-07-11T13:22:23.105962475Z	⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2025-07-11T13:22:23.109992127Z	Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-07-11T13:22:23.110321333Z	This information is used to shape Next.js' roadmap and prioritize features.
+2025-07-11T13:22:23.110351995Z	You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-11T13:22:23.110625318Z	https://nextjs.org/telemetry
+2025-07-11T13:22:23.110818659Z	
+2025-07-11T13:22:23.172240003Z	   ▲ Next.js 15.3.5
+2025-07-11T13:22:23.172452874Z	
+2025-07-11T13:22:23.227682921Z	   Creating an optimized production build ...
+2025-07-11T13:22:31.90248043Z	 ✓ Compiled successfully in 4.0s
+2025-07-11T13:22:31.990207105Z	   Linting and checking validity of types ...
+2025-07-11T13:22:35.10732408Z	   Collecting page data ...
+2025-07-11T13:22:36.693801668Z	   Generating static pages (0/5) ...
+2025-07-11T13:22:37.390196766Z	   Generating static pages (1/5) 
+2025-07-11T13:22:37.390495616Z	   Generating static pages (2/5) 
+2025-07-11T13:22:37.390516224Z	   Generating static pages (3/5) 
+2025-07-11T13:22:37.391294593Z	 ✓ Generating static pages (5/5)
+2025-07-11T13:22:37.735956208Z	   Finalizing page optimization ...
+2025-07-11T13:22:37.736221959Z	   Collecting build traces ...
+2025-07-11T13:22:43.796349091Z	   Exporting (0/3) ...
+2025-07-11T13:22:44.332989774Z	 ✓ Exporting (3/3)
+2025-07-11T13:22:44.368700658Z	
+2025-07-11T13:22:44.373272238Z	Route (app)                                 Size  First Load JS
+2025-07-11T13:22:44.373295928Z	┌ ○ /                                    31.9 kB         133 kB
+2025-07-11T13:22:44.373300412Z	└ ○ /_not-found                            977 B         102 kB
+2025-07-11T13:22:44.373304414Z	+ First Load JS shared by all             101 kB
+2025-07-11T13:22:44.373309633Z	  ├ chunks/4bd1b696-ff9d18f87f13a0de.js  53.2 kB
+2025-07-11T13:22:44.373314404Z	  ├ chunks/684-b4e4944b7740d19e.js       46.1 kB
+2025-07-11T13:22:44.373319025Z	  └ other shared chunks (total)           1.9 kB
+2025-07-11T13:22:44.373324523Z	
+2025-07-11T13:22:44.373329633Z	
+2025-07-11T13:22:44.373334329Z	○  (Static)  prerendered as static content
+2025-07-11T13:22:44.373338706Z	
+2025-07-11T13:22:44.425949612Z	Finished
+2025-07-11T13:22:45.329114937Z	Checking for configuration in a Wrangler configuration file (BETA)
+2025-07-11T13:22:45.329490084Z	
+2025-07-11T13:22:46.430012322Z	No wrangler.toml file found. Continuing.
+2025-07-11T13:22:46.430049246Z	Note: No functions dir at /functions found. Skipping.
+2025-07-11T13:22:46.430055185Z	Validating asset output directory
+2025-07-11T13:22:49.223271739Z	Deploying your site to Cloudflare's global network...
+2025-07-11T13:22:51.218251379Z	Uploading... (29/35)
+2025-07-11T13:22:51.757732329Z	Uploading... (31/35)
+2025-07-11T13:22:51.909663876Z	Uploading... (33/35)
+2025-07-11T13:22:51.987360033Z	Uploading... (35/35)
+2025-07-11T13:22:51.987421249Z	✨ Success! Uploaded 6 files (29 already uploaded) (1.05 sec)
+2025-07-11T13:22:51.98765095Z	
+2025-07-11T13:22:52.276729342Z	✨ Upload complete!
+2025-07-11T13:22:55.360157Z	Success: Assets published!
+2025-07-11T13:22:56.584051Z	Success: Your site was deployed!

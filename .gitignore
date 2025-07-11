@@ -41,6 +41,7 @@ yarn-error.log*
 next-env.d.ts
 gemini.md
 buildlog.md
+errorlog.md
 
 # github push
 github push_svgconverter.txt

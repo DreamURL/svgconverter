@@ -6,45 +6,40 @@ import { UploadPanel } from '@/components/UploadPanel';
 import { PreviewPanel } from '@/components/PreviewPanel';
 import { ControlPanel } from '@/components/ControlPanel';
 import { CodeModal } from '@/components/CodeModal';
+import { ExportTestModal } from '@/components/ExportTestModal';
 
 export interface SVGConfig {
-  color: string;
+  // Color settings
+  color: string; // stroke color
+  fillColor: string; // fill color
+  
+  // Transform settings (independent)
   size: number;
   rotation: number;
   opacity: number;
+  
   // Animation settings
   animation: 'none' | 'spin' | 'pulse' | 'scale' | 'bounce';
-  animationSpeed: number; // 1-10 (speed multiplier)
-  animationDuration: number; // custom duration in seconds
+  
   // Hover effects
-  hoverEffect: 'none' | 'scale' | 'color' | 'rotate' | 'opacity';
-  hoverColor?: string;
-  hoverScale?: number;
-  hoverRotation?: number;
-  hoverOpacity?: number;
-  hoverDuration?: number; // hover transition duration
+  hoverEffect: 'none' | 'scale' | 'rotate' | 'opacity';
 }
 
 export default function Home() {
   const [svgContent, setSvgContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [config, setConfig] = useState<SVGConfig>({
     color: '#ffffff',
+    fillColor: '#000000',
     size: 100,
     rotation: 0,
     opacity: 1,
     animation: 'none',
-    animationSpeed: 5,
-    animationDuration: 2,
     hoverEffect: 'none',
-    hoverColor: '#f0f0f0',
-    hoverScale: 1.1,
-    hoverRotation: 15,
-    hoverOpacity: 0.8,
-    hoverDuration: 0.3,
   });
   const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
+  const [isExportTestModalOpen, setIsExportTestModalOpen] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
 
   const handleDownloadSVG = () => {
@@ -260,6 +255,7 @@ export default function Home() {
         onDownloadGIF={handleDownloadGIF}
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+        onOpenExportTest={() => setIsExportTestModalOpen(true)}
       />
       
       <main className="pt-16">
@@ -299,18 +295,12 @@ export default function Home() {
                   setFileName('');
                   setConfig({
                     color: '#ffffff',
+                    fillColor: '#000000',
                     size: 100,
                     rotation: 0,
                     opacity: 1,
                     animation: 'none',
-                    animationSpeed: 5,
-                    animationDuration: 2,
                     hoverEffect: 'none',
-                    hoverColor: '#f0f0f0',
-                    hoverScale: 1.1,
-                    hoverRotation: 15,
-                    hoverOpacity: 0.8,
-                    hoverDuration: 0.3,
                   });
                 }}
                 isDarkMode={isDarkMode}
@@ -335,6 +325,12 @@ export default function Home() {
         svgContent={svgContent}
         config={config}
         fileName={fileName}
+      />
+      <ExportTestModal
+        isOpen={isExportTestModalOpen}
+        onClose={() => setIsExportTestModalOpen(false)}
+        isDarkMode={isDarkMode}
+        onToggleTheme={() => setIsDarkMode(!isDarkMode)}
       />
     </div>
   );

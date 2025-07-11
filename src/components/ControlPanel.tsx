@@ -1,7 +1,7 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
-import { RotateCcw, Palette, Move, Zap, MousePointer, ChevronDown, ChevronUp } from 'lucide-react';
+import { RotateCcw, Palette, Move, Zap, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface ControlPanelProps {
@@ -140,34 +140,63 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
           <Palette className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-          <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Color</label>
+          <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Colors</label>
         </div>
-        <div className="flex items-center space-x-3">
-          <input
-            type="color"
-            value={config.color}
-            onChange={(e) => handleChange('color', e.target.value)}
-            className="w-10 h-10 rounded border border-gray-600 cursor-pointer"
-          />
-          <input
-            type="text"
-            value={config.color}
-            onChange={(e) => handleChange('color', e.target.value)}
-            className={`flex-1 px-3 py-2 text-sm rounded border ${
-              isDarkMode 
-                ? 'bg-gray-800 border-gray-700 text-white' 
-                : 'bg-white border-gray-300 text-black'
-            }`}
-            placeholder="#ffffff"
-          />
+        
+        {/* Stroke Color */}
+        <div className="space-y-2">
+          <label className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Stroke Color</label>
+          <div className="flex items-center space-x-3">
+            <input
+              type="color"
+              value={config.color}
+              onChange={(e) => handleChange('color', e.target.value)}
+              className="w-10 h-10 rounded border border-gray-600 cursor-pointer"
+            />
+            <input
+              type="text"
+              value={config.color}
+              onChange={(e) => handleChange('color', e.target.value)}
+              className={`flex-1 px-3 py-2 text-sm rounded border ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700 text-white' 
+                  : 'bg-white border-gray-300 text-black'
+              }`}
+              placeholder="#ffffff"
+            />
+          </div>
+        </div>
+        
+        {/* Fill Color */}
+        <div className="space-y-2">
+          <label className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Fill Color</label>
+          <div className="flex items-center space-x-3">
+            <input
+              type="color"
+              value={config.fillColor}
+              onChange={(e) => handleChange('fillColor', e.target.value)}
+              className="w-10 h-10 rounded border border-gray-600 cursor-pointer"
+            />
+            <input
+              type="text"
+              value={config.fillColor}
+              onChange={(e) => handleChange('fillColor', e.target.value)}
+              className={`flex-1 px-3 py-2 text-sm rounded border ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700 text-white' 
+                  : 'bg-white border-gray-300 text-black'
+              }`}
+              placeholder="#000000"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Transform Controls */}
+      {/* Size Control */}
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
           <Move className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-          <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Transform</label>
+          <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Size</label>
         </div>
         
         <NumberSlider
@@ -178,7 +207,15 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           step={1}
           label="Size"
           unit="px"
-          />
+        />
+      </div>
+
+      {/* Rotation Control */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <RotateCcw className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+          <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Rotation</label>
+        </div>
         
         <NumberSlider
           value={config.rotation}
@@ -189,6 +226,14 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           label="Rotation"
           unit="°"
         />
+      </div>
+
+      {/* Opacity Control */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <Eye className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+          <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Opacity</label>
+        </div>
         
         <NumberSlider
           value={config.opacity}
@@ -248,29 +293,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
               </select>
             </div>
             
-            {config.animation !== 'none' && (
-              <>
-                <NumberSlider
-                  value={config.animationSpeed}
-                  onChange={(value) => handleChange('animationSpeed', value)}
-                  min={1}
-                  max={10}
-                  step={1}
-                  label="Speed Multiplier"
-                  unit="x"
-                />
-                
-                <NumberSlider
-                  value={config.animationDuration}
-                  onChange={(value) => handleChange('animationDuration', value)}
-                  min={0.1}
-                  max={10}
-                  step={0.1}
-                  label="Base Duration"
-                  unit="s"
-                />
-              </>
-            )}
           </div>
         )}
       </div>
@@ -284,7 +306,7 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           }`}
         >
           <div className="flex items-center space-x-2">
-            <MousePointer className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+            <Move className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
             <span className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
               Hover Effects
               {config.hoverEffect !== 'none' && (
@@ -312,90 +334,15 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                   isDarkMode 
                     ? 'bg-gray-800 border-gray-700 text-white' 
                     : 'bg-white border-gray-300 text-black'
-                } ${config.hoverEffect !== 'none' ? '' : ''}`}
+                }`}
               >
                 <option value="none">None</option>
                 <option value="scale">Scale</option>
-                <option value="color">Color</option>
                 <option value="rotate">Rotate</option>
                 <option value="opacity">Opacity</option>
               </select>
             </div>
             
-            {config.hoverEffect !== 'none' && (
-              <>
-                <NumberSlider
-                  value={config.hoverDuration || 0.3}
-                  onChange={(value) => handleChange('hoverDuration', value)}
-                  min={0.1}
-                  max={2}
-                  step={0.1}
-                  label="Transition Duration"
-                  unit="s"
-                />
-                
-                {config.hoverEffect === 'scale' && (
-                  <NumberSlider
-                    value={config.hoverScale || 1.1}
-                    onChange={(value) => handleChange('hoverScale', value)}
-                    min={0.5}
-                    max={2}
-                    step={0.1}
-                    label="Scale Factor"
-                    unit="x"
-                  />
-                )}
-                
-                {config.hoverEffect === 'color' && (
-                  <div className="space-y-2">
-                    <label className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Hover Color</label>
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="color"
-                        value={config.hoverColor || '#f0f0f0'}
-                        onChange={(e) => handleChange('hoverColor', e.target.value)}
-                        className="w-10 h-10 rounded border border-gray-600 cursor-pointer"
-                      />
-                      <input
-                        type="text"
-                        value={config.hoverColor || '#f0f0f0'}
-                        onChange={(e) => handleChange('hoverColor', e.target.value)}
-                        className={`flex-1 px-3 py-2 text-sm rounded border ${
-                          isDarkMode 
-                            ? 'bg-gray-800 border-gray-700 text-white' 
-                            : 'bg-white border-gray-300 text-black'
-                        }`}
-                        placeholder="#f0f0f0"
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                {config.hoverEffect === 'rotate' && (
-                  <NumberSlider
-                    value={config.hoverRotation || 15}
-                    onChange={(value) => handleChange('hoverRotation', value)}
-                    min={0}
-                    max={360}
-                    step={1}
-                    label="Rotation Angle"
-                    unit="°"
-                  />
-                )}
-                
-                {config.hoverEffect === 'opacity' && (
-                  <NumberSlider
-                    value={config.hoverOpacity || 0.8}
-                    onChange={(value) => handleChange('hoverOpacity', value)}
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    label="Hover Opacity"
-                    unit=""
-                  />
-                )}
-              </>
-            )}
           </div>
         )}
       </div>
