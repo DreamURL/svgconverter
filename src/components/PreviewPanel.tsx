@@ -9,17 +9,6 @@ interface PreviewPanelProps {
   isDarkMode: boolean;
 }
 
-// 색상에 따른 hue-rotate 값 계산
-const getHueRotation = (color: string) => {
-  const hex = color.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  
-  const hue = Math.atan2(Math.sqrt(3) * (g - b), 2 * r - g - b) * 180 / Math.PI;
-  return `${hue}deg`;
-};
-
 export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelProps) {
   const processedSVG = useMemo(() => {
     if (!svgContent) return '';
@@ -57,39 +46,11 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
     const speed = config.animationSpeed || 5; // 기본 5배속
     const actualDuration = duration / speed; // 실제 애니메이션 시간
     
-    let timingFunction = 'ease-in-out';
-    let animationName = config.animation;
-    
-    // 애니메이션별 타이밍 함수 설정
-    if (config.animation === 'bounce') {
-      timingFunction = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-    } else if (config.animation === 'spin') {
-      timingFunction = 'linear';
-    } else if (config.animation === 'pulse') {
-      timingFunction = 'ease-in-out';
-    } else if (config.animation === 'scale') {
-      timingFunction = 'ease-in-out';
-    }
+    const timingFunction = config.animation === 'bounce' ? 'cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'ease-in-out';
+    const animationName = config.animation;
     
     return {
       animation: `${animationName} ${actualDuration}s ${timingFunction} infinite`
-    };
-  };
-
-  const getHoverStyle = () => {
-    if (config.hoverEffect === 'none') return {};
-    
-    const duration = config.hoverDuration || 0.3;
-    
-    return {
-      transition: `all ${duration}s ease-in-out`,
-      cursor: 'pointer',
-      ':hover': {
-        ...(config.hoverEffect === 'scale' && { transform: `scale(${config.hoverScale || 1.1})` }),
-        ...(config.hoverEffect === 'rotate' && { transform: `rotate(${config.hoverRotation || 15}deg)` }),
-        ...(config.hoverEffect === 'opacity' && { opacity: config.hoverOpacity || 0.8 }),
-        ...(config.hoverEffect === 'color' && { fill: config.hoverColor || '#f0f0f0' }),
-      }
     };
   };
 

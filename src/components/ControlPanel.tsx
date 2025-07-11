@@ -38,7 +38,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
     step = 1, 
     label,
     unit = '',
-    configKey
   }: { 
     value: number; 
     onChange: (value: number) => void; 
@@ -47,7 +46,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
     step?: number; 
     label: string; 
     unit?: string;
-    configKey: string;
   }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragValue, setDragValue] = useState(value);
@@ -180,8 +178,7 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           step={1}
           label="Size"
           unit="px"
-          configKey="size"
-        />
+          />
         
         <NumberSlider
           value={config.rotation}
@@ -191,7 +188,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           step={1}
           label="Rotation"
           unit="°"
-          configKey="rotation"
         />
         
         <NumberSlider
@@ -202,7 +198,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           step={0.01}
           label="Opacity"
           unit=""
-          configKey="opacity"
         />
       </div>
 
@@ -263,7 +258,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                   step={1}
                   label="Speed Multiplier"
                   unit="x"
-                  configKey="animationSpeed"
                 />
                 
                 <NumberSlider
@@ -274,7 +268,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                   step={0.1}
                   label="Base Duration"
                   unit="s"
-                  configKey="animationDuration"
                 />
               </>
             )}
@@ -339,7 +332,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                   step={0.1}
                   label="Transition Duration"
                   unit="s"
-                  configKey="hoverDuration"
                 />
                 
                 {config.hoverEffect === 'scale' && (
@@ -351,7 +343,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                     step={0.1}
                     label="Scale Factor"
                     unit="x"
-                    configKey="hoverScale"
                   />
                 )}
                 
@@ -389,7 +380,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                     step={1}
                     label="Rotation Angle"
                     unit="°"
-                    configKey="hoverRotation"
                   />
                 )}
                 
@@ -402,7 +392,6 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
                     step={0.01}
                     label="Hover Opacity"
                     unit=""
-                    configKey="hoverOpacity"
                   />
                 )}
               </>
