@@ -18,10 +18,8 @@ declare module 'imagetracerjs' {
     roundcoords?: number;
   }
 
-  function imageToSVG(buffer: Buffer, options?: ImageTracerOptions): string;
-
   const ImageTracer: {
-    imageToSVG: (buffer: Buffer, options?: ImageTracerOptions) => string;
+    imageToSVG: (buffer: never, options?: ImageTracerOptions) => string;
   };
 
   export default ImageTracer;

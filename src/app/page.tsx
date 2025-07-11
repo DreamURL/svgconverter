@@ -115,7 +115,15 @@ export default function Home() {
       canvas.height = canvasSize;
       
       // Worker 없이 실행하거나 worker 경로 설정
-      let gifOptions: any = {
+      const gifOptions: {
+        quality: number;
+        width: number;
+        height: number;
+        background: string;
+        debug: boolean;
+        workers?: number;
+        workerScript?: string;
+      } = {
         quality: 10,
         width: canvasSize,
         height: canvasSize,

@@ -41,8 +41,7 @@ export function UploadPanel({ onUpload, isConverting, setIsConverting, isDarkMod
             viewbox: true,
             roundcoords: 1,
           };
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const svgString = ImageTracer.imageToSVG(event.target.result as any, options);
+          const svgString = ImageTracer.imageToSVG(event.target.result as never, options);
           resolve(svgString);
         } else {
           reject(new Error('Could not read file.'));

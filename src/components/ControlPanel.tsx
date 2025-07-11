@@ -18,7 +18,7 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
     hover: true,
   });
 
-  const handleChange = (key: keyof SVGConfig, value: any) => {
+  const handleChange = (key: keyof SVGConfig, value: string | number | boolean) => {
     onChange({ ...config, [key]: value });
   };
 
