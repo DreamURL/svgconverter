@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileImage, Loader2 } from 'lucide-react';
+import ImageTracer from 'imagetracerjs';
 
 interface UploadPanelProps {
   onUpload: (content: string, name: string) => void;
@@ -15,6 +16,44 @@ export function UploadPanel({ onUpload, isConverting, setIsConverting, isDarkMod
   const [error, setError] = useState<string>('');
   const [conversionStep, setConversionStep] = useState<string>('');
 
+  // Client-side image to SVG conversion
+  const convertImageToSvg = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setConversionStep('Tracing image to SVG...');
+          const options = {
+            ltres: 1,
+            qtres: 1,
+            scale: 1,
+            strokewidth: 0,
+            linefilter: true,
+            speckleremoval: 4,
+            colorsampling: 2,
+            numberofcolors: 12,
+            mincolorratio: 0.05,
+            colorquantcycles: 3,
+            layering: 0,
+            blurradius: 0,
+            blurdelta: 20,
+            desc: false,
+            viewbox: true,
+            roundcoords: 1,
+          };
+          const svgString = ImageTracer.imageToSVG(event.target.result as any, options);
+          resolve(svgString);
+        } else {
+          reject(new Error('Could not read file.'));
+        }
+      };
+      reader.onerror = () => {
+        reject(new Error('Error reading file.'));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
     
@@ -25,43 +64,18 @@ export function UploadPanel({ onUpload, isConverting, setIsConverting, isDarkMod
     
     try {
       if (file.type === 'image/svg+xml') {
-        // SVG 파일은 직접 읽기
         setConversionStep('Reading SVG file...');
         const text = await file.text();
         onUpload(text, file.name);
       } else if (file.type.startsWith('image/')) {
-        // 서버 API를 통해 이미지를 SVG로 변환
-        try {
-          setConversionStep('Uploading image...');
-          const formData = new FormData();
-          formData.append('file', file);
-          
-          setConversionStep('Processing image...');
-          const response = await fetch('/api/convert', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          const result = await response.json();
-          
-          if (result.success) {
-            setConversionStep('Converting to SVG...');
-            onUpload(result.svg, file.name);
-          } else {
-            throw new Error(result.error || '변환에 실패했습니다.');
-          }
-        } catch (apiError) {
-          console.warn('API 변환 실패, 대체 방법 사용:', apiError);
-          setConversionStep('Creating image-embedded SVG...');
-          // API 실패 시 실제 이미지를 포함한 SVG 생성
-          const imageSVG = await createImageEmbeddedSVG(file);
-          onUpload(imageSVG, file.name);
-        }
+        setConversionStep('Preparing image for conversion...');
+        const svgResult = await convertImageToSvg(file);
+        onUpload(svgResult, file.name);
       } else {
-        throw new Error('지원되지 않는 파일 형식입니다. SVG, PNG, JPG, GIF 파일만 업로드 가능합니다.');
+        throw new Error('Unsupported file type. Please upload SVG, PNG, JPG, or GIF files.');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : '파일 처리 중 오류가 발생했습니다.');
+      setError(err instanceof Error ? err.message : 'An error occurred while processing the file.');
     } finally {
       setIsConverting(false);
       setConversionStep('');
@@ -131,51 +145,4 @@ export function UploadPanel({ onUpload, isConverting, setIsConverting, isDarkMod
       )}
     </div>
   );
-}
-
-// 실제 이미지를 base64로 임베드한 SVG 생성
-async function createImageEmbeddedSVG(file: File): Promise<string> {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const base64 = e.target?.result as string;
-      
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-          <image 
-            href="${base64}" 
-            x="0" 
-            y="0" 
-            width="400" 
-            height="400" 
-            preserveAspectRatio="xMidYMid meet"
-          />
-        </svg>
-      `.trim();
-      
-      resolve(svg);
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-// 더 실용적인 SVG 생성 함수
-function createBetterMockSVG(fileName: string): string {
-  const name = fileName.replace(/\.[^/.]+$/, '');
-  const colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#f97316'];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  
-  return `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-      <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:${color};stop-opacity:1" />
-          <stop offset="100%" style="stop-color:${color}80;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <rect width="200" height="200" fill="url(#grad1)" rx="20"/>
-      <circle cx="100" cy="80" r="30" fill="white" fill-opacity="0.3"/>
-      <rect x="70" y="120" width="60" height="40" fill="white" fill-opacity="0.3" rx="5"/>
-    </svg>
-  `.trim();
 }
