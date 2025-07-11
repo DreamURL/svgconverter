@@ -8,10 +8,10 @@ interface HeaderProps {
   onDownloadGIF: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
-  onOpenExportTest?: () => void;
+  // onOpenExportTest?: () => void;
 }
 
-export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme, onOpenExportTest }: HeaderProps) {
+export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme}: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (

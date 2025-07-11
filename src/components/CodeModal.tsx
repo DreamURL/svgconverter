@@ -54,7 +54,7 @@ export function CodeModal({ isOpen, onClose, svgContent, config, fileName }: Cod
 
   const generateReactComponent = () => {
     // 간단한 SVG 처리
-    let processedSVG = svgContent
+    const processedSVG = svgContent
       .replace(/<\?xml[^>]*\?>/g, '')
       .replace(/<!--[^>]*-->/g, '')
       .replace(/stroke-width/g, 'strokeWidth')
@@ -240,7 +240,7 @@ export function ${capitalizedName}() {
 
   const generateCSS = () => {
     // 간단한 SVG 처리
-    let processedSVG = svgContent
+    const processedSVG = svgContent
       .replace(/<\?xml[^>]*\?>/g, '')
       .replace(/<!--[^>]*-->/g, '')
       .replace(/fill="[^"]*"/g, `fill="${config.fillColor}"`)
