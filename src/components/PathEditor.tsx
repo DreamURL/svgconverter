@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 interface PathEditorProps {
   svgEditorState: SVGEditorState;
-  onPathUpdate: (pathId: string, changes: any) => void;
+  onPathUpdate: (pathId: string, changes: Record<string, unknown>) => void;
   onPathToggleIndividual: (pathId: string) => void;
   onPathReset: (pathId: string) => void;
   onPathSelect: (pathId: string | null) => void;

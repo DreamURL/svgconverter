@@ -10,7 +10,6 @@ import { ControlPanel } from '@/components/ControlPanel';
 import { CodeModal } from '@/components/CodeModal';
 import { ExportTestModal } from '@/components/ExportTestModal';
 import { ParsedSVG } from '@/utils/svgParser';
-
 import { 
   svgEditorReducer, 
   migrateToGlobalConfig, 
@@ -169,7 +168,8 @@ export default function Home() {
         ) : (
           <div className="h-full flex">
             {/* Left Panel - Controls */}
-            <div className={`w-80 h-[1200px] border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>            
+            <div className={`w-80 h-[1200px] border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>     
+              <div className="ml-4">     
               <ControlPanel
               config={config}
               onChange={(newConfig) => {
@@ -232,7 +232,7 @@ export default function Home() {
                   mode,
                 });
               }}
-            />
+            /></div>  
             </div>
             
             {/* Right Panel - Preview */}

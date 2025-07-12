@@ -18,7 +18,7 @@ export function convertToEditablePaths(parsedSVG: ParsedSVG): EditablePathElemen
 }
 
 // 기존 SVGConfig에서 GlobalSVGConfig로 변환
-export function migrateToGlobalConfig(legacyConfig: any): GlobalSVGConfig {
+export function migrateToGlobalConfig(legacyConfig: import('../app/page').SVGConfig): GlobalSVGConfig {
   return {
     color: legacyConfig.color || '#ffffff',
     fillColor: legacyConfig.fillColor || '#000000', 
@@ -32,7 +32,7 @@ export function migrateToGlobalConfig(legacyConfig: any): GlobalSVGConfig {
 }
 
 // GlobalSVGConfig에서 기존 SVGConfig로 변환 (하위 호환성)
-export function convertToLegacyConfig(globalConfig: GlobalSVGConfig): any {
+export function convertToLegacyConfig(globalConfig: GlobalSVGConfig): import('../app/page').SVGConfig {
   return {
     color: globalConfig.color,
     fillColor: globalConfig.fillColor,
