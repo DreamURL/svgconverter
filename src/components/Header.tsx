@@ -1,6 +1,6 @@
 import { Code2, Github, Twitter, Sun, Moon, Download, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
-import { Cup } from '@/components/ui/Cloud';
+import { Cup2 } from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
@@ -39,7 +39,7 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
             <span>Export Code</span>
           </button>
 
-          <Cup />
+          <Cup2 />
 
 
 

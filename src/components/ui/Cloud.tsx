@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Cup() {
+export function Cup2() {
   return (
     <div
       style={{
