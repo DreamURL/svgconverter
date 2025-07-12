@@ -10,7 +10,7 @@ import { ControlPanel } from '@/components/ControlPanel';
 import { CodeModal } from '@/components/CodeModal';
 import { ExportTestModal } from '@/components/ExportTestModal';
 import { ParsedSVG } from '@/utils/svgParser';
-import { GlobalSVGConfig, SVGEditorState } from '@/types/svgTypes';
+
 import { 
   svgEditorReducer, 
   migrateToGlobalConfig, 

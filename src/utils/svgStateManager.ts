@@ -6,7 +6,7 @@ import {
   PathEditAction,
   GlobalEditAction 
 } from '../types/svgTypes';
-import { ParsedSVG, PathElement } from './svgParser';
+import { ParsedSVG} from './svgParser';
 
 // ParsedSVG를 EditablePathElement로 변환
 export function convertToEditablePaths(parsedSVG: ParsedSVG): EditablePathElement[] {

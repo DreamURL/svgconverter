@@ -78,4 +78,4 @@ export interface PathRenderSettings {
   opacity: number;
 }
 
-export { PathElement, SVGMetadata };
+export type { PathElement, SVGMetadata };

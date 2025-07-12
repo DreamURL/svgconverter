@@ -1,6 +1,6 @@
 'use client';
 
-import { EditablePathElement, SVGEditorState, PathRenderSettings } from '@/types/svgTypes';
+import { SVGEditorState } from '@/types/svgTypes';
 import { getPathRenderSettings } from '@/utils/svgStateManager';
 import { Eye, EyeOff, RotateCcw, Settings } from 'lucide-react';
 import { useState } from 'react';
