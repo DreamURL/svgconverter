@@ -4,9 +4,10 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileImage, Loader2 } from 'lucide-react';
 import ImageTracer from 'imagetracerjs';
+import { parseSVGPaths, ParsedSVG } from '@/utils/svgParser';
 
 interface UploadPanelProps {
-  onUpload: (content: string, name: string) => void;
+  onUpload: (content: string, name: string, parsedSVG?: ParsedSVG) => void;
   isConverting: boolean;
   setIsConverting: (isConverting: boolean) => void;
   isDarkMode: boolean;
@@ -73,11 +74,31 @@ export function UploadPanel({ onUpload, isConverting, setIsConverting, isDarkMod
       if (file.type === 'image/svg+xml') {
         setConversionStep('Reading SVG file...');
         const text = await file.text();
-        onUpload(text, file.name);
+        
+        // Parse the SVG to extract path information
+        setConversionStep('Parsing SVG paths...');
+        try {
+          const parsedSVG = parseSVGPaths(text);
+          console.log('Parsed SVG:', parsedSVG); // Debug log
+          onUpload(text, file.name, parsedSVG);
+        } catch (parseError) {
+          console.warn('Failed to parse SVG paths, using original content:', parseError);
+          onUpload(text, file.name);
+        }
       } else if (file.type.startsWith('image/')) {
         setConversionStep('Preparing image for conversion...');
         const svgResult = await convertImageToSvg(file);
-        onUpload(svgResult, file.name);
+        
+        // Parse the generated SVG
+        setConversionStep('Parsing generated SVG...');
+        try {
+          const parsedSVG = parseSVGPaths(svgResult);
+          console.log('Parsed generated SVG:', parsedSVG); // Debug log
+          onUpload(svgResult, file.name, parsedSVG);
+        } catch (parseError) {
+          console.warn('Failed to parse generated SVG paths, using original content:', parseError);
+          onUpload(svgResult, file.name);
+        }
       } else {
         throw new Error('Unsupported file type. Please upload SVG, PNG, JPG, or GIF files.');
       }

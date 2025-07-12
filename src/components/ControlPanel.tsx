@@ -1,8 +1,10 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
-import { RotateCcw, Palette, Move, Zap, ChevronDown, ChevronUp, Eye } from 'lucide-react';
+import { SVGEditorState } from '@/types/svgTypes';
+import { RotateCcw, Palette, Move, Zap, ChevronDown, ChevronUp, Eye, Settings, Layers } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { PathEditor } from './PathEditor';
 
 interface ControlPanelProps {
   config: SVGConfig;
@@ -10,9 +12,28 @@ interface ControlPanelProps {
   fileName: string;
   onReset: () => void;
   isDarkMode: boolean;
+  // 새로운 props
+  svgEditorState?: SVGEditorState;
+  onPathUpdate?: (pathId: string, changes: any) => void;
+  onPathToggleIndividual?: (pathId: string) => void;
+  onPathReset?: (pathId: string) => void;
+  onPathSelect?: (pathId: string | null) => void;
+  onEditModeChange?: (mode: 'global' | 'individual') => void;
 }
 
-export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }: ControlPanelProps) {
+export function ControlPanel({ 
+  config, 
+  onChange, 
+  fileName, 
+  onReset, 
+  isDarkMode,
+  svgEditorState,
+  onPathUpdate,
+  onPathToggleIndividual,
+  onPathReset,
+  onPathSelect,
+  onEditModeChange,
+}: ControlPanelProps) {
   const [expandedSections, setExpandedSections] = useState({
     animation: true,
     hover: true,
@@ -138,8 +159,64 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
         <p>File: {fileName}</p>
       </div>
 
-      {/* Color Control */}
-      <div className="space-y-4">
+      {/* Edit Mode Toggle */}
+      {svgEditorState?.parsedSVG && svgEditorState.parsedSVG.paths.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <Layers className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+            <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Edit Mode</label>
+          </div>
+          
+          <div className={`flex rounded-lg p-1 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+            <button
+              onClick={() => onEditModeChange?.('global')}
+              className={`flex-1 px-3 py-2 text-sm rounded-md transition-colors ${
+                svgEditorState.editMode === 'global'
+                  ? isDarkMode 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-blue-500 text-white'
+                  : isDarkMode
+                    ? 'text-gray-300 hover:text-white'
+                    : 'text-gray-600 hover:text-black'
+              }`}
+            >
+              Global
+            </button>
+            <button
+              onClick={() => onEditModeChange?.('individual')}
+              className={`flex-1 px-3 py-2 text-sm rounded-md transition-colors ${
+                svgEditorState.editMode === 'individual'
+                  ? isDarkMode 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-blue-500 text-white'
+                  : isDarkMode
+                    ? 'text-gray-300 hover:text-white'
+                    : 'text-gray-600 hover:text-black'
+              }`}
+            >
+              Individual
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Individual Path Editor */}
+      {svgEditorState?.editMode === 'individual' && svgEditorState.parsedSVG && (
+        <PathEditor
+          svgEditorState={svgEditorState}
+          onPathUpdate={onPathUpdate || (() => {})}
+          onPathToggleIndividual={onPathToggleIndividual || (() => {})}
+          onPathReset={onPathReset || (() => {})}
+          onPathSelect={onPathSelect || (() => {})}
+          isDarkMode={isDarkMode}
+        />
+      )}
+
+      {/* Global Controls - Only show in global mode or when no paths available */}
+      {(!svgEditorState?.parsedSVG || svgEditorState.editMode === 'global') && (
+        <>
+          {/* Color Control */}
+          <div className="space-y-4">
         <div className="flex items-center space-x-2">
           <Palette className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
           <label className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>Colors</label>
@@ -364,6 +441,8 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

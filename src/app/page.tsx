@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import Link from 'next/link';
 import { Download, Edit, Code } from 'lucide-react';
 import { Header } from '@/components/Header';
@@ -9,6 +9,13 @@ import { PreviewPanel } from '@/components/PreviewPanel';
 import { ControlPanel } from '@/components/ControlPanel';
 import { CodeModal } from '@/components/CodeModal';
 import { ExportTestModal } from '@/components/ExportTestModal';
+import { ParsedSVG } from '@/utils/svgParser';
+import { GlobalSVGConfig, SVGEditorState } from '@/types/svgTypes';
+import { 
+  svgEditorReducer, 
+  migrateToGlobalConfig, 
+  convertToLegacyConfig 
+} from '@/utils/svgStateManager';
 
 export interface SVGConfig {
   // Color settings
@@ -32,19 +39,42 @@ export default function Home() {
   const [svgContent, setSvgContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [config, setConfig] = useState<SVGConfig>({
-    color: '#ffffff',
-    fillColor: '#000000',
-    strokeWidth: 1,
-    size: 100,
-    rotation: 0,
-    opacity: 1,
-    animation: 'none',
-    hoverEffect: 'none',
+  
+  // 새로운 통합 상태 관리
+  const [svgEditorState, dispatchSVGEditor] = useReducer(svgEditorReducer, {
+    globalConfig: {
+      color: '#ffffff',
+      fillColor: '#000000',
+      strokeWidth: 1,
+      size: 100,
+      rotation: 0,
+      opacity: 1,
+      animation: 'none',
+      hoverEffect: 'none',
+    },
+    parsedSVG: null,
+    selectedPathId: null,
+    editMode: 'global',
+    showPathList: false,
   });
+  
+  // 기존 시스템과의 호환성을 위한 legacy config
+  const config = convertToLegacyConfig(svgEditorState.globalConfig);
+  const setConfig = (newConfig: SVGConfig) => {
+    dispatchSVGEditor({
+      type: 'UPDATE_GLOBAL',
+      changes: migrateToGlobalConfig(newConfig),
+    });
+  };
+  
   const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
   const [isExportTestModalOpen, setIsExportTestModalOpen] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
+  
+  // 디버깅을 위한 상태 모니터링
+  useEffect(() => {
+    console.log('SVG Editor State changed:', svgEditorState);
+  }, [svgEditorState]);
 
 
   return (
@@ -70,9 +100,13 @@ export default function Home() {
             </div>
             
             <UploadPanel
-              onUpload={(content: string, name: string) => {
+              onUpload={(content: string, name: string, parsedSVG?: ParsedSVG) => {
                 setSvgContent(content);
                 setFileName(name);
+                dispatchSVGEditor({
+                  type: 'SET_PARSED_SVG',
+                  parsedSVG: parsedSVG || null,
+                });
               }}
               isConverting={isConverting}
               setIsConverting={setIsConverting}
@@ -135,17 +169,20 @@ export default function Home() {
         ) : (
           <div className="h-full flex">
             {/* Left Panel - Controls */}
-            <div className={`w-80 border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>            <ControlPanel
+            <div className={`w-80 h-[1200px] border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>            
+              <ControlPanel
               config={config}
               onChange={(newConfig) => {
                 console.log('Config changed:', newConfig); // 디버깅용
                 setConfig(newConfig);
               }}
               fileName={fileName}
-                onReset={() => {
-                  setSvgContent('');
-                  setFileName('');
-                  setConfig({
+              onReset={() => {
+                setSvgContent('');
+                setFileName('');
+                dispatchSVGEditor({
+                  type: 'UPDATE_GLOBAL',
+                  changes: {
                     color: '#ffffff',
                     fillColor: '#000000',
                     strokeWidth: 1,
@@ -154,10 +191,48 @@ export default function Home() {
                     opacity: 1,
                     animation: 'none',
                     hoverEffect: 'none',
-                  });
-                }}
-                isDarkMode={isDarkMode}
-              />
+                  },
+                });
+                dispatchSVGEditor({
+                  type: 'SET_PARSED_SVG',
+                  parsedSVG: null,
+                });
+              }}
+              isDarkMode={isDarkMode}
+              // 새로운 path 편집 관련 props
+              svgEditorState={svgEditorState}
+              onPathUpdate={(pathId, changes) => {
+                dispatchSVGEditor({
+                  type: 'UPDATE_PATH',
+                  pathId,
+                  changes,
+                });
+              }}
+              onPathToggleIndividual={(pathId) => {
+                dispatchSVGEditor({
+                  type: 'TOGGLE_INDIVIDUAL',
+                  pathId,
+                });
+              }}
+              onPathReset={(pathId) => {
+                dispatchSVGEditor({
+                  type: 'RESET_PATH',
+                  pathId,
+                });
+              }}
+              onPathSelect={(pathId) => {
+                dispatchSVGEditor({
+                  type: 'SET_SELECTED_PATH',
+                  pathId,
+                });
+              }}
+              onEditModeChange={(mode) => {
+                dispatchSVGEditor({
+                  type: 'SET_EDIT_MODE',
+                  mode,
+                });
+              }}
+            />
             </div>
             
             {/* Right Panel - Preview */}
@@ -166,6 +241,14 @@ export default function Home() {
                 svgContent={svgContent}
                 config={config}
                 isDarkMode={isDarkMode}
+                // 새로운 path별 편집 정보 전달
+                svgEditorState={svgEditorState}
+                onPathSelect={(pathId: string) => {
+                  dispatchSVGEditor({
+                    type: 'SET_SELECTED_PATH',
+                    pathId,
+                  });
+                }}
               />
             </div>
           </div>
@@ -178,6 +261,8 @@ export default function Home() {
         svgContent={svgContent}
         config={config}
         fileName={fileName}
+        // 새로운 path별 편집 정보 전달
+        svgEditorState={svgEditorState}
       />
       <ExportTestModal
         isOpen={isExportTestModalOpen}

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Professional online SVG converter and editor for developers and designers.",
   keywords: [
     // Primary Keywords
-    "SVG converter", "image to SVG", "SVG editor", "React SVG components", "SVG animation",
+    "SVG converter", "image to SVG", "SVG editor", "React SVG components", "SVG animation", "SVG to code",
     
     // Professional Tools Keywords
     "online SVG converter", "web SVG editor", "vector converter", "image converter",

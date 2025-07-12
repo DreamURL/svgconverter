@@ -1,191 +1,242 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
+import { SVGEditorState } from '@/types/svgTypes';
+import { getPathRenderSettings } from '@/utils/svgStateManager';
+import { formatSVGWithPaths } from '@/utils/svgParser';
 import { useMemo } from 'react';
 
 interface PreviewPanelProps {
   svgContent: string;
   config: SVGConfig;
   isDarkMode: boolean;
+  // 새로운 props (optional로 처리)
+  svgEditorState?: SVGEditorState;
+  onPathSelect?: (pathId: string) => void;
 }
 
-export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelProps) {
-  // CodeModal의 generateInlineSVG와 동일한 로직으로 SVG 처리
+export function PreviewPanel({ 
+  svgContent, 
+  config, 
+  isDarkMode,
+  svgEditorState,
+  onPathSelect,
+}: PreviewPanelProps) {
+  
+  // 개별 path 설정을 반영한 SVG 처리
   const processedSVG = useMemo(() => {
     if (!svgContent) return '';
-    
+
+    // 파싱된 SVG가 있는 경우 개별 path 설정 적용
+    if (svgEditorState?.parsedSVG) {
+      try {
+        // 각 path에 개별 설정 적용하여 새로운 SVG 생성
+        const updatedPaths = svgEditorState.parsedSVG.paths.map(path => {
+          const renderSettings = getPathRenderSettings(path, svgEditorState.globalConfig);
+          return {
+            ...path,
+            fill: renderSettings.fill,
+            stroke: renderSettings.stroke,
+            strokeWidth: renderSettings.strokeWidth,
+            strokeLinecap: renderSettings.strokeLinecap,
+            strokeLinejoin: renderSettings.strokeLinejoin,
+            opacity: renderSettings.opacity,
+          };
+        });
+
+        const updatedParsedSVG = {
+          ...svgEditorState.parsedSVG,
+          paths: updatedPaths,
+        };
+
+        return formatSVGWithPaths(updatedParsedSVG);
+      } catch (error) {
+        console.warn('Failed to apply individual path settings, falling back to global:', error);
+      }
+    }
+
+    // Fallback: 기존 글로벌 방식으로 처리
     let processed = svgContent
       .replace(/<\?xml[^>]*\?>/g, '')
       .replace(/<!--[^>]*-->/g, '')
       .trim();
 
-    // JSX 속성 변환 (React에서 요구하는 camelCase)
-    processed = processed.replace(/stroke-width="([^"]*)"/g, `strokeWidth="${config.strokeWidth}"`);
-    processed = processed.replace(/stroke-linecap="([^"]*)"/g, `strokeLinecap="$1"`);
-    processed = processed.replace(/stroke-linejoin="([^"]*)"/g, `strokeLinejoin="$1"`);
-    processed = processed.replace(/stroke-dasharray="([^"]*)"/g, `strokeDasharray="$1"`);
-    processed = processed.replace(/stroke-dashoffset="([^"]*)"/g, `strokeDashoffset="$1"`);
-    processed = processed.replace(/fill-rule="([^"]*)"/g, `fillRule="$1"`);
-    processed = processed.replace(/clip-rule="([^"]*)"/g, `clipRule="$1"`);
-    processed = processed.replace(/xml:space="([^"]*)"/g, `xmlSpace="$1"`);
-    processed = processed.replace(/xmlns:xlink="([^"]*)"/g, `xmlnsXlink="$1"`);
-    processed = processed.replace(/xlink:href="([^"]*)"/g, `xlinkHref="$1"`);
-    processed = processed.replace(/<svg([^>]*)\sstyle="[^"]*"([^>]*)>/i, '<svg$1$2>');
-    processed = processed.replace(/desc="([^"]*)"/g, ``); // ImageTracerJS desc 제거
-
-    // currentColor를 실제 색상으로 변경
+    // 글로벌 설정 적용
+    processed = processed.replace(/stroke-width="([^"]*)"/g, `stroke-width="${config.strokeWidth}"`);
     processed = processed.replace(/fill="currentColor"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/stroke="currentColor"/g, `stroke="${config.color}"`);
-    
-    // 색상 코드를 새 색상으로 교체
     processed = processed.replace(/fill="#[a-fA-F0-9]{6}"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/fill="#[a-fA-F0-9]{3}"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/stroke="#[a-fA-F0-9]{6}"/g, `stroke="${config.color}"`);
     processed = processed.replace(/stroke="#[a-fA-F0-9]{3}"/g, `stroke="${config.color}"`);
     
-    // 검은색과 흰색 등 색상 이름도 교체
-    processed = processed.replace(/fill="black"/g, `fill="${config.fillColor}"`);
-    processed = processed.replace(/fill="white"/g, `fill="${config.fillColor}"`);
-    processed = processed.replace(/fill="#000000"/g, `fill="${config.fillColor}"`);
-    processed = processed.replace(/fill="#000"/g, `fill="${config.fillColor}"`);
-    processed = processed.replace(/fill="#ffffff"/g, `fill="${config.fillColor}"`);
-    processed = processed.replace(/fill="#fff"/g, `fill="${config.fillColor}"`);
-    processed = processed.replace(/stroke="black"/g, `stroke="${config.color}"`);
-    processed = processed.replace(/stroke="white"/g, `stroke="${config.color}"`);
-    processed = processed.replace(/stroke="#000000"/g, `stroke="${config.color}"`);
-    processed = processed.replace(/stroke="#000"/g, `stroke="${config.color}"`);
-    processed = processed.replace(/stroke="#ffffff"/g, `stroke="${config.color}"`);
-    processed = processed.replace(/stroke="#fff"/g, `stroke="${config.color}"`);
-    
-    // 기존의 다른 색상 이름들도 교체 (none, transparent, url 제외)
+    // 기본 색상 이름들 교체
     processed = processed.replace(/fill="(?!none|transparent|url\()[^"]*"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/stroke="(?!none|transparent|url\()[^"]*"/g, `stroke="${config.color}"`);
-    
-    // style 속성 내의 fill과 stroke도 교체
-    processed = processed.replace(/style="([^"]*)"/g, (match, styleContent) => {
-      let newStyle = styleContent;
-      newStyle = newStyle.replace(/fill:\s*[^;]*(;|$)/g, `fill:${config.fillColor}$1`);
-      newStyle = newStyle.replace(/stroke:\s*[^;]*(;|$)/g, `stroke:${config.color}$1`);
-      return `style="${newStyle}"`;
-    });
-    
-    // SVG 요소에 기본 색상 적용
-    if (!processed.includes('fill=') && !processed.includes('foreignObject') && !processed.includes('<image')) {
-      processed = processed.replace(/<svg/, `<svg fill="${config.fillColor}"`);
-    }
-    
-    // 이미 SVG 태그에 fill이나 stroke가 있으면 업데이트
-    processed = processed.replace(/<svg([^>]*)\sfill="[^"]*"([^>]*)>/i, `<svg$1 fill="${config.fillColor}"$2>`);
-    processed = processed.replace(/<svg([^>]*)\sstroke="[^"]*"([^>]*)>/i, `<svg$1 stroke="${config.color}"$2>`);
-    
-    // CSS 내부 스타일도 처리
-    processed = processed.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, (match, cssContent) => {
-      let newCSS = cssContent;
-      newCSS = newCSS.replace(/fill:\s*[^;}]*(;|})/g, `fill:${config.fillColor}$1`);
-      newCSS = newCSS.replace(/stroke:\s*[^;}]*(;|})/g, `stroke:${config.color}$1`);
-      return `<style>${newCSS}</style>`;
-    });
-    
-    // 크기를 100%로 설정
-    processed = processed.replace(/width="[^"]*"/g, 'width="100%"');
-    processed = processed.replace(/height="[^"]*"/g, 'height="100%"');
 
     return processed;
-  }, [svgContent, config.fillColor, config.color, config.strokeWidth]);
+  }, [svgContent, config, svgEditorState]);
+
+  // 인터랙티브 SVG 렌더링 (path 클릭 지원)
+  const renderInteractiveSVG = () => {
+    if (!svgEditorState?.parsedSVG || !onPathSelect) {
+      // 기본 SVG 렌더링
+      return (
+        <div 
+          dangerouslySetInnerHTML={{ __html: processedSVG }}
+          className="w-full h-full flex items-center justify-center"
+        />
+      );
+    }
+
+    // path별로 분리된 인터랙티브 SVG 렌더링
+    const { metadata, paths } = svgEditorState.parsedSVG;
+    const selectedPathId = svgEditorState.selectedPathId;
+
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <svg
+          width={metadata.width || "100%"}
+          height={metadata.height || "100%"}
+          viewBox={metadata.viewBox || "0 0 100 100"}
+          xmlns={metadata.xmlns || "http://www.w3.org/2000/svg"}
+          className="max-w-full max-h-full"
+        >
+          {paths.map((path, index) => {
+            const renderSettings = getPathRenderSettings(path, svgEditorState.globalConfig);
+            const isSelected = selectedPathId === path.id;
+            const isVisible = path.visible !== false;
+
+            if (!isVisible) return null;
+
+            return (
+              <path
+                key={path.id}
+                d={path.originalPath}
+                fill={renderSettings.fill}
+                stroke={renderSettings.stroke}
+                strokeWidth={renderSettings.strokeWidth}
+                strokeLinecap={renderSettings.strokeLinecap}
+                strokeLinejoin={renderSettings.strokeLinejoin}
+                opacity={renderSettings.opacity}
+                transform={path.transform}
+                onClick={() => onPathSelect(path.id)}
+                className={`cursor-pointer transition-all duration-200 ${
+                  isSelected 
+                    ? 'drop-shadow-lg' 
+                    : 'hover:opacity-80'
+                }`}
+                style={{
+                  filter: isSelected ? 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.8))' : undefined,
+                }}
+                data-path-info={`Path ${index + 1} - Click to select`}
+              />
+            );
+          })}
+        </svg>
+      </div>
+    );
+  };
+
+  // 애니메이션 스타일 생성
+  const getAnimationStyle = () => {
+    const transform = `scale(${config.size / 100}) rotate(${config.rotation}deg)`;
+    const baseStyle = {
+      transform,
+      opacity: config.opacity,
+      transformOrigin: 'center',
+      transition: 'all 0.3s ease',
+    };
+
+    if (config.animation === 'spin') {
+      return {
+        ...baseStyle,
+        animation: 'spin 2s linear infinite',
+      };
+    } else if (config.animation === 'pulse') {
+      return {
+        ...baseStyle,
+        animation: 'pulse 2s ease-in-out infinite',
+      };
+    } else if (config.animation === 'scale') {
+      return {
+        ...baseStyle,
+        animation: 'scale 2s ease-in-out infinite',
+      };
+    } else if (config.animation === 'bounce') {
+      return {
+        ...baseStyle,
+        animation: 'bounce 2s ease-in-out infinite',
+      };
+    }
+
+    return baseStyle;
+  };
 
   return (
-    <div className="h-full flex flex-col overflow-y-auto">
-      {/* CSS 애니메이션 키프레임 정의 */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-          }
-          @keyframes scale {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-          }
-          @keyframes bounce {
-            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
-            40%, 43% { transform: translateY(-30px); }
-            70% { transform: translateY(-15px); }
-          }
-        `
-      }} />
-      
+    <div className="h-full flex flex-col">
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Preview</h2>
-        <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          {config.size}px × {config.size}px
-        </div>
-      </div>
-
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="relative">
-          <div 
-            className={`relative ${isDarkMode ? 'bg-gray-900/30' : 'bg-gray-100/50'} rounded-lg w-[800px] h-[800px] flex items-center justify-center overflow-hidden`}
-          >
-            {/* Grid Background */}
-            <div 
-              className="absolute inset-0 opacity-10 pointer-events-none"
-              style={{
-                backgroundImage: `
-                  linear-gradient(${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} 1px, transparent 1px),
-                  linear-gradient(90deg, ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} 1px, transparent 1px)
-                `,
-                backgroundSize: '20px 20px',
-                backgroundPosition: '0 0, 0 0'
-              }}
-            />
-            
-            {/* 실시간 동적 렌더링 - JSX 스타일 */}
-            <div 
-              style={{
-                width: `${config.size}px`,
-                height: `${config.size}px`,
-                transform: `rotate(${config.rotation}deg)`,
-                opacity: config.opacity,
-                transition: 'all 0.3s ease-in-out',
-                animation: config.animation !== 'none' ? `${config.animation} 2s infinite` : undefined,
-              }}
-              onMouseEnter={(e) => {
-                if (config.hoverEffect === 'scale') {
-                  e.currentTarget.style.transform = `scale(1.1) rotate(${config.rotation}deg)`;
-                } else if (config.hoverEffect === 'rotate') {
-                  e.currentTarget.style.transform = `rotate(${config.rotation + 360}deg)`;
-                } else if (config.hoverEffect === 'opacity') {
-                  e.currentTarget.style.opacity = '0.8';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = `rotate(${config.rotation}deg)`;
-                e.currentTarget.style.opacity = `${config.opacity}`;
-              }}
-            >
-              <div data-preview-svg dangerouslySetInnerHTML={{ __html: processedSVG }} />
-            </div>
+        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+          Preview
+        </h2>
+        
+        {svgEditorState?.parsedSVG && (
+          <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            {svgEditorState.editMode === 'individual' ? 'Individual Mode' : 'Global Mode'} • {svgEditorState.parsedSVG.paths.length} paths
           </div>
+        )}
+      </div>
+
+      {/* SVG Preview */}
+      <div className="flex-1 flex items-center justify-center">
+        <div 
+          className={`relative p-8 rounded-lg border-2 border-dashed transition-colors ${
+            isDarkMode 
+              ? 'border-gray-700 bg-gray-900/50' 
+              : 'border-gray-300 bg-gray-50/50'
+          }`}
+          style={{ minHeight: '400px', minWidth: '400px' }}
+        >
+          {svgContent ? (
+            <div 
+              style={getAnimationStyle()}
+              className="w-full h-full flex items-center justify-center"
+            >
+              {renderInteractiveSVG()}
+            </div>
+          ) : (
+            <div className={`text-center ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              <p className="text-lg mb-2">No SVG uploaded</p>
+              <p className="text-sm">Upload an image or SVG file to see the preview</p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Config Summary */}
-      <div className={`mt-6 p-4 ${isDarkMode ? 'bg-gray-900/50' : 'bg-gray-100/50'} rounded-lg`}>
-        <h3 className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Current Settings</h3>
-        <div className={`grid grid-cols-2 gap-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          <div>Stroke: {config.color}</div>
-          <div>Fill: {config.fillColor}</div>
-          <div>Size: {config.size}px</div>
-          <div>Rotation: {config.rotation}°</div>
-          <div>Opacity: {Math.round(config.opacity * 100)}%</div>
-          <div>Animation: {config.animation}</div>
-          <div>Hover: {config.hoverEffect}</div>
-        </div>
-      </div>
+      {/* Animation CSS */}
+      <style jsx>{`
+        @keyframes spin {
+          from { transform: scale(${config.size / 100}) rotate(${config.rotation}deg); }
+          to { transform: scale(${config.size / 100}) rotate(${config.rotation + 360}deg); }
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: ${config.opacity}; }
+          50% { opacity: ${Math.max(0.3, config.opacity - 0.3)}; }
+        }
+
+        @keyframes scale {
+          0%, 100% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg); }
+          50% { transform: scale(${config.size / 100 * 1.1}) rotate(${config.rotation}deg); }
+        }
+
+        @keyframes bounce {
+          0%, 20%, 53%, 80%, 100% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg) translateY(0); }
+          40%, 43% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg) translateY(-30px); }
+          70% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg) translateY(-15px); }
+        }
+      `}</style>
     </div>
   );
 }

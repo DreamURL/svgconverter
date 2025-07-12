@@ -1,8 +1,11 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
+import { SVGEditorState } from '@/types/svgTypes';
 import { X, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
+import { getPathRenderSettings } from '@/utils/svgStateManager';
+import { formatSVGWithPaths } from '@/utils/svgParser';
 
 interface CodeModalProps {
   isOpen: boolean;
@@ -10,18 +13,59 @@ interface CodeModalProps {
   svgContent: string;
   config: SVGConfig;
   fileName: string;
+  // 새로운 props (optional로 처리)
+  svgEditorState?: SVGEditorState;
 }
 
-// generateInlineSVG 함수를 별도로 export
-export function generateInlineSVG(svgContent: string, config: SVGConfig) {
-  // JSX 형식으로 SVG 처리
-  let processedSVG = svgContent
+// generateInlineSVG 함수를 별도로 export (개별 path 설정 지원)
+export function generateInlineSVG(
+  svgContent: string, 
+  config: SVGConfig, 
+  svgEditorState?: SVGEditorState
+) {
+  let processedSVG = '';
+
+  // 개별 path 설정이 있는 경우 우선 적용
+  if (svgEditorState?.parsedSVG) {
+    try {
+      // 각 path에 개별 설정 적용하여 새로운 SVG 생성
+      const updatedPaths = svgEditorState.parsedSVG.paths.map(path => {
+        const renderSettings = getPathRenderSettings(path, svgEditorState.globalConfig);
+        return {
+          ...path,
+          fill: renderSettings.fill,
+          stroke: renderSettings.stroke,
+          strokeWidth: renderSettings.strokeWidth,
+          strokeLinecap: renderSettings.strokeLinecap,
+          strokeLinejoin: renderSettings.strokeLinejoin,
+          opacity: renderSettings.opacity,
+        };
+      });
+
+      const updatedParsedSVG = {
+        ...svgEditorState.parsedSVG,
+        paths: updatedPaths,
+      };
+
+      processedSVG = formatSVGWithPaths(updatedParsedSVG);
+    } catch (error) {
+      console.warn('Failed to apply individual path settings in code generation, falling back to global:', error);
+      // Fallback to original SVG
+      processedSVG = svgContent;
+    }
+  } else {
+    // Fallback: 기존 방식
+    processedSVG = svgContent;
+  }
+
+  // JSX 형식으로 변환
+  processedSVG = processedSVG
     .replace(/<\?xml[^>]*\?>/g, '')
     .replace(/<!--[^>]*-->/g, '')
     .trim();
 
   // JSX 속성 변환 (React에서 요구하는 camelCase)
-  processedSVG = processedSVG.replace(/stroke-width="([^"]*)"/g, `strokeWidth="${config.strokeWidth}"`);
+  processedSVG = processedSVG.replace(/stroke-width="([^"]*)"/g, `strokeWidth="$1"`);
   processedSVG = processedSVG.replace(/stroke-linecap="([^"]*)"/g, `strokeLinecap="$1"`);
   processedSVG = processedSVG.replace(/stroke-linejoin="([^"]*)"/g, `strokeLinejoin="$1"`);
   processedSVG = processedSVG.replace(/stroke-dasharray="([^"]*)"/g, `strokeDasharray="$1"`);
@@ -32,60 +76,66 @@ export function generateInlineSVG(svgContent: string, config: SVGConfig) {
   processedSVG = processedSVG.replace(/xmlns:xlink="([^"]*)"/g, `xmlnsXlink="$1"`);
   processedSVG = processedSVG.replace(/xlink:href="([^"]*)"/g, `xlinkHref="$1"`);
   processedSVG = processedSVG.replace(/<svg([^>]*)\sstyle="[^"]*"([^>]*)>/i, '<svg$1$2>');
-  processedSVG = processedSVG.replace(/<svg([^>]*)\sstyle="[^"]*"([^>]*)>/i, '<svg$1$2>');
-  processedSVG = processedSVG.replace(/desc="([^"]*)"/g, ``); // ImageTracerJS는 Public Domain 라이선스로 어트리뷰션 불필요
-  // currentColor를 실제 색상으로 변경
-  processedSVG = processedSVG.replace(/fill="currentColor"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/stroke="currentColor"/g, `stroke="${config.color}"`);
-  
-  // 색상 코드를 새 색상으로 교체
-  processedSVG = processedSVG.replace(/fill="#[a-fA-F0-9]{6}"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/fill="#[a-fA-F0-9]{3}"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/stroke="#[a-fA-F0-9]{6}"/g, `stroke="${config.color}"`);
-  processedSVG = processedSVG.replace(/stroke="#[a-fA-F0-9]{3}"/g, `stroke="${config.color}"`);
-  
-  // 검은색과 흰색 등 색상 이름도 교체
-  processedSVG = processedSVG.replace(/fill="black"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/fill="white"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/fill="#000000"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/fill="#000"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/fill="#ffffff"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/fill="#fff"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/stroke="black"/g, `stroke="${config.color}"`);
-  processedSVG = processedSVG.replace(/stroke="white"/g, `stroke="${config.color}"`);
-  processedSVG = processedSVG.replace(/stroke="#000000"/g, `stroke="${config.color}"`);
-  processedSVG = processedSVG.replace(/stroke="#000"/g, `stroke="${config.color}"`);
-  processedSVG = processedSVG.replace(/stroke="#ffffff"/g, `stroke="${config.color}"`);
-  processedSVG = processedSVG.replace(/stroke="#fff"/g, `stroke="${config.color}"`);
-  
-  // 기존의 다른 색상 이름들도 교체 (none, transparent, url 제외)
-  processedSVG = processedSVG.replace(/fill="(?!none|transparent|url\()[^"]*"/g, `fill="${config.fillColor}"`);
-  processedSVG = processedSVG.replace(/stroke="(?!none|transparent|url\()[^"]*"/g, `stroke="${config.color}"`);
-  
-  // style 속성 내의 fill과 stroke도 교체
-  processedSVG = processedSVG.replace(/style="([^"]*)"/g, (match, styleContent) => {
-    let newStyle = styleContent;
-    newStyle = newStyle.replace(/fill:\\s*[^;]*(;|$)/g, `fill:${config.fillColor}$1`);
-    newStyle = newStyle.replace(/stroke:\\s*[^;]*(;|$)/g, `stroke:${config.color}$1`);
-    return `style="${newStyle}"`;
-  });
-  
-  // SVG 요소에 기본 색상 적용
-  if (!processedSVG.includes('fill=') && !processedSVG.includes('foreignObject') && !processedSVG.includes('<image')) {
-    processedSVG = processedSVG.replace(/<svg/, `<svg fill="${config.fillColor}"`);
+  processedSVG = processedSVG.replace(/desc="([^"]*)"/g, ``); // ImageTracerJS desc 제거
+
+  // 개별 path 설정이 없는 경우에만 글로벌 색상 적용
+  if (!svgEditorState?.parsedSVG) {
+    // currentColor를 실제 색상으로 변경
+    processedSVG = processedSVG.replace(/fill="currentColor"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="currentColor"/g, `stroke="${config.color}"`);
+    
+    // 색상 코드를 새 색상으로 교체
+    processedSVG = processedSVG.replace(/fill="#[a-fA-F0-9]{6}"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#[a-fA-F0-9]{3}"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="#[a-fA-F0-9]{6}"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#[a-fA-F0-9]{3}"/g, `stroke="${config.color}"`);
+    
+    // 검은색과 흰색 등 색상 이름도 교체
+    processedSVG = processedSVG.replace(/fill="black"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="white"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#000000"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#000"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#ffffff"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/fill="#fff"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="black"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="white"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#000000"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#000"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#ffffff"/g, `stroke="${config.color}"`);
+    processedSVG = processedSVG.replace(/stroke="#fff"/g, `stroke="${config.color}"`);
+    
+    // 기존의 다른 색상 이름들도 교체 (none, transparent, url 제외)
+    processedSVG = processedSVG.replace(/fill="(?!none|transparent|url\()[^"]*"/g, `fill="${config.fillColor}"`);
+    processedSVG = processedSVG.replace(/stroke="(?!none|transparent|url\()[^"]*"/g, `stroke="${config.color}"`);
+    
+    // style 속성 내의 fill과 stroke도 교체
+    processedSVG = processedSVG.replace(/style="([^"]*)"/g, (match, styleContent) => {
+      let newStyle = styleContent;
+      newStyle = newStyle.replace(/fill:\\s*[^;]*(;|$)/g, `fill:${config.fillColor}$1`);
+      newStyle = newStyle.replace(/stroke:\\s*[^;]*(;|$)/g, `stroke:${config.color}$1`);
+      return `style="${newStyle}"`;
+    });
   }
-  
-  // 이미 SVG 태그에 fill이나 stroke가 있으면 업데이트
-  processedSVG = processedSVG.replace(/<svg([^>]*)\sfill="[^"]*"([^>]*)>/i, `<svg$1 fill="${config.fillColor}"$2>`);
-  processedSVG = processedSVG.replace(/<svg([^>]*)\sstroke="[^"]*"([^>]*)>/i, `<svg$1 stroke="${config.color}"$2>`);
-  
-  // CSS 내부 스타일도 처리
-  processedSVG = processedSVG.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, (match, cssContent) => {
-    let newCSS = cssContent;
-    newCSS = newCSS.replace(/fill:\s*[^;}]*(;|})/g, `fill:${config.fillColor}$1`);
-    newCSS = newCSS.replace(/stroke:\s*[^;}]*(;|})/g, `stroke:${config.color}$1`);
-    return `<style>${newCSS}</style>`;
-  });
+
+  // 개별 path 설정이 없는 경우에만 추가 글로벌 색상 처리
+  if (!svgEditorState?.parsedSVG) {
+    // SVG 요소에 기본 색상 적용
+    if (!processedSVG.includes('fill=') && !processedSVG.includes('foreignObject') && !processedSVG.includes('<image')) {
+      processedSVG = processedSVG.replace(/<svg/, `<svg fill="${config.fillColor}"`);
+    }
+    
+    // 이미 SVG 태그에 fill이나 stroke가 있으면 업데이트
+    processedSVG = processedSVG.replace(/<svg([^>]*)\sfill="[^"]*"([^>]*)>/i, `<svg$1 fill="${config.fillColor}"$2>`);
+    processedSVG = processedSVG.replace(/<svg([^>]*)\sstroke="[^"]*"([^>]*)>/i, `<svg$1 stroke="${config.color}"$2>`);
+    
+    // CSS 내부 스타일도 처리
+    processedSVG = processedSVG.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, (match, cssContent) => {
+      let newCSS = cssContent;
+      newCSS = newCSS.replace(/fill:\s*[^;}]*(;|})/g, `fill:${config.fillColor}$1`);
+      newCSS = newCSS.replace(/stroke:\s*[^;}]*(;|})/g, `stroke:${config.color}$1`);
+      return `<style>${newCSS}</style>`;
+    });
+  }
   
   // 크기를 100%로 설정
   processedSVG = processedSVG.replace(/width="[^"]*"/g, 'width="100%"');
@@ -142,7 +192,14 @@ export function generateInlineSVG(svgContent: string, config: SVGConfig) {
     </div>`;
 }
 
-export function CodeModal({ isOpen, onClose, svgContent, config, fileName }: CodeModalProps) {
+export function CodeModal({ 
+  isOpen, 
+  onClose, 
+  svgContent, 
+  config, 
+  fileName,
+  svgEditorState,
+}: CodeModalProps) {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'react' | 'inline' | 'css'>('react');
 
@@ -185,7 +242,7 @@ export function CodeModal({ isOpen, onClose, svgContent, config, fileName }: Cod
 
   const generateReactComponent = () => {
     // Inline SVG 코드를 그대로 가져와서 React Component로 wrapping
-    const inlineSVGCode = generateInlineSVG(svgContent, config);
+    const inlineSVGCode = generateInlineSVG(svgContent, config, svgEditorState);
     
     return `import React from 'react';
 
@@ -436,7 +493,7 @@ ${config.hoverEffect === 'rotate' ? `@keyframes hover-rotate {
   };
 
   const reactComponent = generateReactComponent();
-  const inlineSVG = generateInlineSVG(svgContent, config);
+  const inlineSVG = generateInlineSVG(svgContent, config, svgEditorState);
   const cssCode = generateCSS();
 
   return (
