@@ -41,8 +41,15 @@ export function UploadPanel({ onUpload, isConverting, setIsConverting, isDarkMod
             viewbox: true,
             roundcoords: 1,
           };
-          const svgString = ImageTracer.imageToSVG(event.target.result as never, options);
-          resolve(svgString);
+          
+          // imagetracerjs는 콜백 함수가 필수입니다
+          ImageTracer.imageToSVG(
+            event.target.result as string,
+            (svgString: string) => {
+              resolve(svgString);
+            },
+            options
+          );
         } else {
           reject(new Error('Could not read file.'));
         }

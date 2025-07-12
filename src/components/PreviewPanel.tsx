@@ -1,7 +1,7 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
-import { useMemo } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 
 interface PreviewPanelProps {
   svgContent: string;
@@ -10,34 +10,27 @@ interface PreviewPanelProps {
 }
 
 export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelProps) {
-  // Add CSS for hover-rotate animation
-  const hoverRotateStyle = `
-    @keyframes hover-rotate {
-      from { transform: rotate(${config.rotation}deg); }
-      to { transform: rotate(${config.rotation + 360}deg); }
-    }
-  `;
+  const svgContainerRef = useRef<HTMLDivElement>(null);
 
-  // Insert the style into the document head
-  if (typeof document !== 'undefined' && config.hoverEffect === 'rotate') {
-    const existingStyle = document.getElementById('hover-rotate-style');
-    if (existingStyle) {
-      existingStyle.textContent = hoverRotateStyle;
-    } else {
-      const style = document.createElement('style');
-      style.id = 'hover-rotate-style';
-      style.textContent = hoverRotateStyle;
-      document.head.appendChild(style);
-    }
-  }
+  // generateInlineSVG와 동일한 SVG 처리 로직을 React 컴포넌트로 구현
   const processedSVG = useMemo(() => {
     if (!svgContent) return '';
     
-    // SVG 내용을 가공하여 스타일 적용
-    let processed = svgContent;
-    
+    // JSX 형식으로 SVG 처리
+    let processed = svgContent
+      .replace(/<\?xml[^>]*\?>/g, '')
+      .replace(/<!--[^>]*-->/g, '')
+      .trim();
+
     // JSX 속성 변환 (React에서 요구하는 camelCase)
-    processed = processed.replace(/stroke-width="([^"]*)"/g, `strokeWidth="$1"`);
+    processed = processed.replace(/stroke-width="([^"]*)"/g, `strokeWidth="${config.strokeWidth}"`);
+    
+    // stroke-width가 없는 경우 추가
+    if (!processed.includes('strokeWidth=') && !processed.includes('stroke-width=')) {
+      processed = processed.replace(/<svg/, `<svg strokeWidth="${config.strokeWidth}"`);
+    }
+    
+    console.log('PreviewPanel strokeWidth applied:', config.strokeWidth);
     processed = processed.replace(/stroke-linecap="([^"]*)"/g, `strokeLinecap="$1"`);
     processed = processed.replace(/stroke-linejoin="([^"]*)"/g, `strokeLinejoin="$1"`);
     processed = processed.replace(/stroke-dasharray="([^"]*)"/g, `strokeDasharray="$1"`);
@@ -45,6 +38,10 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
     processed = processed.replace(/fill-rule="([^"]*)"/g, `fillRule="$1"`);
     processed = processed.replace(/clip-rule="([^"]*)"/g, `clipRule="$1"`);
     processed = processed.replace(/xml:space="([^"]*)"/g, `xmlSpace="$1"`);
+    processed = processed.replace(/xmlns:xlink="([^"]*)"/g, `xmlnsXlink="$1"`);
+    processed = processed.replace(/xlink:href="([^"]*)"/g, `xlinkHref="$1"`);
+    processed = processed.replace(/<svg([^>]*)\sstyle="[^"]*"([^>]*)>/i, '<svg$1$2>');
+    processed = processed.replace(/desc="([^"]*)"/g, ``); // ImageTracerJS는 Public Domain 라이선스로 어트리뷰션 불필요
     
     // currentColor를 실제 색상으로 변경
     processed = processed.replace(/fill="currentColor"/g, `fill="${config.fillColor}"`);
@@ -56,7 +53,7 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
     processed = processed.replace(/stroke="#[a-fA-F0-9]{6}"/g, `stroke="${config.color}"`);
     processed = processed.replace(/stroke="#[a-fA-F0-9]{3}"/g, `stroke="${config.color}"`);
     
-    // 검은색과 흰색 등 색상 이름도 교체 (이미지 변환 SVG 대응)
+    // 검은색과 흰색 등 색상 이름도 교체
     processed = processed.replace(/fill="black"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/fill="white"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/fill="#000000"/g, `fill="${config.fillColor}"`);
@@ -70,24 +67,39 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
     processed = processed.replace(/stroke="#ffffff"/g, `stroke="${config.color}"`);
     processed = processed.replace(/stroke="#fff"/g, `stroke="${config.color}"`);
     
-    // 기존의 다른 색상 이름들도 교체 (black, white, red 등)
+    // 기존의 다른 색상 이름들도 교체 (none, transparent, url 제외)
     processed = processed.replace(/fill="(?!none|transparent|url\()[^"]*"/g, `fill="${config.fillColor}"`);
     processed = processed.replace(/stroke="(?!none|transparent|url\()[^"]*"/g, `stroke="${config.color}"`);
+    
+    // 모든 SVG 요소에 strokeWidth 적용
+    processed = processed.replace(/<(path|circle|rect|line|polyline|polygon)([^>]*?)>/g, (match, tagName, attributes) => {
+      if (attributes.includes('strokeWidth=')) {
+        // 이미 strokeWidth가 있으면 교체
+        return `<${tagName}${attributes.replace(/strokeWidth="[^"]*"/g, `strokeWidth="${config.strokeWidth}"`)}>`; 
+      } else {
+        // strokeWidth가 없으면 추가
+        return `<${tagName}${attributes} strokeWidth="${config.strokeWidth}">`;
+      }
+    });
+    
+    // strokeWidth 적용 (strokeWidth는 React에서 camelCase로 변환됨)
+    // 기존 strokeWidth를 config 값으로 교체하지만, React용이므로 camelCase 유지
     
     // style 속성 내의 fill과 stroke도 교체
     processed = processed.replace(/style="([^"]*)"/g, (match, styleContent) => {
       let newStyle = styleContent;
       newStyle = newStyle.replace(/fill:\s*[^;]*(;|$)/g, `fill:${config.fillColor}$1`);
       newStyle = newStyle.replace(/stroke:\s*[^;]*(;|$)/g, `stroke:${config.color}$1`);
+      newStyle = newStyle.replace(/stroke-width:\s*[^;]*(;|$)/g, `stroke-width:${config.strokeWidth}$1`);
       return `style="${newStyle}"`;
     });
     
-    // 기본 fill이 없는 경우 추가 (foreignObject나 image가 아닌 경우만)
-    if (!processed.includes('fill=') && !processed.includes('style=') && !processed.includes('foreignObject') && !processed.includes('<image')) {
+    // SVG 요소에 기본 색상 적용
+    if (!processed.includes('fill=') && !processed.includes('foreignObject') && !processed.includes('<image')) {
       processed = processed.replace(/<svg/, `<svg fill="${config.fillColor}"`);
     }
     
-    // 복잡한 이미지 변환 SVG의 경우: 이미 SVG 태그에 fill이 있으면 그것도 업데이트
+    // 이미 SVG 태그에 fill이나 stroke가 있으면 업데이트
     processed = processed.replace(/<svg([^>]*)\sfill="[^"]*"([^>]*)>/i, `<svg$1 fill="${config.fillColor}"$2>`);
     processed = processed.replace(/<svg([^>]*)\sstroke="[^"]*"([^>]*)>/i, `<svg$1 stroke="${config.color}"$2>`);
     
@@ -96,37 +108,48 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
       let newCSS = cssContent;
       newCSS = newCSS.replace(/fill:\s*[^;}]*(;|})/g, `fill:${config.fillColor}$1`);
       newCSS = newCSS.replace(/stroke:\s*[^;}]*(;|})/g, `stroke:${config.color}$1`);
+      newCSS = newCSS.replace(/stroke-width:\s*[^;}]*(;|})/g, `stroke-width:${config.strokeWidth}$1`);
       return `<style>${newCSS}</style>`;
     });
     
-    // SVG의 viewBox가 없으면 추가
-    if (!processed.includes('viewBox') && processed.includes('width=') && processed.includes('height=')) {
-      const widthMatch = processed.match(/width="([^"]+)"/);
-      const heightMatch = processed.match(/height="([^"]+)"/);
-      if (widthMatch && heightMatch) {
-        const width = widthMatch[1].replace('px', '');
-        const height = heightMatch[1].replace('px', '');
-        processed = processed.replace(/<svg/, `<svg viewBox="0 0 ${width} ${height}"`);
-      }
-    }
-    
-    return processed;
-  }, [svgContent, config.color, config.fillColor]);
+    // 크기를 100%로 설정
+    processed = processed.replace(/width="[^"]*"/g, 'width="100%"');
+    processed = processed.replace(/height="[^"]*"/g, 'height="100%"');
 
-  const getAnimationStyle = () => {
-    if (config.animation === 'none') return {};
-    
-    const duration = 2; // 기본 2초 고정
-    const timingFunction = config.animation === 'bounce' ? 'cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'ease-in-out';
-    const animationName = config.animation;
-    
-    return {
-      animation: `${animationName} ${duration}s ${timingFunction} infinite`
-    };
-  };
+    return processed;
+  }, [svgContent, config]);
+
+  // DOM을 직접 업데이트하여 strokeWidth 변경사항을 실시간 반영
+  useEffect(() => {
+    if (svgContainerRef.current) {
+      svgContainerRef.current.innerHTML = processedSVG;
+    }
+  }, [processedSVG]);
 
   return (
     <div className="h-full flex flex-col overflow-y-auto">
+      {/* CSS 애니메이션 정의 */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+          }
+          @keyframes scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+          }
+          @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+            40%, 43% { transform: translateY(-30px); }
+            70% { transform: translateY(-15px); }
+          }
+        `
+      }} />
       <div className="flex items-center justify-between mb-6">
         <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Preview</h2>
         <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -154,70 +177,46 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
               }}
             />
             
-            {/* SVG Container - Always centered */}
-            {/* SVG Container - Always centered */}
+            {/* Inline SVG와 완전히 동일한 구조로 표시 - React 컴포넌트로 렌더링 */}
             <div
-              className="flex items-center justify-center"
               style={{
-                // Size properties
-                width: `${Math.min(config.size, 400)}px`,
-                height: `${Math.min(config.size, 400)}px`,
-                
-                // Rotation property
+                width: `${config.size}px`,
+                height: `${config.size}px`,
                 transform: `rotate(${config.rotation}deg)`,
-                
-                // Opacity property
                 opacity: config.opacity,
-                
-                // Animation property
-                ...getAnimationStyle(),
-                
-                // Hover interaction properties
-                cursor: config.hoverEffect !== 'none' ? 'pointer' : 'default',
-                transition: config.hoverEffect !== 'none' ? 'all 1.5s ease-in-out' : 'none'
+                transition: 'all 1.5s ease-in-out',
+                animation: config.animation !== 'none' ? `${config.animation} 2s infinite` : undefined,
               }}
-              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
-                const element = e.currentTarget;
-                const baseTransform = `rotate(${config.rotation}deg)`;
-                
-                // Apply hover effect while preserving other properties
-                switch (config.hoverEffect) {
-                  case 'scale':
-                    element.style.transform = `${baseTransform} scale(1.1)`;
-                    break;
-                  case 'rotate':
-                    element.style.animation = 'hover-rotate 1s linear infinite';
-                    break;
-                  case 'opacity':
-                    element.style.opacity = '0.8';
-                    element.style.transform = baseTransform; // Keep rotation
-                    break;
-                  default:
-                    break;
+              onMouseEnter={(e) => {
+                if (config.hoverEffect === 'scale') {
+                  e.currentTarget.style.transform = `scale(1.1) rotate(${config.rotation}deg)`;
+                } else if (config.hoverEffect === 'rotate') {
+                  if (config.animation === 'scale') {
+                    e.currentTarget.style.animation = 'none';
+                    e.currentTarget.style.transform = `rotate(${config.rotation + 360}deg)`;
+                  } else {
+                    e.currentTarget.style.transform = `rotate(${config.rotation + 360}deg)`;
+                  }
+                } else if (config.hoverEffect === 'opacity') {
+                  e.currentTarget.style.opacity = '0.8';
                 }
               }}
-              onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
-                const element = e.currentTarget;
-                const baseTransform = `rotate(${config.rotation}deg)`;
-                
-                // Reset to original values
-                switch (config.hoverEffect) {
-                  case 'scale':
-                    element.style.transform = baseTransform;
-                    break;
-                  case 'rotate':
-                    element.style.animation = config.animation !== 'none' ? getAnimationStyle().animation : 'none';
-                    element.style.transform = baseTransform;
-                    break;
-                  case 'opacity':
-                    element.style.opacity = String(config.opacity);
-                    element.style.transform = baseTransform; // Keep rotation
-                    break;
-                  default:
-                    break;
+              onMouseLeave={(e) => {
+                if (config.hoverEffect === 'scale') {
+                  e.currentTarget.style.transform = `rotate(${config.rotation}deg)`;
+                } else if (config.hoverEffect === 'rotate') {
+                  if (config.animation === 'scale') {
+                    e.currentTarget.style.animation = `${config.animation} 2s infinite`;
+                    e.currentTarget.style.transform = `rotate(${config.rotation}deg)`;
+                  } else {
+                    e.currentTarget.style.transform = `rotate(${config.rotation}deg)`;
+                  }
+                } else if (config.hoverEffect === 'opacity') {
+                  e.currentTarget.style.opacity = `${config.opacity}`;
                 }
               }}
-              dangerouslySetInnerHTML={{ __html: processedSVG }}
+              ref={svgContainerRef}
+              key={`${config.strokeWidth}-${config.color}-${config.fillColor}`} // 강제 리렌더링을 위한 key
             />
           </div>
         </div>

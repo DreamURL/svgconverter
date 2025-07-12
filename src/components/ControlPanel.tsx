@@ -38,14 +38,16 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
     step = 1, 
     label,
     unit = '',
+    isDarkMode,
   }: { 
     value: number; 
     onChange: (value: number) => void; 
     min: number; 
     max: number; 
     step?: number; 
-    label: string; 
+    label?: string; 
     unit?: string;
+    isDarkMode?: boolean;
   }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragValue, setDragValue] = useState(value);
@@ -189,6 +191,19 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
               placeholder="#000000"
             />
           </div>
+        </div>
+        
+        {/* Stroke Width */}
+        <div className="space-y-2">
+          <NumberSlider
+            value={config.strokeWidth}
+            onChange={(value) => handleChange('strokeWidth', value)}
+            min={0}
+            max={10}
+            step={0.5}
+            label="Stroke Width"
+            isDarkMode={isDarkMode}
+          />
         </div>
       </div>
 

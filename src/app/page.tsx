@@ -12,6 +12,7 @@ export interface SVGConfig {
   // Color settings
   color: string; // stroke color
   fillColor: string; // fill color
+  strokeWidth: number; // stroke width
   
   // Transform settings (independent)
   size: number;
@@ -32,6 +33,7 @@ export default function Home() {
   const [config, setConfig] = useState<SVGConfig>({
     color: '#ffffff',
     fillColor: '#000000',
+    strokeWidth: 1,
     size: 100,
     rotation: 0,
     opacity: 1,
@@ -163,7 +165,7 @@ export default function Home() {
         console.log('SVG image loaded, starting GIF generation...');
         
         const frameCount = 20;
-        const duration = (config.animationDuration || 2) / (config.animationSpeed || 5);
+        const duration = 2; // 기본 애니메이션 지속시간 2초
         const frameDelay = Math.max(50, (duration * 1000) / frameCount); // 최소 50ms
         
         console.log(`Frame count: ${frameCount}, delay: ${frameDelay}ms`);
@@ -296,6 +298,7 @@ export default function Home() {
                   setConfig({
                     color: '#ffffff',
                     fillColor: '#000000',
+                    strokeWidth: 1,
                     size: 100,
                     rotation: 0,
                     opacity: 1,

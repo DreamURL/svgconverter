@@ -1,6 +1,6 @@
 import { Code2, Github, Twitter, Sun, Moon, Download, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
-import { Cloudssvgrepocom } from '@/components/ui/Cloud';
+import { Cup } from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
@@ -8,10 +8,10 @@ interface HeaderProps {
   onDownloadGIF: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
-  // onOpenExportTest?: () => void;
+  onOpenExportTest?: () => void;
 }
 
-export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme}: HeaderProps) {
+export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme, onOpenExportTest}: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -39,20 +39,32 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
             <span>Export Code</span>
           </button>
 
-          <Cloudssvgrepocom />
+          <Cup />
 
-
-
-          {/* Export Test button
-          {onOpenExportTest && (
-            <button
-              onClick={onOpenExportTest}
-              className={`px-4 py-2 ${isDarkMode ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-green-600 text-white hover:bg-green-700'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
-            >
-              <Code2 className="w-4 h-4" />
-              <span>Export Test</span>
-            </button>
-          )} */}
+<div
+      style={{
+        // Size property
+        width: '100px',
+        height: '100px',
+        
+        // Rotation property  
+        transform: 'rotate(0deg)',
+        
+        // Opacity property
+        opacity: 1,
+        
+        // Transition for smooth hover effects
+        transition: 'all 1.5s ease-in-out',
+        
+        // Animation property
+        
+      }}
+      
+    >
+      <svg width="100%" height="100%" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.38846 12.7023C3.98522 12.1237 3 10.7636 3 9.17807C3 7.42863 4.3 5.8125 6.25 5.5C6.86168 4.0617 8.30934 3 9.9978 3C12.1607 3 13.9285 4.65893 14.05 6.75C14.8721 7.10549 15.5169 7.83126 15.8166 8.69914M5.38846 12.7023C4.50928 13.5938 4 14.7867 4 16.0315C4 18.7755 6.28335 21 9.1 21L16.75 21C19.0972 21 21 19.1279 21 16.8185C21 15.1039 19.951 13.5202 18.45 12.875C18.3457 11.0905 17.3135 9.5483 15.8166 8.69914M5.38846 12.7023C6.11557 11.9651 7.0957 11.4339 8.25 11.25C9.04989 9.3802 10.943 8 13.151 8C14.1227 8 15.0333 8.25474 15.8166 8.69914" stroke="#c13333" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
+</svg>
+    </div>
 
           {/* Download dropdown */}
           <div className="relative">

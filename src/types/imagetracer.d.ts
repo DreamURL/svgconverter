@@ -19,7 +19,11 @@ declare module 'imagetracerjs' {
   }
 
   const ImageTracer: {
-    imageToSVG: (buffer: never, options?: ImageTracerOptions) => string;
+    imageToSVG: (
+      imageUrl: string, 
+      callback: (svgString: string) => void, 
+      options?: ImageTracerOptions
+    ) => void;
   };
 
   export default ImageTracer;
