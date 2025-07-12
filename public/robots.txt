@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow specific paths if needed
+# Disallow: /api/
+# Disallow: /_next/
+
+Sitemap: https://svg-studio.com/sitemap.xml
+
+# Optional: crawl delay (in seconds)
+Crawl-delay: 1

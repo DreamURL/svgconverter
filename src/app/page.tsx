@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { Download, Edit, Code } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { UploadPanel } from '@/components/UploadPanel';
 import { PreviewPanel } from '@/components/PreviewPanel';
@@ -76,6 +78,59 @@ export default function Home() {
               setIsConverting={setIsConverting}
               isDarkMode={isDarkMode}
             />
+
+            {/* SEO Links Section */}
+            <div className="mt-16 text-center">
+              <h2 className={`text-2xl font-bold mb-8 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                Explore Our SVG Tools
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <Link 
+                  href="/free-svg-converter"
+                  className={`p-6 rounded-lg border ${isDarkMode ? 'border-gray-800 bg-gray-900 hover:bg-gray-800' : 'border-gray-200 bg-white hover:bg-gray-50'} transition-colors group`}
+                >
+                  <div className={`w-12 h-12 rounded-lg ${isDarkMode ? 'bg-blue-600' : 'bg-blue-500'} flex items-center justify-center mb-4`}>
+                    <Download className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    Free SVG Converter
+                  </h3>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Convert any image to SVG format instantly. No registration required, 100% free.
+                  </p>
+                </Link>
+
+                <Link 
+                  href="/svg-editor-online"
+                  className={`p-6 rounded-lg border ${isDarkMode ? 'border-gray-800 bg-gray-900 hover:bg-gray-800' : 'border-gray-200 bg-white hover:bg-gray-50'} transition-colors group`}
+                >
+                  <div className={`w-12 h-12 rounded-lg ${isDarkMode ? 'bg-purple-600' : 'bg-purple-500'} flex items-center justify-center mb-4`}>
+                    <Edit className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    SVG Editor Online
+                  </h3>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Professional SVG editor with colors, animations, and real-time preview.
+                  </p>
+                </Link>
+
+                <Link 
+                  href="/react-svg-components"
+                  className={`p-6 rounded-lg border ${isDarkMode ? 'border-gray-800 bg-gray-900 hover:bg-gray-800' : 'border-gray-200 bg-white hover:bg-gray-50'} transition-colors group`}
+                >
+                  <div className={`w-12 h-12 rounded-lg ${isDarkMode ? 'bg-green-600' : 'bg-green-500'} flex items-center justify-center mb-4`}>
+                    <Code className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    React SVG Components
+                  </h3>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Generate TypeScript React components from your SVG files.
+                  </p>
+                </Link>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="h-full flex">
