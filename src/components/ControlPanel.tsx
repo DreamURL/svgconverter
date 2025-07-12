@@ -204,6 +204,9 @@ export function ControlPanel({ config, onChange, fileName, onReset, isDarkMode }
             label="Stroke Width"
             isDarkMode={isDarkMode}
           />
+          <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            * Line thickness is applied in real-time. Preview does not show line thickness.
+          </div>
         </div>
       </div>
 

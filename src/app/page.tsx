@@ -287,11 +287,13 @@ export default function Home() {
         ) : (
           <div className="h-full flex">
             {/* Left Panel - Controls */}
-            <div className={`w-80 border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>
-              <ControlPanel
-                config={config}
-                onChange={setConfig}
-                fileName={fileName}
+            <div className={`w-80 border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>            <ControlPanel
+              config={config}
+              onChange={(newConfig) => {
+                console.log('Config changed:', newConfig); // 디버깅용
+                setConfig(newConfig);
+              }}
+              fileName={fileName}
                 onReset={() => {
                   setSvgContent('');
                   setFileName('');
