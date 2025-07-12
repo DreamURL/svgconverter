@@ -13,7 +13,7 @@ interface CodeModalProps {
 }
 
 // generateInlineSVG 함수를 별도로 export
-export function generateInlineSVG(svgContent: string, config: SVGConfig, fileName: string) {
+export function generateInlineSVG(svgContent: string, config: SVGConfig, _fileName: string) {
   // JSX 형식으로 SVG 처리
   let processedSVG = svgContent
     .replace(/<\?xml[^>]*\?>/g, '')
@@ -151,37 +151,37 @@ export function CodeModal({ isOpen, onClose, svgContent, config, fileName }: Cod
   const componentName = fileName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]/g, '');
   const capitalizedName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
 
-  const generateHoverFunction = () => {
-    const baseTransform = `rotate(${config.rotation}deg)`;
+  // const generateHoverFunction = () => {
+  //   const baseTransform = `rotate(${config.rotation}deg)`;
     
-    if (config.hoverEffect === 'scale') {
-      return `const getHoverStyle = () => {
-    if (!isHovered) return {};
+  //   if (config.hoverEffect === 'scale') {
+  //     return `const getHoverStyle = () => {
+  //   if (!isHovered) return {};
     
-    const baseTransform = \`${baseTransform}\`;
+  //   const baseTransform = \`${baseTransform}\`;
     
-    return { transform: \`scale(1.1) \${baseTransform}\` };
-  };`;
-    } else if (config.hoverEffect === 'rotate') {
-      return `const getHoverStyle = () => {
-    if (!isHovered) return {};
+  //   return { transform: \`scale(1.1) \${baseTransform}\` };
+  // };`;
+  //   } else if (config.hoverEffect === 'rotate') {
+  //     return `const getHoverStyle = () => {
+  //   if (!isHovered) return {};
     
-    return { animation: 'hover-rotate 1s linear infinite' };
-  };`;
-    } else if (config.hoverEffect === 'opacity') {
-      return `const getHoverStyle = () => {
-    if (!isHovered) return {};
+  //   return { animation: 'hover-rotate 1s linear infinite' };
+  // };`;
+  //   } else if (config.hoverEffect === 'opacity') {
+  //     return `const getHoverStyle = () => {
+  //   if (!isHovered) return {};
     
-    const baseTransform = \`${baseTransform}\`;
+  //   const baseTransform = \`${baseTransform}\`;
     
-    return { 
-      opacity: 0.8,
-      transform: baseTransform 
-    };
-  };`;
-    }
-    return '';
-  };
+  //   return { 
+  //     opacity: 0.8,
+  //     transform: baseTransform 
+  //   };
+  // };`;
+  //   }
+  //   return '';
+  // };
 
   const generateReactComponent = () => {
     // Inline SVG 코드를 그대로 가져와서 React Component로 wrapping
