@@ -1,21 +1,20 @@
-Starting GIF download process...
-page.tsx:130 SVG content available: true
-page.tsx:131 Animation type: pulse
-page.tsx:134 Importing gif.js...
-page.tsx:136 gif.js imported successfully
-page.tsx:174 Using original SVG content for GIF generation
-page.tsx:182 SVG string length: 746
-page.tsx:194 Processed SVG for GIF: <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5.38846 12.7023C3.98522 12.1237 3 10.7636 3 9.17807C3 7.42863 4.3 5.8125 6.25 5.5C6.86168 4
-page.tsx:283 Starting to load SVG image...
-page.tsx:284 Image src will be set to: blob:http://localhost:3000/7df0be67-c7bc-42f5-b961-7d5cb4aa4db6
-page.tsx:202 SVG image loaded successfully, starting GIF generation...
-page.tsx:203 Image dimensions: 100 x 100
-page.tsx:209 Frame count: 20, delay: 100ms
-page.tsx:250 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
-GIF.getContextData @ gif.coffee:163
-GIF.addFrame @ gif.coffee:57
-img.onload @ page.tsx:250Understand this warning
-page.tsx:253 All frames added, starting GIF rendering...
-page.tsx:268 GIF generation progress: 0%
 
+
+
+  사이트에 방문자를 속여 기밀 정보를 유출하거나 소프트웨어를 다운로드하게 하는 등 위험한 작업을 실행하게 하는 콘텐츠가 있습니다. Google 세이프 브라우징은 사기성 콘텐츠를 지속적으로 표시하는 페이지에 방문하기 전에 미리 경고를 표시하여 웹 사용자를 보호합니다.
+
+다음의 경우 사기성 웹페이지로 간주됩니다.
+
+내 기기 또는 브라우저 등 신뢰할 수 있는 대상이나 웹사이트 자체인 것처럼 작동하거나 외형적으로 보이도록 함
+사용자를 속여서 비밀번호 공유, 기술 지원팀에 전화, 소프트웨어 다운로드 등 신뢰할 수 있는 대상에만 실행하는 작업을 하도록 유도함
+이러한 유형의 사기성 콘텐츠를 소셜 엔지니어링이라고 합니다. 소셜 엔지니어링에 관해 자세히 알아보거나 사기성 페이지의 예시를 확인하세요.
+
+문제 해결
+1. 문제 확인
+예시 페이지를 방문하여 사기성 콘텐츠가 있는지 확인합니다. URL 검사 도구를 사용하면 휴대기기와 데스크톱 보기 모두에서 사이트를 볼 수 있습니다.
+
+2. 페이지 문제 해결
+소셜 엔지니어링이 포함된 모든 페이지를 수정합니다. 세이프 브라우징이 웹페이지를 잘못 분류했다고 생각되면 여기에서 신고하세요.
+
+3. 검토 요청
+사이트에서 문제가 해결되었음을 확인한 후 보안 문제 보고서에서 보안 검토를 요청합니다. 검토가 완료되는 데 며칠에서 몇 주까지 걸릴 수 있습니다.

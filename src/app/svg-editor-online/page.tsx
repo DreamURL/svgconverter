@@ -120,46 +120,6 @@ export default function SVGEditorOnline() {
               Open SVG Editor →
             </Link>
           </div>
-
-          <div className="prose prose-invert max-w-none">
-            <h2>How to Use the Online SVG Editor</h2>
-            <ol>
-              <li><strong>Upload SVG File:</strong> Import existing SVG or convert from PNG/JPG</li>
-              <li><strong>Customize Properties:</strong> Edit colors, size, rotation, and stroke width</li>
-              <li><strong>Add Animations:</strong> Choose from spin, pulse, scale, or bounce effects</li>
-              <li><strong>Preview Changes:</strong> See real-time updates in the preview panel</li>
-              <li><strong>Export Code:</strong> Generate React components or clean SVG code</li>
-            </ol>
-
-            <h2>Perfect for Web Developers</h2>
-            <p>Our SVG editor is designed specifically for developers who need:</p>
-            <ul>
-              <li>Clean, optimized SVG code output</li>
-              <li>React component generation</li>
-              <li>CSS-based animations</li>
-              <li>Responsive SVG graphics</li>
-              <li>Customizable hover effects</li>
-            </ul>
-
-            <h2>Professional SVG Editing Features</h2>
-            <ul>
-              <li><strong>Precision Controls:</strong> Fine-tune every aspect of your SVG</li>
-              <li><strong>Color Management:</strong> RGB, HSL, and hex color support</li>
-              <li><strong>Animation Timeline:</strong> Control animation speed and timing</li>
-              <li><strong>Stroke Properties:</strong> Adjust line width and style</li>
-              <li><strong>Transform Options:</strong> Rotate, scale, and position elements</li>
-            </ul>
-
-            <h2>Why Choose Our SVG Editor?</h2>
-            <p>Unlike desktop software, our online SVG editor offers:</p>
-            <ul>
-              <li>Instant access from any device</li>
-              <li>No software installation required</li>
-              <li>Automatic cloud processing</li>
-              <li>Developer-friendly code output</li>
-              <li>Free to use with no limitations</li>
-            </ul>
-          </div>
         </div>
       </main>
       </div>

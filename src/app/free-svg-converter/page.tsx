@@ -101,33 +101,6 @@ export default function FreeSVGConverter() {
               Start Converting Images to SVG →
             </Link>
           </div>
-
-          <div className="prose prose-invert max-w-none">
-            <h2>How to Convert Images to SVG for Free</h2>
-            <ol>
-              <li><strong>Upload Your Image:</strong> Drag and drop or click to upload PNG, JPG, or GIF files</li>
-              <li><strong>Customize Settings:</strong> Adjust colors, size, rotation, and animation effects</li>
-              <li><strong>Export Your SVG:</strong> Get clean SVG code, React components, or CSS</li>
-            </ol>
-
-            <h2>Benefits of SVG Format</h2>
-            <ul>
-              <li><strong>Scalable:</strong> SVG files look crisp at any size, perfect for responsive design</li>
-              <li><strong>Lightweight:</strong> Vector graphics are often smaller than bitmap images</li>
-              <li><strong>SEO-Friendly:</strong> Search engines can index SVG content and text</li>
-              <li><strong>Interactive:</strong> Add animations and hover effects to SVG elements</li>
-              <li><strong>Editable:</strong> Modify colors, shapes, and styles with CSS or code</li>
-            </ul>
-
-            <h2>Best Use Cases for Free SVG Conversion</h2>
-            <ul>
-              <li>Website icons and logos</li>
-              <li>UI components for web applications</li>
-              <li>Scalable graphics for mobile apps</li>
-              <li>Print-ready vector illustrations</li>
-              <li>Interactive web animations</li>
-            </ul>
-          </div>
         </div>
       </main>
       </div>

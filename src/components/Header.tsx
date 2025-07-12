@@ -1,5 +1,4 @@
 import { Code2, Github, Twitter, Sun, Moon } from 'lucide-react';
-import { Cup2 } from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
@@ -24,10 +23,9 @@ export function Header({ onExportCode, isDarkMode, onToggleTheme}: HeaderProps) 
           </div>
         </button>
 
-          <Cup2 />
 
-        {/* Center buttons */}
-        <div className="flex items-center space-x-4">
+
+        <div className="flex items-center space-x-4 ml-[-40px]">
           <button
             onClick={onExportCode}
             className={`px-4 py-2 ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
