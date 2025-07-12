@@ -1,5 +1,4 @@
 import { Code2, Github, Twitter, Sun, Moon } from 'lucide-react';
-import { Cup } from "@/components/ui/Cloud";
 
 interface HeaderProps {
   onExportCode: () => void;
@@ -34,9 +33,6 @@ export function Header({ onExportCode, isDarkMode, onToggleTheme}: HeaderProps) 
             <Code2 className="w-4 h-4" />
             <span>Export Code</span>
           </button>
-
-          {/* Cup Component */}
-          <Cup />
 
           {/* Theme Toggle */}
           <button
