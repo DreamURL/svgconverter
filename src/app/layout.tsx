@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "SVG Studio - Convert Images to Interactive SVG Components | Professional Online Tool",
-  description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Professional online SVG converter and editor for developers and designers."
+  description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Professional online SVG converter and editor for developers and designers.",
   keywords: [
     // Primary Keywords
     "SVG converter", "image to SVG", "SVG editor", "React SVG components", "SVG animation",
