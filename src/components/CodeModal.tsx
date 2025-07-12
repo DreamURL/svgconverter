@@ -13,7 +13,7 @@ interface CodeModalProps {
 }
 
 // generateInlineSVG 함수를 별도로 export
-export function generateInlineSVG(svgContent: string, config: SVGConfig, _fileName: string) {
+export function generateInlineSVG(svgContent: string, config: SVGConfig) {
   // JSX 형식으로 SVG 처리
   let processedSVG = svgContent
     .replace(/<\?xml[^>]*\?>/g, '')
@@ -185,7 +185,7 @@ export function CodeModal({ isOpen, onClose, svgContent, config, fileName }: Cod
 
   const generateReactComponent = () => {
     // Inline SVG 코드를 그대로 가져와서 React Component로 wrapping
-    const inlineSVGCode = generateInlineSVG(svgContent, config, fileName);
+    const inlineSVGCode = generateInlineSVG(svgContent, config);
     
     return `import React from 'react';
 
@@ -436,7 +436,7 @@ ${config.hoverEffect === 'rotate' ? `@keyframes hover-rotate {
   };
 
   const reactComponent = generateReactComponent();
-  const inlineSVG = generateInlineSVG(svgContent, config, fileName);
+  const inlineSVG = generateInlineSVG(svgContent, config);
   const cssCode = generateCSS();
 
   return (

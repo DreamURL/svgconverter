@@ -257,7 +257,6 @@ export default function Home() {
         onDownloadGIF={handleDownloadGIF}
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
-        onOpenExportTest={() => setIsExportTestModalOpen(true)}
       />
       
       <main className="pt-16">
