@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DefaultGoogleAnalytics } from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
-  title: "Free SVG Converter Online - Convert PNG, JPG, GIF to SVG Files Instantly | No Registration",
+  title: "SVG Converter Online - Convert PNG, JPG, GIF to SVG Files Instantly | Professional Tool",
   description: "Convert any image to SVG format completely free. Upload PNG, JPG, JPEG, GIF files and get high-quality scalable vector graphics instantly. No registration, no watermarks, unlimited conversions. Professional SVG converter for web developers and designers.",
   keywords: [
     // Primary Free Keywords

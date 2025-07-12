@@ -11,15 +11,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SVG Studio - Convert Images to Interactive SVG Components | Free Online Tool",
-  description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Free online SVG converter and editor for developers and designers.",
+  title: "SVG Studio - Convert Images to Interactive SVG Components | Professional Online Tool",
+  description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Professional online SVG converter and editor for developers and designers."
   keywords: [
     // Primary Keywords
     "SVG converter", "image to SVG", "SVG editor", "React SVG components", "SVG animation",
     
-    // Free Tools Keywords
-    "free SVG converter", "free online SVG editor", "free vector converter", "free image converter",
-    "no registration SVG tool", "unlimited SVG conversion", "free SVG generator",
+    // Professional Tools Keywords
+    "online SVG converter", "web SVG editor", "vector converter", "image converter",
+    "browser SVG tool", "SVG conversion", "SVG generator",
     
     // File Format Keywords
     "PNG to SVG", "JPG to SVG", "JPEG to SVG", "GIF to SVG", "bitmap to vector",
