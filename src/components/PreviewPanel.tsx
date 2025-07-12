@@ -167,7 +167,7 @@ export function PreviewPanel({ svgContent, config, isDarkMode }: PreviewPanelPro
                 e.currentTarget.style.opacity = `${config.opacity}`;
               }}
             >
-              <div dangerouslySetInnerHTML={{ __html: processedSVG }} />
+              <div data-preview-svg dangerouslySetInnerHTML={{ __html: processedSVG }} />
             </div>
           </div>
         </div>

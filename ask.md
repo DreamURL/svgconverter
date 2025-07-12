@@ -1,9 +1,21 @@
-Processed SVG for HTML: <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<g id="_x30_4">
-</g>
-<g id="_x30_3">
-	<g>
-		<path d="M73.328,344.016c-1.051-2.372-1.994-4.069-2.829-5.094c-1.105-1.375-2.608-2.533-4.508-3.478
-			c-1.9-0.942-4.063-1.63-6.489-2.061c-0.916-0.162-1.846-0.242-2.789-0.242c-1.859,0-3.894,0.27-6.104,0.809
-			c-2.83,0.701-4.717,2.008-5.66,3.921c-
+Starting GIF download process...
+page.tsx:130 SVG content available: true
+page.tsx:131 Animation type: pulse
+page.tsx:134 Importing gif.js...
+page.tsx:136 gif.js imported successfully
+page.tsx:174 Using original SVG content for GIF generation
+page.tsx:182 SVG string length: 746
+page.tsx:194 Processed SVG for GIF: <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.38846 12.7023C3.98522 12.1237 3 10.7636 3 9.17807C3 7.42863 4.3 5.8125 6.25 5.5C6.86168 4
+page.tsx:283 Starting to load SVG image...
+page.tsx:284 Image src will be set to: blob:http://localhost:3000/7df0be67-c7bc-42f5-b961-7d5cb4aa4db6
+page.tsx:202 SVG image loaded successfully, starting GIF generation...
+page.tsx:203 Image dimensions: 100 x 100
+page.tsx:209 Frame count: 20, delay: 100ms
+page.tsx:250 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+GIF.getContextData @ gif.coffee:163
+GIF.addFrame @ gif.coffee:57
+img.onload @ page.tsx:250Understand this warning
+page.tsx:253 All frames added, starting GIF rendering...
+page.tsx:268 GIF generation progress: 0%
+

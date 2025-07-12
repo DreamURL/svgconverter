@@ -1,17 +1,13 @@
-import { Code2, Github, Twitter, Sun, Moon, Download, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { Code2, Github, Twitter, Sun, Moon } from 'lucide-react';
 import { Cup2 } from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
-  onDownloadSVG: () => void;
-  onDownloadGIF: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
 }
 
-export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode, onToggleTheme}: HeaderProps) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+export function Header({ onExportCode, isDarkMode, onToggleTheme}: HeaderProps) {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
@@ -28,6 +24,8 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
           </div>
         </button>
 
+          <Cup2 />
+
         {/* Center buttons */}
         <div className="flex items-center space-x-4">
           <button
@@ -38,47 +36,6 @@ export function Header({ onExportCode, onDownloadSVG, onDownloadGIF, isDarkMode,
             <span>Export Code</span>
           </button>
 
-          <Cup2 />
-
-
-
-
-          {/* Download dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`px-4 py-2 ${isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
-            >
-              <Download className="w-4 h-4" />
-              <span>Download</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-
-            {isDropdownOpen && (
-              <div className={`absolute top-full right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border rounded-lg shadow-lg z-10`}>
-                <button
-                  onClick={() => {
-                    onDownloadSVG();
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`w-full px-4 py-2 text-left ${isDarkMode ? 'hover:bg-gray-700 text-white rounded-lg' : 'hover:bg-gray-100 text-black rounded-lg'} transition-colors flex items-center space-x-2`}
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download SVG</span>
-                </button>
-                <button
-                  onClick={() => {
-                    onDownloadGIF();
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`w-full px-4 py-2 text-left ${isDarkMode ? 'hover:bg-gray-700 text-white rounded-lg' : 'hover:bg-gray-100 text-black rounded-lg'} transition-colors flex items-center space-x-2`}
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download GIF</span>
-                </button>
-              </div>
-            )}
-          </div>
 
           {/* Theme Toggle */}
           <button
