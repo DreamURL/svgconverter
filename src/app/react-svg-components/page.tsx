@@ -3,15 +3,73 @@ import Link from "next/link";
 import { DefaultGoogleAnalytics } from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
-  title: "React SVG Components Generator - Convert Images to React SVG Components",
-  description: "Generate reusable React SVG components from images. TypeScript support, customizable props, and production-ready code. Perfect for React developers.",
+  title: "React SVG Components Generator - Convert Images to TypeScript React Components | Free Tool",
+  description: "Generate production-ready React SVG components from images with TypeScript support, customizable props, and clean code output. Perfect for React developers, Next.js projects, and component libraries. Free online tool with instant code generation.",
   keywords: [
-    "React SVG components",
-    "SVG to React",
-    "React component generator",
-    "TypeScript SVG",
-    "React development tools",
-    "SVG components library"
+    // Primary React Keywords
+    "React SVG components", "React SVG generator", "SVG to React converter",
+    "React component generator", "JSX SVG components", "React icon generator",
+    
+    // TypeScript Keywords
+    "TypeScript SVG components", "TypeScript React SVG", "typed SVG components",
+    "React SVG with TypeScript", "type-safe SVG components",
+    
+    // Framework Keywords
+    "Next.js SVG components", "React 18 SVG components", "React Native SVG",
+    "Gatsby SVG components", "Create React App SVG", "Vite React SVG",
+    
+    // Development Keywords
+    "React development tools", "component library generator", "reusable React components",
+    "React UI components", "React icon library", "React graphics components",
+    
+    // Code Quality Keywords
+    "production-ready React components", "clean React code", "optimized React SVG",
+    "tree-shakeable SVG components", "performant React components",
+    
+    // Props and Customization
+    "customizable React components", "configurable SVG props", "dynamic React SVG",
+    "responsive React components", "themed React components",
+    
+    // Design System Keywords
+    "React design system", "component design system", "SVG design tokens",
+    "React component library", "UI component generator", "design system tools",
+    
+    // Developer Experience
+    "React developer tools", "SVG automation", "code generation tools",
+    "React workflow tools", "developer productivity", "rapid prototyping React",
+    
+    // Bundle and Performance
+    "lightweight React components", "small bundle React SVG", "optimized React icons",
+    "tree-shaking React components", "performance React SVG",
+    
+    // Accessibility Keywords
+    "accessible React SVG", "ARIA React components", "semantic React SVG",
+    "screen reader friendly SVG", "inclusive React components",
+    
+    // Styling Keywords
+    "styled-components SVG", "emotion React SVG", "CSS-in-JS SVG",
+    "Tailwind CSS React SVG", "styled React components",
+    
+    // Use Cases
+    "React icon components", "React logo components", "React illustration components",
+    "React navigation icons", "React button icons", "React dashboard icons",
+    
+    // Technical Keywords
+    "React SVG props", "React component props", "SVG React hooks",
+    "React SVG rendering", "client-side React SVG", "server-side React SVG",
+    
+    // Alternative Keywords
+    "React-icons alternative", "custom React icons", "bespoke React components",
+    "unique React SVG", "branded React components",
+    
+    // Long-tail Keywords
+    "how to create React SVG components", "best React SVG component generator",
+    "convert SVG to React component online", "React SVG component best practices",
+    "generate TypeScript React components from SVG",
+    
+    // Enterprise Keywords
+    "enterprise React components", "scalable React architecture", "maintainable React code",
+    "React component standards", "professional React development"
   ],
   openGraph: {
     title: "React SVG Components Generator - Convert Images to React",
@@ -120,7 +178,7 @@ export function MyIcon({
               <li><strong>Next.js Apps:</strong> Optimized SVG components for Next.js applications</li>
               <li><strong>TypeScript Projects:</strong> Full type safety with proper interfaces</li>
               <li><strong>Design Systems:</strong> Reusable components with consistent styling</li>
-              <li><strong>Performance:</strong> Lightweight SVG components that don't affect bundle size</li>
+              <li><strong>Performance:</strong> Lightweight SVG components that don&apos;t affect bundle size</li>
             </ul>
 
             <h2>Advanced Component Features</h2>
