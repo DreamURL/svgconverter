@@ -54,7 +54,7 @@ export function parseSVGPaths(svgContent: string): ParsedSVG {
       return {
         id: `path-${index}`,
         originalPath: path.getAttribute('d') || '',
-        fill: path.getAttribute('fill') || '#000000',
+        fill: path.getAttribute('fill') || undefined,
         stroke: path.getAttribute('stroke') || 'none',
         strokeWidth: parseFloat(path.getAttribute('stroke-width') || '1'),
         strokeLinecap: (path.getAttribute('stroke-linecap') as PathElement['strokeLinecap']) || 'round',
@@ -113,7 +113,7 @@ ${svgContent}
 // Helper function to get default path configuration
 export function getDefaultPathConfig(): Partial<PathElement> {
   return {
-    fill: '#000000',
+    fill: undefined,
     stroke: 'none',
     strokeWidth: 1,
     strokeLinecap: 'round',

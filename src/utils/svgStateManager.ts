@@ -21,7 +21,7 @@ export function convertToEditablePaths(parsedSVG: ParsedSVG): EditablePathElemen
 export function migrateToGlobalConfig(legacyConfig: import('../app/page').SVGConfig): GlobalSVGConfig {
   return {
     color: legacyConfig.color || '#ffffff',
-    fillColor: legacyConfig.fillColor || '#000000', 
+    fillColor: legacyConfig.fillColor || '#ffffff', 
     strokeWidth: legacyConfig.strokeWidth || 1,
     size: legacyConfig.size || 100,
     rotation: legacyConfig.rotation || 0,
@@ -52,8 +52,8 @@ export function getPathRenderSettings(
 ): PathRenderSettings {
   if (path.useIndividualSettings && path.individualSettings) {
     return {
-      fill: path.individualSettings.fill ?? globalConfig.fillColor,
-      stroke: path.individualSettings.stroke ?? globalConfig.color,
+      fill: path.individualSettings.fill ?? (path.fill || globalConfig.fillColor),
+      stroke: path.individualSettings.stroke ?? (path.stroke && path.stroke !== 'none' ? path.stroke : globalConfig.color),
       strokeWidth: path.individualSettings.strokeWidth ?? globalConfig.strokeWidth,
       strokeLinecap: path.individualSettings.strokeLinecap ?? (path.strokeLinecap || 'round'),
       strokeLinejoin: path.individualSettings.strokeLinejoin ?? (path.strokeLinejoin || 'round'),
@@ -61,10 +61,10 @@ export function getPathRenderSettings(
     };
   }
   
-  // 글로벌 설정 사용
+  // 글로벌 설정 사용 (원본 색상 우선)
   return {
-    fill: globalConfig.fillColor,
-    stroke: globalConfig.color,
+    fill: path.fill || globalConfig.fillColor,
+    stroke: path.stroke && path.stroke !== 'none' ? path.stroke : globalConfig.color,
     strokeWidth: globalConfig.strokeWidth,
     strokeLinecap: path.strokeLinecap || 'round',
     strokeLinejoin: path.strokeLinejoin || 'round', 
@@ -97,13 +97,13 @@ export function togglePathIndividualSettings(
     const isTogglingOn = !path.useIndividualSettings;
     
     if (isTogglingOn) {
-      // 개별 설정을 켜는 경우: 현재 글로벌 설정을 개별 설정으로 복사
+      // 개별 설정을 켜는 경우: 현재 렌더링 색상을 개별 설정으로 복사
       return {
         ...path,
         useIndividualSettings: true,
         individualSettings: {
-          fill: globalConfig.fillColor,
-          stroke: globalConfig.color,
+          fill: path.fill || globalConfig.fillColor,
+          stroke: path.stroke && path.stroke !== 'none' ? path.stroke : globalConfig.color,
           strokeWidth: globalConfig.strokeWidth,
           strokeLinecap: path.strokeLinecap || 'round',
           strokeLinejoin: path.strokeLinejoin || 'round',

@@ -43,7 +43,7 @@ export default function Home() {
   const [svgEditorState, dispatchSVGEditor] = useReducer(svgEditorReducer, {
     globalConfig: {
       color: '#ffffff',
-      fillColor: '#000000',
+      fillColor: '#ffffff',
       strokeWidth: 1,
       size: 100,
       rotation: 0,

@@ -131,4 +131,7 @@ export function parseSVGPaths(svgContent: string): PathElement[] {
 ## 첫 번째 작업 완료
 **1단계: SVG 파싱 및 Path 분석** 완료됨.
 
-다음 작업은 2단계 또는 3단계 중 선택 가능.
+
+# 추가 개선 사항
+ - svg 파일 업로드 시에 모든 path에 기본으로 흰색이 배정되어 있으며 fillcolor는 검은색으로 되어있음.
+ - svg 파일을 업로드하면 원본 파일이 갖고 있는 path 별 색상을 초기 값으로 갖도록 수정.
