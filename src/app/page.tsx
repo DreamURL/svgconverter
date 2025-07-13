@@ -84,7 +84,7 @@ export default function Home() {
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
       />
       
-      <main className="pt-16">
+      <main className="pt-20 md:pt-16">
         {!svgContent ? (
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-2xl mx-auto text-center mb-12">
