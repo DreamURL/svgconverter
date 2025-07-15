@@ -277,10 +277,10 @@ ${paths}
             </div>
           </div>
         ) : (
-          <div className="h-screen relative">
+          <div className="fixed inset-0 top-16 flex">
             {/* Left Panel - Controls */}
             {!isControlPanelCollapsed && (
-              <div className={`fixed left-0 top-16 w-80 h-[calc(100vh-4rem)] border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} overflow-y-auto z-40`}>
+              <div className={`w-80 border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} overflow-y-auto z-40`}>
                 <div className="p-6">
                   <ControlPanel
               config={config}
@@ -352,7 +352,7 @@ ${paths}
             {/* Toggle Button */}
             <button
               onClick={() => setIsControlPanelCollapsed(!isControlPanelCollapsed)}
-              className={`fixed top-32 ${isControlPanelCollapsed ? 'left-2' : 'left-70'} z-50 p-2 rounded-lg ${isDarkMode ? 'bg-blue-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-black'} shadow-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
+              className={`absolute top-16 ${isControlPanelCollapsed ? 'left-2' : 'left-80'} z-50 p-2 rounded-lg ${isDarkMode ? 'bg-blue-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-black'} shadow-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
               title={isControlPanelCollapsed ? 'Show Controls' : 'Hide Controls'}
             >
               {isControlPanelCollapsed ? (
@@ -363,8 +363,8 @@ ${paths}
             </button>
             
             {/* Right Panel - Preview */}
-            <div className="w-full h-full overflow-auto">
-              <div className={`${!isControlPanelCollapsed ? 'ml-80' : ''} p-6 transition-all duration-300`}>
+            <div className={`flex-1 overflow-auto ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+              <div className="p-6 h-full">
                 <PreviewPanel
                   svgContent={svgContent}
                   config={config}
