@@ -194,7 +194,7 @@ ${paths}
             </div>
 
             {/* Google AdSense Section */}
-            <div className="mt-12 text-center">
+            {/* <div className="mt-12 text-center">
               <div className={`p-6 rounded-lg border-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
                 <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
                   Advertisement
@@ -205,7 +205,7 @@ ${paths}
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
 
             {/* SEO Links Section */}
