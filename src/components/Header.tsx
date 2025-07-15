@@ -1,5 +1,5 @@
 import { Code2, Github, Twitter, Sun, Moon, Download, HelpCircle } from 'lucide-react';
-import {Cloud} from '@/components/ui/Cloud';
+
 
 interface HeaderProps {
   onExportCode: () => void;
