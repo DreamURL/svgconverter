@@ -1,6 +1,6 @@
 'use client';
 
-import { X, Upload, Settings, Code, Download, Eye, RotateCcw, Palette, Move, Zap, Star, Twitter } from 'lucide-react';
+import { X, Upload, Settings, Code, Download, Eye, RotateCcw, Palette, Move, Zap, Star } from 'lucide-react';
 
 interface HelpModalProps {
   isOpen: boolean;
@@ -208,13 +208,15 @@ export function HelpModal({ isOpen, onClose, isDarkMode }: HelpModalProps) {
                   <span>Leave a Review on Product Hunt</span>
                 </a>
                 <a
-                  href="https://twitter.com/intent/tweet?text=Just%20discovered%20SVG%20Studio%20-%20an%20amazing%20tool%20for%20editing%20SVG%20files%20and%20exporting%20React%20components!%20Check%20it%20out%20at%20[your-website-url]"
+                  href="https://x.com/intent/tweet?text=Just%20discovered%20SVG%20Studio%20-%20an%20amazing%20tool%20for%20editing%20SVG%20files%20and%20exporting%20React%20components!%20Check%20it%20out%20at%20[your-website-url]"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white transition-colors`}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-900 hover:bg-gray-800'} text-white transition-colors`}
                 >
-                  <Twitter className="w-4 h-4" />
-                  <span>Share on Twitter</span>
+                  <div className="w-4 h-4 flex items-center justify-center bg-black rounded-full">
+                    <span className="text-white text-xs font-bold">𝕏</span>
+                  </div>
+                  <span>Share on X</span>
                 </a>
               </div>
               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>

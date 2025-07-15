@@ -1,4 +1,4 @@
-import { Code2, Github, Twitter, Sun, Moon, Download, HelpCircle } from 'lucide-react';
+import { Code2, Github, Sun, Moon, Download, HelpCircle, X } from 'lucide-react';
 
 
 interface HeaderProps {
@@ -51,7 +51,7 @@ export function Header({ onExportCode, onDownloadSVG, onShowHelp, isDarkMode, on
               rel="noopener noreferrer"
               className={`p-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors`}
             >
-              <Twitter className="w-4 h-4 flex-shrink-0" />
+              <X className="w-4 h-4 flex-shrink-0" />
             </a>
           </div>
         </div>
@@ -114,12 +114,14 @@ export function Header({ onExportCode, onDownloadSVG, onShowHelp, isDarkMode, on
               <Github className="w-5 h-5 flex-shrink-0" />
             </a>
             <a
-              href="https://twitter.com"
+              href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
               className={`p-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors`}
             >
-              <Twitter className="w-5 h-5 flex-shrink-0" />
+              <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center bg-black rounded-full">
+                <span className="text-white text-xs font-bold">𝕏</span>
+              </div>
             </a>
           </div>
         </div>
