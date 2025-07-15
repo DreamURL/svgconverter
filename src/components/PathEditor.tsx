@@ -3,7 +3,7 @@
 import { SVGEditorState } from '@/types/svgTypes';
 import { getPathRenderSettings } from '@/utils/svgStateManager';
 import { Eye, EyeOff, RotateCcw, Settings } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface PathEditorProps {
   svgEditorState: SVGEditorState;
@@ -47,36 +47,56 @@ export function PathEditor({
   const ColorPicker = ({ 
     value, 
     onChange, 
-    label 
+    label,
+    disabled = false
   }: { 
     value: string; 
     onChange: (value: string) => void; 
     label: string;
-  }) => (
-    <div className="flex items-center space-x-2">
-      <label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-        {label}
-      </label>
+    disabled?: boolean;
+  }) => {
+    const [tempValue, setTempValue] = useState(value);
+    
+    // 외부 값이 변경되면 임시값도 업데이트
+    useEffect(() => {
+      setTempValue(value);
+    }, [value]);
+
+    return (
       <div className="flex items-center space-x-2">
-        <input
-          type="color"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-8 h-8 rounded border border-gray-300 cursor-pointer"
-        />
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-20 px-2 py-1 text-xs border rounded ${
-            isDarkMode 
-              ? 'bg-gray-700 border-gray-600 text-white' 
-              : 'bg-white border-gray-300 text-black'
-          }`}
-        />
+        <label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          {label}
+        </label>
+        <div className="flex items-center space-x-2">
+          <input
+            type="color"
+            value={tempValue}
+            onChange={(e) => disabled ? null : setTempValue(e.target.value)}
+            onBlur={(e) => disabled ? null : onChange(e.target.value)}
+            disabled={disabled}
+            className={`w-8 h-8 rounded border border-gray-300 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+          />
+          <input
+            type="text"
+            value={tempValue}
+            onChange={(e) => disabled ? null : setTempValue(e.target.value)}
+            onBlur={(e) => disabled ? null : onChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !disabled) {
+                onChange(tempValue);
+              }
+            }}
+            disabled={disabled}
+            className={`w-20 px-2 py-1 text-xs border rounded ${
+              isDarkMode 
+                ? 'bg-gray-700 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-black'
+            } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const NumberSlider = ({ 
     value, 
@@ -85,7 +105,8 @@ export function PathEditor({
     max, 
     step = 1, 
     label,
-    unit = ''
+    unit = '',
+    disabled = false
   }: { 
     value: number; 
     onChange: (value: number) => void; 
@@ -94,6 +115,7 @@ export function PathEditor({
     step?: number; 
     label: string; 
     unit?: string;
+    disabled?: boolean;
   }) => (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
@@ -110,8 +132,9 @@ export function PathEditor({
         max={max}
         step={step}
         value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+        onChange={(e) => disabled ? null : onChange(parseFloat(e.target.value))}
+        disabled={disabled}
+        className={`w-full h-2 bg-gray-200 rounded-lg appearance-none dark:bg-gray-700 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
       />
     </div>
   );
@@ -147,9 +170,6 @@ export function PathEditor({
                 className="p-3 cursor-pointer"
                 onClick={() => {
                   onPathSelect(isSelected ? null : path.id);
-                  if (!isExpanded) {
-                    togglePathExpansion(path.id);
-                  }
                 }}
               >
                 <div className="flex items-center justify-between">
@@ -178,19 +198,15 @@ export function PathEditor({
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    {/* Visibility Toggle */}
+                    {/* Options Panel Toggle */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        // TODO: Implement visibility toggle
+                        togglePathExpansion(path.id);
                       }}
                       className={`p-1 rounded ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
                     >
-                      {path.visible ? (
-                        <Eye className="w-4 h-4" />
-                      ) : (
-                        <EyeOff className="w-4 h-4" />
-                      )}
+                      <Eye className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
                     </button>
 
                     {/* Individual Settings Toggle */}
@@ -213,42 +229,46 @@ export function PathEditor({
               </div>
 
               {/* Path Controls */}
-              {isExpanded && path.useIndividualSettings && (
+              {isExpanded && (
                 <div className={`p-3 border-t space-y-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                   <div className="grid grid-cols-1 gap-4">
                     {/* Fill Color */}
                     <ColorPicker
                       value={path.individualSettings?.fill || renderSettings.fill}
-                      onChange={(value) => onPathUpdate(path.id, { fill: value })}
+                      onChange={path.useIndividualSettings ? (value) => onPathUpdate(path.id, { fill: value }) : () => {}}
                       label="Fill"
+                      disabled={!path.useIndividualSettings}
                     />
 
                     {/* Stroke Color */}
                     <ColorPicker
                       value={path.individualSettings?.stroke || renderSettings.stroke}
-                      onChange={(value) => onPathUpdate(path.id, { stroke: value })}
+                      onChange={path.useIndividualSettings ? (value) => onPathUpdate(path.id, { stroke: value }) : () => {}}
                       label="Stroke"
+                      disabled={!path.useIndividualSettings}
                     />
 
                     {/* Stroke Width */}
                     <NumberSlider
                       value={path.individualSettings?.strokeWidth || renderSettings.strokeWidth}
-                      onChange={(value) => onPathUpdate(path.id, { strokeWidth: value })}
+                      onChange={path.useIndividualSettings ? (value) => onPathUpdate(path.id, { strokeWidth: value }) : () => {}}
                       min={0}
                       max={10}
                       step={0.1}
                       label="Stroke Width"
                       unit="px"
+                      disabled={!path.useIndividualSettings}
                     />
 
                     {/* Opacity */}
                     <NumberSlider
                       value={path.individualSettings?.opacity || renderSettings.opacity}
-                      onChange={(value) => onPathUpdate(path.id, { opacity: value })}
+                      onChange={path.useIndividualSettings ? (value) => onPathUpdate(path.id, { opacity: value }) : () => {}}
                       min={0}
                       max={1}
                       step={0.1}
                       label="Opacity"
+                      disabled={!path.useIndividualSettings}
                     />
                   </div>
 

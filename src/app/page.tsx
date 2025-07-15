@@ -42,8 +42,8 @@ export default function Home() {
   // 새로운 통합 상태 관리
   const [svgEditorState, dispatchSVGEditor] = useReducer(svgEditorReducer, {
     globalConfig: {
-      color: '#ffffff',
-      fillColor: '#ffffff',
+      color: '#000000',
+      fillColor: '#000000',
       strokeWidth: 1,
       size: 100,
       rotation: 0,
@@ -53,7 +53,7 @@ export default function Home() {
     },
     parsedSVG: null,
     selectedPathId: null,
-    editMode: 'global',
+    editMode: 'individual',
     showPathList: false,
   });
   

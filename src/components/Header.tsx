@@ -1,4 +1,5 @@
 import { Code2, Github, Twitter, Sun, Moon } from 'lucide-react';
+// import {Cloud} from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
@@ -62,6 +63,7 @@ export function Header({ onExportCode, isDarkMode, onToggleTheme}: HeaderProps) 
             <Code2 className="w-4 h-4 flex-shrink-0" />
             <span>Export Code</span>
           </button>
+
 
           {/* Theme Toggle - visible on desktop */}
           <button

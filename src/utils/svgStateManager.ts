@@ -12,16 +12,23 @@ import { ParsedSVG} from './svgParser';
 export function convertToEditablePaths(parsedSVG: ParsedSVG): EditablePathElement[] {
   return parsedSVG.paths.map(path => ({
     ...path,
-    useIndividualSettings: false,
-    individualSettings: undefined,
+    useIndividualSettings: true,
+    individualSettings: {
+      fill: path.fill || '#000000',
+      stroke: path.stroke || 'none',
+      strokeWidth: path.strokeWidth || 1,
+      strokeLinecap: path.strokeLinecap || 'round',
+      strokeLinejoin: path.strokeLinejoin || 'round',
+      opacity: path.opacity || 1,
+    },
   }));
 }
 
 // 기존 SVGConfig에서 GlobalSVGConfig로 변환
 export function migrateToGlobalConfig(legacyConfig: import('../app/page').SVGConfig): GlobalSVGConfig {
   return {
-    color: legacyConfig.color || '#ffffff',
-    fillColor: legacyConfig.fillColor || '#ffffff', 
+    color: legacyConfig.color || '#000000',
+    fillColor: legacyConfig.fillColor || '#000000', 
     strokeWidth: legacyConfig.strokeWidth || 1,
     size: legacyConfig.size || 100,
     rotation: legacyConfig.rotation || 0,
@@ -52,8 +59,8 @@ export function getPathRenderSettings(
 ): PathRenderSettings {
   if (path.useIndividualSettings && path.individualSettings) {
     return {
-      fill: path.individualSettings.fill ?? (path.fill || globalConfig.fillColor),
-      stroke: path.individualSettings.stroke ?? (path.stroke && path.stroke !== 'none' ? path.stroke : globalConfig.color),
+      fill: path.individualSettings.fill ?? (path.fill || '#000000'),
+      stroke: path.individualSettings.stroke ?? (path.stroke || 'none'),
       strokeWidth: path.individualSettings.strokeWidth ?? globalConfig.strokeWidth,
       strokeLinecap: path.individualSettings.strokeLinecap ?? (path.strokeLinecap || 'round'),
       strokeLinejoin: path.individualSettings.strokeLinejoin ?? (path.strokeLinejoin || 'round'),
@@ -61,10 +68,10 @@ export function getPathRenderSettings(
     };
   }
   
-  // 글로벌 설정 사용 (원본 색상 우선)
+  // Global config 사용 (individual settings가 off일 때)
   return {
-    fill: path.fill || globalConfig.fillColor,
-    stroke: path.stroke && path.stroke !== 'none' ? path.stroke : globalConfig.color,
+    fill: globalConfig.fillColor,
+    stroke: globalConfig.color,
     strokeWidth: globalConfig.strokeWidth,
     strokeLinecap: path.strokeLinecap || 'round',
     strokeLinejoin: path.strokeLinejoin || 'round', 
@@ -97,13 +104,13 @@ export function togglePathIndividualSettings(
     const isTogglingOn = !path.useIndividualSettings;
     
     if (isTogglingOn) {
-      // 개별 설정을 켜는 경우: 현재 렌더링 색상을 개별 설정으로 복사
+      // 개별 설정을 켜는 경우: 기존 individualSettings가 있으면 유지, 없으면 초기값 설정
       return {
         ...path,
         useIndividualSettings: true,
-        individualSettings: {
-          fill: path.fill || globalConfig.fillColor,
-          stroke: path.stroke && path.stroke !== 'none' ? path.stroke : globalConfig.color,
+        individualSettings: path.individualSettings || {
+          fill: path.fill || '#000000',
+          stroke: path.stroke || 'none',
           strokeWidth: globalConfig.strokeWidth,
           strokeLinecap: path.strokeLinecap || 'round',
           strokeLinejoin: path.strokeLinejoin || 'round',
@@ -111,11 +118,11 @@ export function togglePathIndividualSettings(
         },
       };
     } else {
-      // 개별 설정을 끄는 경우: 개별 설정 제거
+      // 개별 설정을 끄는 경우: 플래그만 끄고 설정값은 보존
       return {
         ...path,
         useIndividualSettings: false,
-        individualSettings: undefined,
+        // individualSettings는 유지 (제거하지 않음)
       };
     }
   });

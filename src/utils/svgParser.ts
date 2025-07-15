@@ -54,7 +54,7 @@ export function parseSVGPaths(svgContent: string): ParsedSVG {
       return {
         id: `path-${index}`,
         originalPath: path.getAttribute('d') || '',
-        fill: path.getAttribute('fill') || undefined,
+        fill: path.getAttribute('fill') || '#000000',
         stroke: path.getAttribute('stroke') || 'none',
         strokeWidth: parseFloat(path.getAttribute('stroke-width') || '1'),
         strokeLinecap: (path.getAttribute('stroke-linecap') as PathElement['strokeLinecap']) || 'round',
