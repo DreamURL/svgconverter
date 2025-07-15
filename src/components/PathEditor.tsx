@@ -2,7 +2,7 @@
 
 import { SVGEditorState } from '@/types/svgTypes';
 import { getPathRenderSettings } from '@/utils/svgStateManager';
-import { Eye, EyeOff, RotateCcw, Settings } from 'lucide-react';
+import { Eye, RotateCcw, Settings } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface PathEditorProps {
