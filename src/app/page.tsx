@@ -199,11 +199,15 @@ ${paths}
                 <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
                   Advertisement
                 </p>
-                <div className="bg-gray-100 dark:bg-gray-800 h-32 flex items-center justify-center rounded">
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                    Google AdSense Placeholder
-                  </span>
-                </div>
+                <ins className="adsbygoogle"
+                     style={{display: 'block'}}
+                     data-ad-client="ca-pub-9786013383976168"
+                     data-ad-slot="9580679762"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                  {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+                </script>
               </div>
             </div>
 
