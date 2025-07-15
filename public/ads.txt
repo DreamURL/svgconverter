@@ -1,0 +1,11 @@
+# ads.txt file for Google AdSense
+# This file is required by Google AdSense to verify domain ownership
+
+# Google AdSense
+google.com, pub-9786013383976168, DIRECT, f08c47fec0942fa0
+
+# Format: <Field #1>, <Field #2>, <Field #3>, <Field #4>
+# Field #1: Domain name of the advertising system
+# Field #2: Publisher's Account ID
+# Field #3: Type of Account/Relationship (DIRECT or RESELLER)
+# Field #4: Certification Authority ID (optional)
