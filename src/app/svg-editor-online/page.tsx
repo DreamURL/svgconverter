@@ -6,58 +6,10 @@ export const metadata: Metadata = {
   title: "Professional Online SVG Editor - Edit Colors, Animations & Export React Components | Free Tool",
   description: "Advanced online SVG editor with real-time preview, color customization, animations, and React component export. Professional vector graphics editor for web developers and designers. Free, browser-based, no installation required.",
   keywords: [
-    // Primary Editor Keywords
-    "SVG editor online", "online SVG editor", "web-based SVG editor", "browser SVG editor",
-    "professional SVG editor", "advanced SVG editor", "SVG editor free",
-    
-    // Feature Keywords
-    "SVG color editor", "SVG animation editor", "SVG size editor", "SVG rotation editor",
-    "real-time SVG editor", "live SVG preview", "interactive SVG editor",
-    
-    // Vector Graphics Keywords
-    "vector graphics editor", "vector editor online", "scalable graphics editor",
-    "vector art editor", "vector design tool", "graphic design editor",
-    
-    // Editing Features
-    "edit SVG colors", "change SVG colors", "SVG stroke editor", "SVG fill editor",
-    "SVG opacity editor", "SVG transform editor", "SVG properties editor",
-    
-    // Animation Keywords
-    "SVG animation creator", "animated SVG editor", "SVG hover effects editor",
-    "CSS SVG animations", "interactive SVG creator", "dynamic SVG editor",
-    
-    // Export Keywords
-    "SVG to React converter", "export SVG as React", "React component generator",
-    "SVG code generator", "clean SVG export", "optimized SVG output",
-    
-    // Alternative Keywords
-    "free Adobe Illustrator alternative", "Illustrator online alternative",
-    "Inkscape online alternative", "vector editor alternative",
-    
-    // Professional Keywords
-    "professional vector editor", "commercial SVG editor", "enterprise SVG tool",
-    "production-ready SVG editor", "developer SVG editor",
-    
-    // Use Case Keywords
-    "icon editor online", "logo editor SVG", "illustration editor",
-    "UI design SVG editor", "web design vector editor",
-    
-    // Technical Keywords
-    "SVG path editor", "SVG viewBox editor", "SVG DOM editor",
-    "XML SVG editor", "SVG markup editor", "SVG element editor",
-    
-    // Workflow Keywords
-    "design to code SVG", "SVG prototyping tool", "rapid SVG development",
-    "SVG workflow tool", "collaborative SVG editor",
-    
-    // Platform Keywords
-    "cross-platform SVG editor", "mobile SVG editor", "tablet SVG editor",
-    "responsive SVG editor", "multi-device SVG tool",
-    
-    // Long-tail Keywords
-    "how to edit SVG files online", "best online SVG editor 2024",
-    "free professional SVG editor", "SVG editor for web developers",
-    "online vector graphics editor with animations"
+    "SVG Studio", "SVG edit", "PNG to SVG", "interactive SVG", "SVG animation", "SVG design",
+    "online SVG editor", "vector graphics editor", "SVG color editor", "real-time SVG preview",
+    "React component generator", "professional SVG editor", "web development tool", "graphic design editor",
+    "browser-based SVG editor"
   ],
   openGraph: {
     title: "Online SVG Editor - Edit & Customize SVG Files",
