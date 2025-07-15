@@ -191,17 +191,17 @@ export function PreviewPanel({
       {/* SVG Preview */}
       <div className="flex-1 flex items-center justify-center">
         <div 
-          className={`relative p-8 rounded-lg border-2 border-dashed transition-colors ${
-            isDarkMode 
-              ? 'border-gray-700 bg-gray-900/50' 
-              : 'border-gray-300 bg-gray-50/50'
-          }`}
-          style={{ minHeight: '400px', minWidth: '400px' }}
+          className={`relative p-20 rounded-lg `}
+          style={{ 
+            minHeight: '500px', 
+            minWidth: '500px',
+            top: `${config.size}px`
+          }}
         >
           {svgContent ? (
             <div 
               style={getAnimationStyle()}
-              className="w-full h-full flex items-center justify-center"
+              className=" w-full h-full flex items-center justify-center"
             >
               {renderInteractiveSVG()}
             </div>

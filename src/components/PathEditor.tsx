@@ -24,6 +24,25 @@ export function PathEditor({
 }: PathEditorProps) {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set());
 
+  // 전체 설정 상태 확인
+  const allPathsUseIndividual = svgEditorState.parsedSVG?.paths.every(path => path.useIndividualSettings) || false;
+
+  // 전체 설정 토글
+  const handleToggleAllSettings = () => {
+    const message = allPathsUseIndividual 
+      ? 'Are you sure you want to disable individual settings for all paths? This will apply global settings to all paths.'
+      : 'Are you sure you want to enable individual settings for all paths?';
+    
+    if (window.confirm(message)) {
+      svgEditorState.parsedSVG?.paths.forEach(path => {
+        // 현재 상태와 원하는 상태가 다른 경우에만 토글
+        if (path.useIndividualSettings === allPathsUseIndividual) {
+          onPathToggleIndividual(path.id);
+        }
+      });
+    }
+  };
+
   if (!svgEditorState.parsedSVG || svgEditorState.parsedSVG.paths.length === 0) {
     return (
       <div className={`p-4 rounded-lg border ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
@@ -142,9 +161,22 @@ export function PathEditor({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-black'}`}>
-          Path Editor
-        </h3>
+        <div className="flex items-center space-x-3">
+          <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            Path Editor
+          </h3>
+          <button
+            onClick={handleToggleAllSettings}
+            className={`p-1 rounded ${
+              allPathsUseIndividual 
+                ? 'bg-blue-500 text-white' 
+                : isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'
+            }`}
+            title={allPathsUseIndividual ? 'Disable all individual settings' : 'Enable all individual settings'}
+          >
+            <Settings className="w-4 h-4" />
+          </button>
+        </div>
         <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           {svgEditorState.parsedSVG.paths.length} paths
         </span>
@@ -161,7 +193,7 @@ export function PathEditor({
               key={path.id}
               className={`border rounded-lg ${
                 isSelected 
-                  ? isDarkMode ? 'border-blue-500 bg-blue-500/10' : 'border-blue-500 bg-blue-50'
+                  ? isDarkMode ? 'border-blue-500 bg-blue-500/10' : 'border-blue-500 bg-blue-200'
                   : isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
               }`}
             >

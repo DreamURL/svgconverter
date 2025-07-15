@@ -1,13 +1,15 @@
-import { Code2, Github, Twitter, Sun, Moon } from 'lucide-react';
-// import {Cloud} from '@/components/ui/Cloud';
+import { Code2, Github, Twitter, Sun, Moon, Download, HelpCircle } from 'lucide-react';
+import {Cloud} from '@/components/ui/Cloud';
 
 interface HeaderProps {
   onExportCode: () => void;
+  onDownloadSVG?: () => void;
+  onShowHelp?: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
 }
 
-export function Header({ onExportCode, isDarkMode, onToggleTheme}: HeaderProps) {
+export function Header({ onExportCode, onDownloadSVG, onShowHelp, isDarkMode, onToggleTheme}: HeaderProps) {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
@@ -56,14 +58,39 @@ export function Header({ onExportCode, isDarkMode, onToggleTheme}: HeaderProps) 
 
         {/* Bottom row on mobile, center on desktop */}
         <div className="flex items-center justify-center space-x-4 mt-2 md:mt-0 md:ml-[-40px]">
-          <button
-            onClick={onExportCode}
-            className={`px-4 py-2 ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
-          >
-            <Code2 className="w-4 h-4 flex-shrink-0" />
-            <span>Export Code</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={onExportCode}
+              className={`px-4 py-2 ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
+            >
+              <Code2 className="w-4 h-4 flex-shrink-0" />
+              <span>Export Code</span>
+            </button>
+            
+            {onDownloadSVG && (
+              <button
+                onClick={onDownloadSVG}
+                className={`px-4 py-2 ${isDarkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-black hover:bg-gray-200'} rounded-lg transition-colors font-medium flex items-center space-x-2`}
+                title="Download SVG"
+              >
+                <Download className="w-4 h-4 flex-shrink-0" />
+                <span>Download SVG</span>
+              </button>
+            )}
+          </div>
 
+          {/* <Cloud /> */}
+
+          {/* Help Button - visible on desktop */}
+          {onShowHelp && (
+            <button
+              onClick={onShowHelp}
+              className={`hidden md:flex px-4 py-3 ${isDarkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-black hover:bg-gray-200'} rounded-lg transition-colors items-center space-x-2`}
+              title="Help & Usage Guide"
+            >
+              <HelpCircle className="w-4 h-4 flex-shrink-0" />
+            </button>
+          )}
 
           {/* Theme Toggle - visible on desktop */}
           <button

@@ -145,14 +145,16 @@ export function ControlPanel({
   return (
     <div className="space-y-6 h-full overflow-y-auto">
       <div className="flex items-center justify-between">
-        <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black'}`}>Controls</h2>
-        <button
-          onClick={onReset}
-          className={`p-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors`}
-          title="Reset"
-        >
-          <RotateCcw className="w-4 h-4" />
-        </button>
+        <div className="flex items-center space-x-3">
+          <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black'}`}>Controls</h2>
+          <button
+            onClick={onReset}
+            className={`p-2 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors`}
+            title="Reset"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>

@@ -2,18 +2,20 @@
 
 import { useState, useReducer, useEffect } from 'react';
 import Link from 'next/link';
-import { Download, Edit, Code } from 'lucide-react';
+import { Download, Edit, Code, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { UploadPanel } from '@/components/UploadPanel';
 import { PreviewPanel } from '@/components/PreviewPanel';
 import { ControlPanel } from '@/components/ControlPanel';
 import { CodeModal } from '@/components/CodeModal';
 import { ExportTestModal } from '@/components/ExportTestModal';
+import { HelpModal } from '@/components/HelpModal';
 import { ParsedSVG } from '@/utils/svgParser';
 import { 
   svgEditorReducer, 
   migrateToGlobalConfig, 
-  convertToLegacyConfig 
+  convertToLegacyConfig,
+  getPathRenderSettings 
 } from '@/utils/svgStateManager';
 
 export interface SVGConfig {
@@ -38,6 +40,7 @@ export default function Home() {
   const [svgContent, setSvgContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isControlPanelCollapsed, setIsControlPanelCollapsed] = useState(false);
   
   // 새로운 통합 상태 관리
   const [svgEditorState, dispatchSVGEditor] = useReducer(svgEditorReducer, {
@@ -68,6 +71,7 @@ export default function Home() {
   
   const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
   const [isExportTestModalOpen, setIsExportTestModalOpen] = useState(false);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   
   // 디버깅을 위한 상태 모니터링
@@ -75,11 +79,57 @@ export default function Home() {
     console.log('SVG Editor State changed:', svgEditorState);
   }, [svgEditorState]);
 
+  // SVG 다운로드 함수
+  const handleDownloadSVG = () => {
+    if (!svgContent || !svgEditorState.parsedSVG) return;
+
+    try {
+      // SVG 생성 (애니메이션과 호버 효과 제외)
+      const paths = svgEditorState.parsedSVG.paths
+        .filter(path => path.visible)
+        .map(path => {
+          const renderSettings = getPathRenderSettings(path, svgEditorState.globalConfig);
+          
+          return `    <path
+      d="${path.originalPath}"
+      fill="${renderSettings.fill}"
+      stroke="${renderSettings.stroke}"
+      stroke-width="${renderSettings.strokeWidth}"
+      stroke-linecap="${renderSettings.strokeLinecap}"
+      stroke-linejoin="${renderSettings.strokeLinejoin}"
+      opacity="${renderSettings.opacity}"
+      ${path.transform ? `transform="${path.transform}"` : ''}
+    />`;
+        })
+        .join('\n');
+
+      const svgCode = `<svg ${svgEditorState.parsedSVG.metadata.width ? `width="${svgEditorState.parsedSVG.metadata.width}"` : ''} ${svgEditorState.parsedSVG.metadata.height ? `height="${svgEditorState.parsedSVG.metadata.height}"` : ''} ${svgEditorState.parsedSVG.metadata.viewBox ? `viewBox="${svgEditorState.parsedSVG.metadata.viewBox}"` : ''} xmlns="${svgEditorState.parsedSVG.metadata.xmlns || 'http://www.w3.org/2000/svg'}" style="transform: scale(${config.size / 100}) rotate(${config.rotation}deg);">
+${paths}
+</svg>`;
+
+      // 파일 다운로드
+      const blob = new Blob([svgCode], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${fileName.replace(/\.[^/.]+$/, '')}_edited.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading SVG:', error);
+      alert('Error downloading SVG. Please try again.');
+    }
+  };
+
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
       <Header 
         onExportCode={() => setIsCodeModalOpen(true)}
+        onDownloadSVG={svgContent ? handleDownloadSVG : undefined}
+        onShowHelp={() => setIsHelpModalOpen(true)}
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
       />
@@ -98,19 +148,65 @@ export default function Home() {
               </p>
             </div>
             
-            <UploadPanel
-              onUpload={(content: string, name: string, parsedSVG?: ParsedSVG) => {
-                setSvgContent(content);
-                setFileName(name);
-                dispatchSVGEditor({
-                  type: 'SET_PARSED_SVG',
-                  parsedSVG: parsedSVG || null,
-                });
-              }}
-              isConverting={isConverting}
-              setIsConverting={setIsConverting}
-              isDarkMode={isDarkMode}
-            />
+            <div className="grid md:grid-cols-5 gap-8 items-start">
+              {/* Upload Section */}
+              <div className="md:col-span-3 max-w-4xl">
+                <UploadPanel
+                  onUpload={(content: string, name: string, parsedSVG?: ParsedSVG) => {
+                    setSvgContent(content);
+                    setFileName(name);
+                    dispatchSVGEditor({
+                      type: 'SET_PARSED_SVG',
+                      parsedSVG: parsedSVG || null,
+                    });
+                  }}
+                  isConverting={isConverting}
+                  setIsConverting={setIsConverting}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
+
+              {/* Product Hunt Section */}
+              <div className="md:col-span-2 text-center md:text-left">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      🚀 Love SVG Studio?
+                    </h3>
+                    <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Help us reach more developers by leaving a review and voting on Product Hunt. Your support helps us build better tools for the community!
+                    </p>
+                  </div>
+                  <a href="https://www.producthunt.com/products/svg-studio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-svg&#0045;studio" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-80 transition-opacity">
+                    <img
+                      src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=992197&theme=dark&t=1752569302300"
+                      alt="SVG&#0032;Studio - Edit&#0032;SVG&#0032;and&#0032;export&#0032;as&#0032;react&#0047;inline&#0047;css&#0032;code | Product Hunt"
+                      style={{ width: 250, height: 54 }}
+                      width={250}
+                      height={54}
+                    />
+                  </a>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    ⭐ Takes less than 30 seconds
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Google AdSense Section */}
+            <div className="mt-12 text-center">
+              <div className={`p-6 rounded-lg border-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
+                  Advertisement
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 h-32 flex items-center justify-center rounded">
+                  <span className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                    Google AdSense Placeholder
+                  </span>
+                </div>
+              </div>
+            </div>
+
 
             {/* SEO Links Section */}
             <div className="mt-16 text-center">
@@ -166,11 +262,12 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="h-full flex">
+          <div className="h-screen relative">
             {/* Left Panel - Controls */}
-            <div className={`w-80 h-[1200px] border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} p-6 overflow-y-auto`}>     
-              <div className="ml-4">     
-              <ControlPanel
+            {!isControlPanelCollapsed && (
+              <div className={`fixed left-0 top-16 w-80 h-[calc(100vh-4rem)] border-r ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} overflow-y-auto z-40`}>
+                <div className="p-6">
+                  <ControlPanel
               config={config}
               onChange={(newConfig) => {
                 console.log('Config changed:', newConfig); // 디버깅용
@@ -232,24 +329,41 @@ export default function Home() {
                   mode,
                 });
               }}
-            /></div>  
-            </div>
+            />
+                </div>
+              </div>
+            )}
+            
+            {/* Toggle Button */}
+            <button
+              onClick={() => setIsControlPanelCollapsed(!isControlPanelCollapsed)}
+              className={`fixed top-32 ${isControlPanelCollapsed ? 'left-2' : 'left-70'} z-50 p-2 rounded-lg ${isDarkMode ? 'bg-blue-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-black'} shadow-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
+              title={isControlPanelCollapsed ? 'Show Controls' : 'Hide Controls'}
+            >
+              {isControlPanelCollapsed ? (
+                <ChevronRight className="w-4 h-4" />
+              ) : (
+                <ChevronLeft className="w-4 h-4" />
+              )}
+            </button>
             
             {/* Right Panel - Preview */}
-            <div className="flex-1 p-6 overflow-y-auto">
-              <PreviewPanel
-                svgContent={svgContent}
-                config={config}
-                isDarkMode={isDarkMode}
-                // 새로운 path별 편집 정보 전달
-                svgEditorState={svgEditorState}
-                onPathSelect={(pathId: string) => {
-                  dispatchSVGEditor({
-                    type: 'SET_SELECTED_PATH',
-                    pathId,
-                  });
-                }}
-              />
+            <div className="w-full h-full overflow-auto">
+              <div className={`${!isControlPanelCollapsed ? 'ml-80' : ''} p-6 transition-all duration-300`}>
+                <PreviewPanel
+                  svgContent={svgContent}
+                  config={config}
+                  isDarkMode={isDarkMode}
+                  // 새로운 path별 편집 정보 전달
+                  svgEditorState={svgEditorState}
+                  onPathSelect={(pathId: string) => {
+                    dispatchSVGEditor({
+                      type: 'SET_SELECTED_PATH',
+                      pathId,
+                    });
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -269,6 +383,11 @@ export default function Home() {
         onClose={() => setIsExportTestModalOpen(false)}
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+      />
+      <HelpModal
+        isOpen={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
+        isDarkMode={isDarkMode}
       />
     </div>
   );
