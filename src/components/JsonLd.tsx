@@ -43,6 +43,7 @@ export function JsonLd() {
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData),
       }}
+      suppressHydrationWarning={true}
     />
   );
 }

@@ -79,6 +79,18 @@ export default function Home() {
     console.log('SVG Editor State changed:', svgEditorState);
   }, [svgEditorState]);
 
+  // AdSense 초기화
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+        (window as any).adsbygoogle.push({});
+      } catch (error) {
+        console.error('AdSense error:', error);
+      }
+    }
+  }, []);
+
   // SVG 다운로드 함수
   const handleDownloadSVG = () => {
     if (!svgContent || !svgEditorState.parsedSVG) return;
@@ -205,9 +217,6 @@ ${paths}
                      data-ad-slot="9580679762"
                      data-ad-format="auto"
                      data-full-width-responsive="true"></ins>
-                <script>
-                  {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-                </script>
               </div>
             </div>
 
