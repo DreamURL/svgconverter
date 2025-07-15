@@ -2,6 +2,7 @@
 
 import { useState, useReducer, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Download, Edit, Code, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { UploadPanel } from '@/components/UploadPanel';
@@ -83,8 +84,9 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
-        (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-        (window as any).adsbygoogle.push({});
+        const adsbygoogle = (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle || [];
+        (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle = adsbygoogle;
+        adsbygoogle.push({});
       } catch (error) {
         console.error('AdSense error:', error);
       }
@@ -190,12 +192,12 @@ ${paths}
                     </p>
                   </div>
                   <a href="https://www.producthunt.com/products/svg-studio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-svg&#0045;studio" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-80 transition-opacity">
-                    <img
+                    <Image
                       src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=992197&theme=dark&t=1752569302300"
-                      alt="SVG&#0032;Studio - Edit&#0032;SVG&#0032;and&#0032;export&#0032;as&#0032;react&#0047;inline&#0047;css&#0032;code | Product Hunt"
-                      style={{ width: 250, height: 54 }}
+                      alt="SVG Studio - Edit SVG and export as react/inline/css code | Product Hunt"
                       width={250}
                       height={54}
+                      style={{ width: 250, height: 54 }}
                     />
                   </a>
                   <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
