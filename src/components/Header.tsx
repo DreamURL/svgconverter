@@ -1,4 +1,5 @@
 import { Code2, Github, Sun, Moon, Download, HelpCircle, X } from 'lucide-react';
+// import {Cloud} from '@/components/ui/Cloud';
 
 
 interface HeaderProps {
@@ -67,6 +68,8 @@ export function Header({ onExportCode, onDownloadSVG, onShowHelp, isDarkMode, on
               <span>Export Code</span>
             </button>
             
+           {/* <Cloud/> */}
+
             {onDownloadSVG && (
               <button
                 onClick={onDownloadSVG}
