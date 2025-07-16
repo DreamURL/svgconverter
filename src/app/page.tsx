@@ -479,7 +479,7 @@ ${paths}
                       Do you store my uploaded images?
                     </h3>
                     <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      No, we don't store your images. All processing happens in your browser, and your files remain completely private and secure.
+                      No, we don&apos;t store your images. All processing happens in your browser, and your files remain completely private and secure.
                     </p>
                   </div>
                 </div>
