@@ -207,10 +207,10 @@ ${paths}
               </div>
             </div>
 
-            {/* Google AdSense Section */}
-            <div className="mt-12 text-center">
+            {/* Google AdSense Section - Prominent placement */}
+            <div className="mt-16">
               <div className={`p-6 rounded-lg border-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
-                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2 text-center`}>
                   Advertisement
                 </p>
                 <ins className="adsbygoogle"
@@ -219,6 +219,270 @@ ${paths}
                      data-ad-slot="9580679762"
                      data-ad-format="auto"
                      data-full-width-responsive="true"></ins>
+              </div>
+            </div>
+
+            {/* Clear Site Identity Section */}
+            <div className="mt-16">
+              <div className={`rounded-lg p-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                <h2 className={`text-3xl font-bold mb-6 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  About SVG Studio - Professional Vector Graphics Platform
+                </h2>
+                <div className="max-w-4xl mx-auto space-y-6">
+                  <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    SVG Studio is a comprehensive web-based platform specifically designed for converting, editing, and optimizing Scalable Vector Graphics (SVG) files. Our platform serves web developers, UI/UX designers, graphic artists, and digital marketing professionals who need high-quality vector graphics for modern web applications, mobile apps, and digital projects.
+                  </p>
+                  <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    As a specialized SVG processing tool, we focus on three core functionalities: image-to-SVG conversion using advanced vectorization algorithms, real-time SVG editing with precision controls, and automated code generation for popular web frameworks including React, Vue.js, and Angular. Our platform eliminates the need for expensive desktop software while providing professional-grade results.
+                  </p>
+                  <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Built for the modern web development ecosystem, SVG Studio integrates seamlessly with contemporary development workflows. We support TypeScript definitions, provide clean and optimized code output, and ensure all generated SVG files are web-performance optimized with proper accessibility standards. Our tool is particularly valuable for teams working on responsive web design, icon libraries, and scalable user interface components.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Technical Specifications Section */}
+            <div className="mt-16">
+              <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Technical Specifications & Features
+              </h2>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    🔧 Input Format Support
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li><strong>Raster Images:</strong> PNG, JPG, JPEG, GIF (up to 10MB)</li>
+                    <li><strong>Vector Files:</strong> SVG, existing vector graphics</li>
+                    <li><strong>Processing:</strong> Advanced edge detection and vectorization</li>
+                    <li><strong>Quality:</strong> Lossless conversion with detail preservation</li>
+                    <li><strong>Optimization:</strong> Automatic path simplification and compression</li>
+                  </ul>
+                </div>
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    🎨 Editing Capabilities
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li><strong>Color Control:</strong> Individual path color customization</li>
+                    <li><strong>Transformations:</strong> Scale, rotate, position adjustments</li>
+                    <li><strong>Animations:</strong> CSS-based spin, pulse, scale, bounce effects</li>
+                    <li><strong>Opacity:</strong> Transparency and layer blending controls</li>
+                    <li><strong>Stroke:</strong> Width, color, and style modifications</li>
+                  </ul>
+                </div>
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    💻 Code Generation
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li><strong>React Components:</strong> JSX with TypeScript definitions</li>
+                    <li><strong>CSS Output:</strong> Clean CSS with animation keyframes</li>
+                    <li><strong>SVG Markup:</strong> Optimized, standards-compliant code</li>
+                    <li><strong>Props Support:</strong> Customizable size, color, animation props</li>
+                    <li><strong>Tree Shaking:</strong> Optimized for modern bundlers</li>
+                  </ul>
+                </div>
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    🚀 Performance & Compatibility
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li><strong>Browser Support:</strong> All modern browsers (Chrome, Firefox, Safari, Edge)</li>
+                    <li><strong>Processing Speed:</strong> Real-time editing with instant preview</li>
+                    <li><strong>File Size:</strong> Optimized output with minimal file size</li>
+                    <li><strong>Accessibility:</strong> ARIA labels and semantic markup</li>
+                    <li><strong>Responsive:</strong> Scalable graphics for all screen sizes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Use Cases and Target Audience */}
+            <div className="mt-16">
+              <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Professional Use Cases & Target Audience
+              </h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    👨‍💻 Web Developers
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li>• Creating scalable icons for web applications</li>
+                    <li>• Converting design assets to code-ready components</li>
+                    <li>• Building responsive UI elements and graphics</li>
+                    <li>• Optimizing graphics for web performance</li>
+                    <li>• Integrating with React, Vue, Angular projects</li>
+                  </ul>
+                </div>
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    🎨 UI/UX Designers
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li>• Converting mockups to implementable graphics</li>
+                    <li>• Creating consistent icon libraries</li>
+                    <li>• Designing scalable brand elements</li>
+                    <li>• Prototyping interactive animations</li>
+                    <li>• Ensuring design-to-development handoff</li>
+                  </ul>
+                </div>
+                <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    📱 Digital Marketers
+                  </h3>
+                  <ul className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li>• Creating scalable social media graphics</li>
+                    <li>• Converting logos for web and print use</li>
+                    <li>• Building email template graphics</li>
+                    <li>• Optimizing graphics for fast loading</li>
+                    <li>• Maintaining brand consistency across platforms</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* How to Use SVG Studio - Detailed Guide */}
+            <div className="mt-16">
+              <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                How to Use SVG Studio - Complete Guide
+              </h2>
+              <div className={`rounded-lg p-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      📤 Step 1: Upload Your Image
+                    </h3>
+                    <p className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Upload any image format (PNG, JPG, GIF, or existing SVG) by clicking the upload area or dragging and dropping your file. Our advanced image processing converts raster images to scalable vector graphics while preserving quality.
+                    </p>
+                    <ul className={`list-disc list-inside space-y-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <li>Supports PNG, JPG, JPEG, GIF, and SVG formats</li>
+                      <li>Maximum file size: 10MB</li>
+                      <li>Automatic format detection and optimization</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      🎨 Step 2: Customize Your SVG
+                    </h3>
+                    <p className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Use our intuitive editor to customize colors, size, rotation, and animations. Each path in your SVG can be individually controlled or edited globally for consistent styling across your entire graphic.
+                    </p>
+                    <ul className={`list-disc list-inside space-y-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <li>Individual path color customization</li>
+                      <li>Global size and rotation controls</li>
+                      <li>Animation effects (spin, pulse, scale, bounce)</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      💻 Step 3: Export Your Code
+                    </h3>
+                    <p className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Generate production-ready code in multiple formats. Export as React components with TypeScript support, inline CSS, or clean SVG markup. Perfect for modern web development workflows.
+                    </p>
+                    <ul className={`list-disc list-inside space-y-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <li>React components with TypeScript</li>
+                      <li>CSS code with animations</li>
+                      <li>Clean SVG markup</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      🚀 Step 4: Download & Integrate
+                    </h3>
+                    <p className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Download your customized SVG file or copy the generated code directly into your project. Our code is optimized for performance and follows best practices for web accessibility.
+                    </p>
+                    <ul className={`list-disc list-inside space-y-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <li>One-click download functionality</li>
+                      <li>Copy code to clipboard</li>
+                      <li>Optimized for web performance</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Features and Benefits Section */}
+            <div className="mt-16">
+              <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Why Choose SVG Studio?
+              </h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <div className="text-4xl mb-4">🎯</div>
+                  <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Precision Control
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Edit individual SVG paths with pixel-perfect precision. Control colors, opacity, and animations for each element separately or apply changes globally.
+                  </p>
+                </div>
+                <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <div className="text-4xl mb-4">⚡</div>
+                  <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Real-time Preview
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    See changes instantly as you edit. Our real-time preview ensures you get exactly the result you want before exporting your SVG.
+                  </p>
+                </div>
+                <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                  <div className="text-4xl mb-4">🔧</div>
+                  <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Developer-Friendly
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Export clean, optimized code that integrates seamlessly with React, Vue, Angular, and vanilla JavaScript projects. TypeScript support included.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ Section */}
+            <div className="mt-16">
+              <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Frequently Asked Questions
+              </h2>
+              <div className={`rounded-lg p-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      What image formats can I upload?
+                    </h3>
+                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      SVG Studio supports PNG, JPG, JPEG, GIF, and existing SVG files. We automatically convert raster images to vector format while maintaining quality and detail.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Is SVG Studio free to use?
+                    </h3>
+                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Yes! SVG Studio is completely free to use. You can convert unlimited images, customize SVG graphics, and export code without any restrictions or watermarks.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Can I use the generated code in commercial projects?
+                    </h3>
+                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Absolutely! All code generated by SVG Studio can be used in personal and commercial projects without any licensing restrictions.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Do you store my uploaded images?
+                    </h3>
+                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      No, we don't store your images. All processing happens in your browser, and your files remain completely private and secure.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -14,10 +14,50 @@ export const metadata: Metadata = {
   title: "SVG Studio - Convert Images to Interactive SVG Components | Professional Online Tool",
   description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Professional online SVG converter and editor for developers and designers.",
   keywords: [
-    "SVG Studio", "SVG edit", "PNG to SVG", "interactive SVG", "SVG animation", "SVG design",
-    "SVG converter", "online SVG editor", "vector graphics editor", "React SVG components",
-    "web development tools", "graphic design tool", "SVG code generator", "image converter",
-    "scalable vector graphics"
+    // Primary Keywords
+    "SVG converter", "image to SVG", "SVG editor", "React SVG components", "SVG animation", "SVG to code",
+    
+    // Professional Tools Keywords
+    "online SVG converter", "web SVG editor", "vector converter", "image converter",
+    "browser SVG tool", "SVG conversion", "SVG generator",
+    
+    // File Format Keywords
+    "PNG to SVG", "JPG to SVG", "JPEG to SVG", "GIF to SVG", "bitmap to vector",
+    "raster to vector", "image format converter", "vector graphics converter",
+    
+    // Developer Keywords
+    "React SVG components", "TypeScript SVG", "Next.js SVG", "SVG component library",
+    "JSX SVG components", "reusable SVG components", "SVG icon generator",
+    
+    // Web Development Keywords
+    "web development tools", "frontend tools", "UI development", "responsive SVG",
+    "scalable vector graphics", "SVG optimization", "web graphics", "CSS SVG",
+    
+    // Design Keywords
+    "vector graphics editor", "SVG design tool", "icon creator", "logo converter",
+    "illustration converter", "graphic design tool", "SVG customization",
+    
+    // Animation Keywords
+    "SVG animation", "animated SVG", "interactive SVG", "SVG hover effects",
+    "CSS SVG animation", "SVG transitions", "dynamic SVG",
+    
+    // Long-tail Keywords
+    "convert image to scalable vector graphics", "online SVG editor with real-time preview",
+    "generate React components from SVG", "responsive SVG for web development",
+    "free online vector graphics converter", "SVG editor for web developers",
+    "custom SVG components with animations", "professional SVG editing tool",
+    
+    // Technical Keywords
+    "SVG code generator", "clean SVG markup", "optimized SVG files", "SVG path editor",
+    "SVG viewport", "SVG viewBox", "inline SVG", "external SVG files",
+    
+    // Use Case Keywords
+    "website icons", "mobile app icons", "web UI components", "dashboard icons",
+    "navigation icons", "button icons", "social media icons", "brand logos",
+    
+    // Platform Keywords
+    "browser-based SVG editor", "online vector editor", "cloud SVG tool",
+    "cross-platform SVG editor", "mobile-friendly SVG converter"
   ],
   authors: [{ name: "SVG Studio Team" }],
   creator: "SVG Studio",
