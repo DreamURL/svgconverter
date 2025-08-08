@@ -207,18 +207,20 @@ ${paths}
               </div>
             </div>
 
-            {/* Google AdSense Section - Prominent placement */}
+            {/* Google AdSense Section - Responsive placement */}
             <div className="mt-16">
-              <div className={`p-6 rounded-lg border-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
-                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2 text-center`}>
+              <div className={`p-3 sm:p-4 md:p-6 rounded-lg border-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
+                <p className={`text-xs sm:text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2 text-center`}>
                   Advertisement
                 </p>
-                <ins className="adsbygoogle"
-                     style={{display: 'block'}}
-                     data-ad-client="ca-pub-9786013383976168"
-                     data-ad-slot="9580679762"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
+                <div className="w-full overflow-hidden">
+                  <ins className="adsbygoogle"
+                       style={{display: 'block', width: '100%', minHeight: '100px'}}
+                       data-ad-client="ca-pub-9786013383976168"
+                       data-ad-slot="9580679762"
+                       data-ad-format="auto"
+                       data-full-width-responsive="true"></ins>
+                </div>
               </div>
             </div>
 
