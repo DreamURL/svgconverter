@@ -86,7 +86,11 @@ export default function Home() {
       try {
         const adsbygoogle = (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle || [];
         (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle = adsbygoogle;
-        adsbygoogle.push({});
+        
+        // 광고가 로드된 후 초기화
+        setTimeout(() => {
+          adsbygoogle.push({});
+        }, 100);
       } catch (error) {
         console.error('AdSense error:', error);
       }
@@ -214,10 +218,11 @@ ${paths}
                   Advertisement
                 </p>
                 <div className="w-full overflow-hidden">
+                  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9786013383976168" crossOrigin="anonymous"></script>
                   <ins className="adsbygoogle"
                        style={{display: 'block', width: '100%', minHeight: '100px'}}
                        data-ad-client="ca-pub-9786013383976168"
-                       data-ad-slot="9580679762"
+                       data-ad-slot="4523651989"
                        data-ad-format="auto"
                        data-full-width-responsive="true"></ins>
                 </div>
