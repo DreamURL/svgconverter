@@ -164,7 +164,7 @@ export function AnimationPanel({ onAnimationChange, isDarkMode, initialConfig }:
   const [delay, setDelay] = useState(0);
   const [expandedSections, setExpandedSections] = useState({
     animation: true,
-    settings: false
+    settings: true
   });
 
   // 초기 설정 적용

@@ -1,7 +1,8 @@
 // CSS 파일 동적 로딩 유틸리티
 
+type StylesheetEl = HTMLLinkElement | HTMLStyleElement;
 interface LoadedStylesheets {
-  [key: string]: HTMLLinkElement;
+  [key: string]: StylesheetEl;
 }
 
 const loadedStylesheets: LoadedStylesheets = {};
