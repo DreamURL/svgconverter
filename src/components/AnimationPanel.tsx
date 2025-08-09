@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Zap, Play, ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { Zap, ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { AnimationConfig } from '@/types/svgTypes';
 import { loadAnimationCSS } from '@/utils/cssLoader';
 
