@@ -2251,7 +2251,7 @@ export async function loadAnimationCSS(animationType: string): Promise<void> {
     style.innerHTML = cssContent;
     
     document.head.appendChild(style);
-    loadedStylesheets[stylesheetId] = style as any; // HTMLLinkElement이지만 HTMLStyleElement도 허용
+    loadedStylesheets[stylesheetId] = style as HTMLLinkElement | HTMLStyleElement;
     resolve();
   });
 }

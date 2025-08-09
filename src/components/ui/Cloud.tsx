@@ -27,7 +27,7 @@ export function Supercoilsvgrepocom() {
       style.innerHTML = animationStyles;
       document.head.appendChild(style);
     }
-  }, []);
+  }, [animationStyles]);
 
   return (
     <div

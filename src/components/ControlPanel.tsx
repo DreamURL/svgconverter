@@ -2,7 +2,7 @@
 
 import { SVGConfig } from '@/app/page';
 import { SVGEditorState } from '@/types/svgTypes';
-import { RotateCcw, Palette, Move, Zap, ChevronDown, ChevronUp, Eye, Layers } from 'lucide-react';
+import { RotateCcw, Palette, Move, ChevronDown, ChevronUp, Eye, Layers } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { PathEditor } from './PathEditor';
 

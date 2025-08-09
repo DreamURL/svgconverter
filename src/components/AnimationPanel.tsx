@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Zap, Play, ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { AnimationConfig } from '@/types/svgTypes';
-import { loadAnimationCSS, unloadAnimationCSS } from '@/utils/cssLoader';
+import { loadAnimationCSS } from '@/utils/cssLoader';
 
 interface AnimationPanelProps {
   onAnimationChange: (config: AnimationConfig | null) => void;
@@ -166,7 +166,6 @@ export function AnimationPanel({ onAnimationChange, isDarkMode, initialConfig }:
     animation: true,
     settings: false
   });
-  const [previewActive, setPreviewActive] = useState(false);
 
   // 초기 설정 적용
   useEffect(() => {
