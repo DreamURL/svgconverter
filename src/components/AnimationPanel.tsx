@@ -229,13 +229,7 @@ export function AnimationPanel({ onAnimationChange, isDarkMode, initialConfig }:
     }
   };
 
-  const handlePreview = () => {
-    if (selectedCategory && selectedDirection) {
-      // 미리보기 활성화
-      setPreviewActive(true);
-      setTimeout(() => setPreviewActive(false), duration * 1000);
-    }
-  };
+
 
   const handleClearAnimation = () => {
     setSelectedCategory(null);
@@ -343,22 +337,6 @@ export function AnimationPanel({ onAnimationChange, isDarkMode, initialConfig }:
               </div>
             )}
 
-            {/* Preview Button */}
-            {selectedCategory && selectedDirection && (
-              <div className="flex space-x-2">
-                <button
-                  onClick={handlePreview}
-                  className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded cursor-pointer transition-all duration-150 transform active:scale-95 ${
-                    isDarkMode
-                      ? 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-green-500 hover:bg-green-600 text-white shadow-md hover:shadow-lg'
-                  }`}
-                >
-                  <Play className="w-4 h-4" />
-                  <span>Preview</span>
-                </button>
-              </div>
-            )}
           </div>
         )}
       </div>
