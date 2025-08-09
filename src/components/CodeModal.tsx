@@ -1,11 +1,12 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
-import { SVGEditorState } from '@/types/svgTypes';
+import { SVGEditorState, AnimationConfig } from '@/types/svgTypes';
 import { X, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { getPathRenderSettings } from '@/utils/svgStateManager';
 import { formatSVGWithPaths } from '@/utils/svgParser';
+import { getSpecificAnimationCSS } from '@/utils/cssLoader';
 
 interface CodeModalProps {
   isOpen: boolean;
@@ -15,13 +16,15 @@ interface CodeModalProps {
   fileName: string;
   // 새로운 props (optional로 처리)
   svgEditorState?: SVGEditorState;
+  animationConfig?: AnimationConfig | null;
 }
 
 // generateInlineSVG 함수를 별도로 export (개별 path 설정 지원)
 export function generateInlineSVG(
   svgContent: string, 
   config: SVGConfig, 
-  svgEditorState?: SVGEditorState
+  svgEditorState?: SVGEditorState,
+  animationConfig?: AnimationConfig | null
 ) {
   let processedSVG = '';
 
@@ -168,7 +171,26 @@ export function generateInlineSVG(
       onMouseLeave={(e) => e.currentTarget.style.opacity = '${config.opacity}'}`;
   }
 
+  // Advanced Animation Configuration
+  let animationStyle = '';
+  let animationClass = '';
+  
+  if (animationConfig && animationConfig.type && animationConfig.direction) {
+    // Advanced animation 사용
+    animationClass = `${animationConfig.type}-${animationConfig.direction}`;
+    animationStyle = `
+        // Advanced Animation Override
+        animationDuration: '${animationConfig.duration}s',
+        animationIterationCount: ${animationConfig.iterationCount === 'infinite' ? "'infinite'" : animationConfig.iterationCount},
+        animationTimingFunction: '${animationConfig.timingFunction}',
+        animationDelay: '${animationConfig.delay}s',`;
+  } else if (config.animation !== 'none') {
+    // Basic animation 사용 (기존 방식)
+    animationStyle = `animation: '${config.animation} 2s infinite',`;
+  }
+
   return `<div
+      ${animationClass ? `className="${animationClass}"` : ''}
       style={{
         // Size property
         width: '${config.size}px',
@@ -182,9 +204,7 @@ export function generateInlineSVG(
         
         // Transition for smooth hover effects
         transition: 'all 1.5s ease-in-out',
-        
-        // Animation property
-        ${config.animation !== 'none' ? `animation: '${config.animation} 2s infinite'` : ''}
+        ${animationStyle}
       }}
       ${hoverHandlers}
     >
@@ -199,6 +219,7 @@ export function CodeModal({
   config, 
   fileName,
   svgEditorState,
+  animationConfig,
 }: CodeModalProps) {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'react' | 'inline' | 'css'>('react');
@@ -242,11 +263,42 @@ export function CodeModal({
 
   const generateReactComponent = () => {
     // Inline SVG 코드를 그대로 가져와서 React Component로 wrapping
-    const inlineSVGCode = generateInlineSVG(svgContent, config, svgEditorState);
+    const inlineSVGCode = generateInlineSVG(svgContent, config, svgEditorState, animationConfig);
+    
+    // Advanced Animation이 있는 경우 특정 애니메이션 CSS만 포함
+    let animationCSS = '';
+    if (animationConfig && animationConfig.type && animationConfig.direction) {
+      const cssContent = getSpecificAnimationCSS(animationConfig.type, animationConfig.direction);
+      if (cssContent) {
+        // CSS 내용을 정리하고 들여쓰기 조정
+        const cleanedCSS = cssContent
+          .trim()
+          .split('\n')
+          .map(line => line.trim() ? `      ${line}` : '')
+          .join('\n');
+        
+        animationCSS = `\n\n  // Advanced Animation Styles (${animationConfig.type}-${animationConfig.direction})
+  const animationStyles = \`
+${cleanedCSS}
+  \`;
+
+  // Inject styles on component mount
+  React.useEffect(() => {
+    const styleId = 'advanced-animation-styles';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.innerHTML = animationStyles;
+      document.head.appendChild(style);
+    }
+  }, []);`;
+      }
+    }
     
     return `import React from 'react';
 
-export function ${capitalizedName}() {
+export function ${capitalizedName}() {${animationCSS}
+
   return (
     ${inlineSVGCode}
   );
@@ -429,7 +481,48 @@ export function ${capitalizedName}() {
 }`;
     }
 
-    return `.${className} {
+    // Advanced Animation CSS
+    let animationCSS = '';
+    let additionalClasses = '';
+    
+    if (animationConfig && animationConfig.type && animationConfig.direction) {
+      // Advanced animation 사용 - 특정 애니메이션 CSS만 포함
+      const animationClassName = `${animationConfig.type}-${animationConfig.direction}`;
+      additionalClasses = ` ${animationClassName}`;
+      
+      const cssContent = getSpecificAnimationCSS(animationConfig.type, animationConfig.direction);
+      if (cssContent) {
+        // CSS 내용을 정리
+        const cleanedCSS = cssContent.trim();
+        animationCSS = `\n/* Advanced Animation Styles (${animationClassName}) */\n${cleanedCSS}\n\n/* Animation Override */
+.${animationClassName} {
+  animation-duration: ${animationConfig.duration}s !important;
+  animation-iteration-count: ${animationConfig.iterationCount} !important;
+  animation-timing-function: ${animationConfig.timingFunction} !important;
+  animation-delay: ${animationConfig.delay}s !important;
+}`;
+      } else {
+        animationCSS = `
+/* Advanced Animation Override */
+.${animationClassName} {
+  animation-duration: ${animationConfig.duration}s;
+  animation-iteration-count: ${animationConfig.iterationCount};
+  animation-timing-function: ${animationConfig.timingFunction};
+  animation-delay: ${animationConfig.delay}s;
+}`;
+      }
+    } else if (config.animation !== 'none') {
+      // Basic animation 사용 (기존 방식)
+      animationCSS = `
+/* Basic Animation */
+.${className} {
+  animation: ${config.animation} 2s infinite;
+}`;
+    }
+
+    return `/* SVG Animation Styles */
+
+.${className} {
   /* Size property */
   width: ${config.size}px;
   height: ${config.size}px;
@@ -442,14 +535,13 @@ export function ${capitalizedName}() {
   
   /* Transition for smooth hover effects */
   transition: all 0.3s ease-in-out;
-  
-  /* Animation property */
-  ${config.animation !== 'none' ? `animation: ${config.animation} 2s infinite;` : ''}
 }
 
 ${hoverCSS}
 
-/* Animation keyframes */
+${animationCSS}
+
+/* Basic Animation keyframes (fallback) */
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -477,7 +569,7 @@ ${config.hoverEffect === 'rotate' ? `@keyframes hover-rotate {
 }` : ''}
 
 /* HTML */
-<div class="${className}">
+<div class="${className}${additionalClasses}">
   ${processedSVG}
 </div>`;
   };
@@ -493,7 +585,7 @@ ${config.hoverEffect === 'rotate' ? `@keyframes hover-rotate {
   };
 
   const reactComponent = generateReactComponent();
-  const inlineSVG = generateInlineSVG(svgContent, config, svgEditorState);
+  const inlineSVG = generateInlineSVG(svgContent, config, svgEditorState, animationConfig);
   const cssCode = generateCSS();
 
   return (

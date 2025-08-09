@@ -35,7 +35,6 @@ export function ControlPanel({
   onEditModeChange,
 }: ControlPanelProps) {
   const [expandedSections, setExpandedSections] = useState({
-    animation: true,
     hover: true,
   });
 
@@ -43,7 +42,7 @@ export function ControlPanel({
     onChange({ ...config, [key]: value });
   };
 
-  const toggleSection = (section: 'animation' | 'hover') => {
+  const toggleSection = (section: 'hover') => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section]
@@ -300,7 +299,7 @@ export function ControlPanel({
           value={config.size}
           onChange={(value) => handleChange('size', value)}
           min={10}
-          max={500}
+          max={1000}
           step={1}
           label="Size"
           unit="px"
@@ -343,56 +342,6 @@ export function ControlPanel({
         />
       </div>
 
-      {/* Animation Control */}
-      <div className="space-y-3">
-        <button
-          onClick={() => toggleSection('animation')}
-          className={`w-full flex items-center justify-between p-2 rounded ${
-            isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-          }`}
-        >
-          <div className="flex items-center space-x-2">
-            <Zap className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-            <span className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
-              Animation
-              {config.animation !== 'none' && (
-                <span className="ml-2 text-xs bg-blue-500 text-white px-2 py-1 rounded">
-                  {config.animation}
-                </span>
-              )}
-            </span>
-          </div>
-          {expandedSections.animation ? (
-            <ChevronUp className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-          ) : (
-            <ChevronDown className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-          )}
-        </button>
-        
-        {expandedSections.animation && (
-          <div className="space-y-4 pl-4">
-            <div className="space-y-4">
-              <label className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} mb-3 block`}>Type</label>
-              <select
-                value={config.animation}
-                onChange={(e) => handleChange('animation', e.target.value)}
-                className={`w-full px-3 py-2 text-sm rounded border ${
-                  isDarkMode 
-                    ? 'bg-gray-800 border-gray-700 text-white' 
-                    : 'bg-white border-gray-300 text-black'
-                } ${config.animation !== 'none' ? '' : ''}`}
-              >
-                <option value="none">None</option>
-                <option value="spin">Spin</option>
-                <option value="pulse">Pulse</option>
-                <option value="scale">Scale</option>
-                <option value="bounce">Bounce</option>
-              </select>
-            </div>
-            
-          </div>
-        )}
-      </div>
 
       {/* Hover Effects */}
       <div className="space-y-3">

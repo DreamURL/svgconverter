@@ -78,4 +78,14 @@ export interface PathRenderSettings {
   opacity: number;
 }
 
+// Advanced Animation Configuration
+export interface AnimationConfig {
+  type: string; // 애니메이션 카테고리 (swing, scale-up, slide 등)
+  direction: string; // 방향 (top, bottom, center 등)
+  duration: number; // 지속시간 (초)
+  iterationCount: 'infinite' | number; // 반복 횟수
+  timingFunction: string; // 이징 함수
+  delay: number; // 지연 시간 (초)
+}
+
 export type { PathElement, SVGMetadata };

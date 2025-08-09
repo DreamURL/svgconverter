@@ -11,6 +11,7 @@ import { ControlPanel } from '@/components/ControlPanel';
 import { CodeModal } from '@/components/CodeModal';
 import { ExportTestModal } from '@/components/ExportTestModal';
 import { HelpModal } from '@/components/HelpModal';
+import { AnimationPanel } from '@/components/AnimationPanel';
 import { ParsedSVG } from '@/utils/svgParser';
 import { 
   svgEditorReducer, 
@@ -18,6 +19,7 @@ import {
   convertToLegacyConfig,
   getPathRenderSettings 
 } from '@/utils/svgStateManager';
+import { AnimationConfig } from '@/types/svgTypes';
 
 export interface SVGConfig {
   // Color settings
@@ -42,6 +44,10 @@ export default function Home() {
   const [fileName, setFileName] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isControlPanelCollapsed, setIsControlPanelCollapsed] = useState(false);
+  const [isAnimationPanelCollapsed, setIsAnimationPanelCollapsed] = useState(false);
+  
+  // 애니메이션 설정 상태
+  const [animationConfig, setAnimationConfig] = useState<AnimationConfig | null>(null);
   
   // 새로운 통합 상태 관리
   const [svgEditorState, dispatchSVGEditor] = useReducer(svgEditorReducer, {
@@ -49,7 +55,7 @@ export default function Home() {
       color: '#000000',
       fillColor: '#000000',
       strokeWidth: 1,
-      size: 100,
+      size: 400,
       rotation: 0,
       opacity: 1,
       animation: 'none',
@@ -576,6 +582,7 @@ ${paths}
                     hoverEffect: 'none',
                   },
                 });
+                setAnimationConfig(null);
                 dispatchSVGEditor({
                   type: 'SET_PARSED_SVG',
                   parsedSVG: null,
@@ -620,10 +627,10 @@ ${paths}
               </div>
             )}
             
-            {/* Toggle Button */}
+            {/* Left Panel Toggle Button */}
             <button
               onClick={() => setIsControlPanelCollapsed(!isControlPanelCollapsed)}
-              className={`absolute top-16 ${isControlPanelCollapsed ? 'left-2' : 'left-80'} z-50 p-2 rounded-lg ${isDarkMode ? 'bg-blue-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-black'} shadow-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
+              className={`absolute top-0 ${isControlPanelCollapsed ? 'left-0' : 'left-0'} z-50 p-2 rounded-lg ${isDarkMode ? 'bg-blue-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-black'} shadow-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
               title={isControlPanelCollapsed ? 'Show Controls' : 'Hide Controls'}
             >
               {isControlPanelCollapsed ? (
@@ -633,7 +640,20 @@ ${paths}
               )}
             </button>
             
-            {/* Right Panel - Preview */}
+            {/* Right Panel Toggle Button */}
+            <button
+              onClick={() => setIsAnimationPanelCollapsed(!isAnimationPanelCollapsed)}
+              className={`absolute top-0 ${isAnimationPanelCollapsed ? 'right-0' : 'right-0'} z-50 p-2 rounded-lg ${isDarkMode ? 'bg-purple-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-black'} shadow-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
+              title={isAnimationPanelCollapsed ? 'Show Animation Panel' : 'Hide Animation Panel'}
+            >
+              {isAnimationPanelCollapsed ? (
+                <ChevronLeft className="w-4 h-4" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
+            </button>
+            
+            {/* Center Panel - Preview */}
             <div className={`flex-1 overflow-auto ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
               <div className="p-6 h-full">
                 <PreviewPanel
@@ -642,6 +662,7 @@ ${paths}
                   isDarkMode={isDarkMode}
                   // 새로운 path별 편집 정보 전달
                   svgEditorState={svgEditorState}
+                  animationConfig={animationConfig}
                   onPathSelect={(pathId: string) => {
                     dispatchSVGEditor({
                       type: 'SET_SELECTED_PATH',
@@ -651,6 +672,19 @@ ${paths}
                 />
               </div>
             </div>
+
+            {/* Right Panel - Animation */}
+            {!isAnimationPanelCollapsed && (
+              <div className={`w-80 border-l ${isDarkMode ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'} overflow-y-auto z-40`}>
+                <div className="p-6">
+                  <AnimationPanel
+                    onAnimationChange={setAnimationConfig}
+                    isDarkMode={isDarkMode}
+                    initialConfig={animationConfig || undefined}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </main>
@@ -663,6 +697,7 @@ ${paths}
         fileName={fileName}
         // 새로운 path별 편집 정보 전달
         svgEditorState={svgEditorState}
+        animationConfig={animationConfig}
       />
       <ExportTestModal
         isOpen={isExportTestModalOpen}

@@ -51,3 +51,6 @@ github push_svgconverter.txt
 
 # test files
 /testimage
+
+# reference
+/reference/

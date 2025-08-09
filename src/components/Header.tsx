@@ -1,5 +1,5 @@
 import { Code2, Github, Sun, Moon, Download, HelpCircle, X } from 'lucide-react';
-// import {Cloud} from '@/components/ui/Cloud';
+
 
 
 interface HeaderProps {
@@ -28,6 +28,12 @@ export function Header({ onExportCode, onDownloadSVG, onShowHelp, isDarkMode, on
               <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>SVG Studio</h1>
             </div>
           </button>
+
+          {/* <div>
+              <Supercoilsvgrepocom />
+            </div> */}
+
+
 
           {/* Theme toggle and social links - visible on mobile top row */}
           <div className="flex items-center space-x-2 md:hidden">

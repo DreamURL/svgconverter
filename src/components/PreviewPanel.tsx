@@ -1,10 +1,11 @@
 'use client';
 
 import { SVGConfig } from '@/app/page';
-import { SVGEditorState } from '@/types/svgTypes';
+import { SVGEditorState, AnimationConfig } from '@/types/svgTypes';
 import { getPathRenderSettings } from '@/utils/svgStateManager';
 import { formatSVGWithPaths } from '@/utils/svgParser';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
+import { loadAnimationCSS } from '@/utils/cssLoader';
 
 interface PreviewPanelProps {
   svgContent: string;
@@ -13,6 +14,7 @@ interface PreviewPanelProps {
   // 새로운 props (optional로 처리)
   svgEditorState?: SVGEditorState;
   onPathSelect?: (pathId: string) => void;
+  animationConfig?: AnimationConfig | null;
 }
 
 export function PreviewPanel({ 
@@ -21,7 +23,17 @@ export function PreviewPanel({
   isDarkMode,
   svgEditorState,
   onPathSelect,
+  animationConfig,
 }: PreviewPanelProps) {
+  
+  // 애니메이션 CSS 동적 로딩
+  useEffect(() => {
+    if (animationConfig && animationConfig.type) {
+      loadAnimationCSS(animationConfig.type).catch((error) => {
+        console.warn(`Failed to load animation CSS for ${animationConfig.type}:`, error);
+      });
+    }
+  }, [animationConfig]);
   
   // 개별 path 설정을 반영한 SVG 처리
   const processedSVG = useMemo(() => {
@@ -138,39 +150,58 @@ export function PreviewPanel({
     );
   };
 
-  // 애니메이션 스타일 생성
-  const getAnimationStyle = () => {
-    const transform = `scale(${config.size / 100}) rotate(${config.rotation}deg)`;
-    const baseStyle = {
-      transform,
+  // Wrapper 스타일 생성 (size, rotation, opacity 적용)
+  const getWrapperStyle = () => {
+    return {
+      width: `${config.size}px`,
+      height: `${config.size}px`,
+      transform: `rotate(${config.rotation}deg)`,
       opacity: config.opacity,
       transformOrigin: 'center',
       transition: 'all 0.3s ease',
     };
+  };
 
+  // 애니메이션 스타일 생성 (애니메이션만)
+  const getAnimationStyle = () => {
+    // Advanced Animation이 있는 경우
+    if (animationConfig && animationConfig.type && animationConfig.direction) {
+      return {
+        animationDuration: `${animationConfig.duration}s`,
+        animationIterationCount: animationConfig.iterationCount,
+        animationTimingFunction: animationConfig.timingFunction,
+        animationDelay: `${animationConfig.delay}s`,
+      };
+    }
+
+    // Basic Animation (기존 방식) - 이 경우 wrapper 스타일과 함께 적용
     if (config.animation === 'spin') {
       return {
-        ...baseStyle,
         animation: 'spin 2s linear infinite',
       };
     } else if (config.animation === 'pulse') {
       return {
-        ...baseStyle,
         animation: 'pulse 2s ease-in-out infinite',
       };
     } else if (config.animation === 'scale') {
       return {
-        ...baseStyle,
         animation: 'scale 2s ease-in-out infinite',
       };
     } else if (config.animation === 'bounce') {
       return {
-        ...baseStyle,
         animation: 'bounce 2s ease-in-out infinite',
       };
     }
 
-    return baseStyle;
+    return {};
+  };
+
+  // 애니메이션 클래스명 생성
+  const getAnimationClassName = () => {
+    if (animationConfig && animationConfig.type && animationConfig.direction) {
+      return `${animationConfig.type}-${animationConfig.direction}`;
+    }
+    return '';
   };
 
   return (
@@ -194,16 +225,20 @@ export function PreviewPanel({
           className={`relative p-20 rounded-lg `}
           style={{ 
             minHeight: '500px', 
-            minWidth: '500px',
-            top: `${config.size}px`
+            minWidth: '500px'
           }}
         >
           {svgContent ? (
             <div 
-              style={getAnimationStyle()}
-              className=" w-full h-full flex items-center justify-center"
+              style={getWrapperStyle()}
+              className="w-full h-full flex items-center justify-center"
             >
-              {renderInteractiveSVG()}
+              <div 
+                style={getAnimationStyle()}
+                className={`w-full h-full flex items-center justify-center ${getAnimationClassName()}`}
+              >
+                {renderInteractiveSVG()}
+              </div>
             </div>
           ) : (
             <div className={`text-center ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
@@ -217,8 +252,8 @@ export function PreviewPanel({
       {/* Animation CSS */}
       <style jsx>{`
         @keyframes spin {
-          from { transform: scale(${config.size / 100}) rotate(${config.rotation}deg); }
-          to { transform: scale(${config.size / 100}) rotate(${config.rotation + 360}deg); }
+          from { transform: rotate(${config.rotation}deg); }
+          to { transform: rotate(${config.rotation + 360}deg); }
         }
 
         @keyframes pulse {
@@ -227,14 +262,14 @@ export function PreviewPanel({
         }
 
         @keyframes scale {
-          0%, 100% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg); }
-          50% { transform: scale(${config.size / 100 * 1.1}) rotate(${config.rotation}deg); }
+          0%, 100% { transform: scale(1) rotate(${config.rotation}deg); }
+          50% { transform: scale(1.1) rotate(${config.rotation}deg); }
         }
 
         @keyframes bounce {
-          0%, 20%, 53%, 80%, 100% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg) translateY(0); }
-          40%, 43% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg) translateY(-30px); }
-          70% { transform: scale(${config.size / 100}) rotate(${config.rotation}deg) translateY(-15px); }
+          0%, 20%, 53%, 80%, 100% { transform: rotate(${config.rotation}deg) translateY(0); }
+          40%, 43% { transform: rotate(${config.rotation}deg) translateY(-30px); }
+          70% { transform: rotate(${config.rotation}deg) translateY(-15px); }
         }
       `}</style>
     </div>
