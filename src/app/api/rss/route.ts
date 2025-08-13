@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// Next.js 15 정적 내보내기를 위한 설정
+export const dynamic = 'force-static';
+
 export async function GET() {
   const siteName = 'SVG Studio';
   const siteUrl = 'https://svg-studio.com';
@@ -39,7 +42,7 @@ export async function GET() {
     <link>${siteUrl}</link>
     <description>${siteDescription}</description>
     <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${new Date('2024-08-13').toUTCString()}</lastBuildDate>
     <atom:link href="${siteUrl}/api/rss" rel="self" type="application/rss+xml" />
     <image>
       <url>${siteUrl}/thumnail.jpg</url>
