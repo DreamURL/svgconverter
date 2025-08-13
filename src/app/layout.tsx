@@ -113,7 +113,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://svg-studio.com",
     types: {
-      'application/rss+xml': '/api/rss',
+      'application/rss+xml': '/rss.xml',
     },
   },
   metadataBase: new URL("https://svg-studio.com"),

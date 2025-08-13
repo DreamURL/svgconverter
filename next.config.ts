@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  assetPrefix: undefined,
   // sitemap과 RSS를 위한 설정
   experimental: {
     
