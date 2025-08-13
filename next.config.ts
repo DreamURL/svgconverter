@@ -8,10 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // CSS 최적화 설정
-  experimental: {
-    optimizeCss: true,
-  },
+  // CSS 최적화는 TailwindCSS + PostCSS + Autoprefixer로 처리됨
   // 정적 export에서 CSS 처리 개선
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
