@@ -8,9 +8,13 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // sitemap과 RSS를 위한 설정
+  // CSS 최적화 설정
   experimental: {
-    
+    optimizeCss: true,
+  },
+  // 정적 export에서 CSS 처리 개선
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
 };
 
