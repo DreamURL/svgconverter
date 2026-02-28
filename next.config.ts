@@ -2,8 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',
-  basePath: '/svgconverter',
-  assetPrefix: '/svgconverter/',
   trailingSlash: true,
   images: {
     unoptimized: true,
