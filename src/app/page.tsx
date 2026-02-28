@@ -86,23 +86,6 @@ export default function Home() {
     console.log('SVG Editor State changed:', svgEditorState);
   }, [svgEditorState]);
 
-  // AdSense 초기화
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const adsbygoogle = (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle || [];
-        (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle = adsbygoogle;
-        
-        // 광고가 로드된 후 초기화
-        setTimeout(() => {
-          adsbygoogle.push({});
-        }, 100);
-      } catch (error) {
-        console.error('AdSense error:', error);
-      }
-    }
-  }, []);
-
   // SVG 다운로드 함수
   const handleDownloadSVG = () => {
     if (!svgContent || !svgEditorState.parsedSVG) return;
@@ -213,24 +196,6 @@ ${paths}
                   <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     ⭐ Takes less than 30 seconds
                   </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Google AdSense Section - Responsive placement */}
-            <div className="mt-16">
-              <div className={`p-3 sm:p-4 md:p-6 rounded-lg border-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
-                <p className={`text-xs sm:text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2 text-center`}>
-                  Advertisement
-                </p>
-                <div className="w-full overflow-hidden">
-                  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9786013383976168" crossOrigin="anonymous"></script>
-                  <ins className="adsbygoogle"
-                       style={{display: 'block', width: '100%', minHeight: '100px'}}
-                       data-ad-client="ca-pub-9786013383976168"
-                       data-ad-slot="4523651989"
-                       data-ad-format="auto"
-                       data-full-width-responsive="true"></ins>
                 </div>
               </div>
             </div>

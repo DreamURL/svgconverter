@@ -51,10 +51,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free SVG Converter - Convert Images to SVG Online",
     description: "Convert any image to SVG format for free. Upload PNG, JPG, GIF files and get scalable vector graphics instantly.",
-    url: "https://svg-studio.com/free-svg-converter",
+    url: "https://dreamurl.github.io/svgconverter/free-svg-converter",
   },
   alternates: {
-    canonical: "https://svg-studio.com/free-svg-converter",
+    canonical: "https://dreamurl.github.io/svgconverter/free-svg-converter",
   },
 };
 

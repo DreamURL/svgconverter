@@ -74,10 +74,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "React SVG Components Generator - Convert Images to React",
     description: "Generate reusable React SVG components from images. TypeScript support, customizable props, and production-ready code.",
-    url: "https://svg-studio.com/react-svg-components",
+    url: "https://dreamurl.github.io/svgconverter/react-svg-components",
   },
   alternates: {
-    canonical: "https://svg-studio.com/react-svg-components",
+    canonical: "https://dreamurl.github.io/svgconverter/react-svg-components",
   },
 };
 

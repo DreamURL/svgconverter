@@ -5,7 +5,7 @@ Allow: /
 # Disallow: /api/
 # Disallow: /_next/
 
-Sitemap: https://svg-studio.com/sitemap.xml
+Sitemap: https://dreamurl.github.io/svgconverter/sitemap.xml
 
 # Optional: crawl delay (in seconds)
 Crawl-delay: 1

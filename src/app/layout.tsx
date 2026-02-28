@@ -90,7 +90,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://svg-studio.com",
+    url: "https://dreamurl.github.io/svgconverter",
     siteName: "SVG Studio",
     title: "SVG Studio - Convert Images to Interactive SVG Components",
     description: "Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Free online SVG converter and editor.",
@@ -111,12 +111,12 @@ export const metadata: Metadata = {
     creator: "@svgstudio",
   },
   alternates: {
-    canonical: "https://svg-studio.com",
+    canonical: "https://dreamurl.github.io/svgconverter",
     types: {
       'application/rss+xml': '/rss.xml',
     },
   },
-  metadataBase: new URL("https://svg-studio.com"),
+  metadataBase: new URL("https://dreamurl.github.io/svgconverter"),
   category: "Web Development Tools",
 };
 
@@ -135,10 +135,6 @@ export default function RootLayout({
       <head>
         <JsonLd />
         <DefaultGoogleAnalytics />
-        {/* Google AdSense */}
-        <meta name="google-adsense-account" content="ca-pub-9786013383976168" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9786013383976168"
-          crossOrigin="anonymous"></script>
       </head>
       <body
         className={`${inter.variable} font-sans antialiased bg-black text-white`}

@@ -5,7 +5,7 @@ export function JsonLd() {
     name: 'SVG Studio',
     alternateName: 'SVG Converter',
     description: 'Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Free online SVG converter and editor for developers and designers.',
-    url: 'https://svg-studio.com',
+    url: 'https://dreamurl.github.io/svgconverter',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Web Browser',
     offers: {
@@ -17,7 +17,7 @@ export function JsonLd() {
     creator: {
       '@type': 'Organization',
       name: 'SVG Studio Team',
-      url: 'https://svg-studio.com'
+      url: 'https://dreamurl.github.io/svgconverter'
     },
     featureList: [
       'Image to SVG conversion',
@@ -29,7 +29,7 @@ export function JsonLd() {
       'CSS code generation',
       'Responsive design support'
     ],
-    screenshot: 'https://svg-studio.com/og-image.png',
+    screenshot: 'https://dreamurl.github.io/svgconverter/og-image.png',
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.8',

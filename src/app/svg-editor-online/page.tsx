@@ -62,10 +62,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Online SVG Editor - Edit & Customize SVG Files",
     description: "Professional online SVG editor with real-time preview. Edit colors, animations, size, and export as React components.",
-    url: "https://svg-studio.com/svg-editor-online",
+    url: "https://dreamurl.github.io/svgconverter/svg-editor-online",
   },
   alternates: {
-    canonical: "https://svg-studio.com/svg-editor-online",
+    canonical: "https://dreamurl.github.io/svgconverter/svg-editor-online",
   },
 };
 

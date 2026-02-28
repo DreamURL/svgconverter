@@ -33,8 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# cloudflare
+# deployment artifacts
 .wrangler/
+.vercel/
 
 # build output
 /out/
@@ -48,6 +49,7 @@ errorlog.md
 codebackup.md
 seo.md
 google.md
+errlog.md
 
 # github push
 github push_svgconverter.txt
@@ -57,3 +59,5 @@ github push_svgconverter.txt
 
 # reference
 /reference/
+
+headersnipet.txt

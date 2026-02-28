@@ -2,15 +2,15 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SVG Studio</title>
-    <link>https://svg-studio.com</link>
+    <link>https://dreamurl.github.io/svgconverter</link>
     <description>Professional SVG converter and editor tools for web developers and designers</description>
     <language>en-us</language>
     <lastBuildDate>Tue, 13 Aug 2024 00:00:00 GMT</lastBuildDate>
-    <atom:link href="https://svg-studio.com/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://dreamurl.github.io/svgconverter/rss.xml" rel="self" type="application/rss+xml" />
     <image>
-      <url>https://svg-studio.com/thumnail.jpg</url>
+      <url>https://dreamurl.github.io/svgconverter/thumnail.jpg</url>
       <title>SVG Studio</title>
-      <link>https://svg-studio.com</link>
+      <link>https://dreamurl.github.io/svgconverter</link>
       <width>1200</width>
       <height>630</height>
       <description>Professional SVG converter and editor tools for web developers and designers</description>
@@ -18,34 +18,34 @@
     
     <item>
       <title><![CDATA[SVG Studio - Convert Images to Interactive SVG Components]]></title>
-      <link>https://svg-studio.com</link>
+      <link>https://dreamurl.github.io/svgconverter</link>
       <description><![CDATA[Transform your images into customizable SVG components with real-time editing, animations, and exportable React code. Professional online SVG converter and editor for developers and designers.]]></description>
       <pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate>
-      <guid isPermaLink="true">https://svg-studio.com</guid>
+      <guid isPermaLink="true">https://dreamurl.github.io/svgconverter</guid>
     </item>
 
     <item>
       <title><![CDATA[Free SVG Converter - Convert PNG, JPG, GIF to SVG Files]]></title>
-      <link>https://svg-studio.com/free-svg-converter</link>
+      <link>https://dreamurl.github.io/svgconverter/free-svg-converter</link>
       <description><![CDATA[Convert any image to SVG format completely free. Upload PNG, JPG, JPEG, GIF files and get high-quality scalable vector graphics instantly. No registration, no watermarks, unlimited conversions.]]></description>
       <pubDate>Wed, 10 Jan 2024 00:00:00 GMT</pubDate>
-      <guid isPermaLink="true">https://svg-studio.com/free-svg-converter</guid>
+      <guid isPermaLink="true">https://dreamurl.github.io/svgconverter/free-svg-converter</guid>
     </item>
 
     <item>
       <title><![CDATA[React SVG Components Generator - TypeScript Support]]></title>
-      <link>https://svg-studio.com/react-svg-components</link>
+      <link>https://dreamurl.github.io/svgconverter/react-svg-components</link>
       <description><![CDATA[Generate production-ready React SVG components from images with TypeScript support, customizable props, and clean code output. Perfect for React developers, Next.js projects, and component libraries.]]></description>
       <pubDate>Fri, 05 Jan 2024 00:00:00 GMT</pubDate>
-      <guid isPermaLink="true">https://svg-studio.com/react-svg-components</guid>
+      <guid isPermaLink="true">https://dreamurl.github.io/svgconverter/react-svg-components</guid>
     </item>
 
     <item>
       <title><![CDATA[Professional Online SVG Editor - Advanced Features]]></title>
-      <link>https://svg-studio.com/svg-editor-online</link>
+      <link>https://dreamurl.github.io/svgconverter/svg-editor-online</link>
       <description><![CDATA[Advanced online SVG editor with real-time preview, color customization, animations, and React component export. Professional vector graphics editor for web developers and designers.]]></description>
       <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <guid isPermaLink="true">https://svg-studio.com/svg-editor-online</guid>
+      <guid isPermaLink="true">https://dreamurl.github.io/svgconverter/svg-editor-online</guid>
     </item>
   </channel>
 </rss>

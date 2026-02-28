@@ -5,7 +5,7 @@ export const dynamic = 'force-static';
 
 export async function GET() {
   const siteName = 'SVG Studio';
-  const siteUrl = 'https://svg-studio.com';
+  const siteUrl = 'https://dreamurl.github.io/svgconverter';
   const siteDescription = 'Professional SVG converter and editor tools for web developers and designers';
   
   const rssItems = [
