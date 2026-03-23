@@ -20,6 +20,7 @@ import {
   getPathRenderSettings 
 } from '@/utils/svgStateManager';
 import { AnimationConfig } from '@/types/svgTypes';
+import AdUnit from '@/components/AdUnit';
 
 export interface SVGConfig {
   // Color settings
@@ -80,6 +81,8 @@ export default function Home() {
   const [isExportTestModalOpen, setIsExportTestModalOpen] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
+  const [showInterstitialAd, setShowInterstitialAd] = useState(false);
+  const [canCloseAd, setCanCloseAd] = useState(false);
   
   // 디버깅을 위한 상태 모니터링
   useEffect(() => {
@@ -200,6 +203,11 @@ ${paths}
               </div>
             </div>
 
+            {/* Display Ad below upload area */}
+            <div className="mt-8 max-w-4xl mx-auto">
+              <AdUnit slot="8504504766" format="auto" style={{ display: 'block' }} />
+            </div>
+
             {/* Clear Site Identity Section */}
             <div className="mt-16">
               <div className={`rounded-lg p-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
@@ -275,6 +283,11 @@ ${paths}
                   </ul>
                 </div>
               </div>
+            </div>
+
+            {/* In-article Ad */}
+            <div className="mt-12 max-w-4xl mx-auto">
+              <AdUnit slot="9648263725" format="fluid" layout="in-article" style={{ display: 'block', textAlign: 'center' }} />
             </div>
 
             {/* Use Cases and Target Audience */}
@@ -656,7 +669,14 @@ ${paths}
 
       <CodeModal
         isOpen={isCodeModalOpen}
-        onClose={() => setIsCodeModalOpen(false)}
+        onClose={() => {
+          setIsCodeModalOpen(false);
+          if (svgContent) {
+            setShowInterstitialAd(true);
+            setCanCloseAd(false);
+            setTimeout(() => setCanCloseAd(true), 5000);
+          }
+        }}
         svgContent={svgContent}
         config={config}
         fileName={fileName}
@@ -675,6 +695,89 @@ ${paths}
         onClose={() => setIsHelpModalOpen(false)}
         isDarkMode={isDarkMode}
       />
+
+      {/* Bottom Anchor Ad */}
+      {!svgContent && (
+        <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          backgroundColor: isDarkMode ? '#111' : '#fff',
+          borderTop: `1px solid ${isDarkMode ? '#333' : '#ddd'}`,
+          padding: '4px 0',
+        }}>
+          <div style={{ maxWidth: '728px', margin: '0 auto' }}>
+            <AdUnit slot="8504504766" format="horizontal" style={{ display: 'inline-block', width: '100%', height: '90px' }} />
+          </div>
+        </div>
+      )}
+
+      {/* Interstitial Ad Overlay */}
+      {showInterstitialAd && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 10000,
+        }}>
+          <div style={{
+            backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
+            padding: '2rem',
+            borderRadius: '12px',
+            maxWidth: '600px',
+            width: '90%',
+            textAlign: 'center',
+            position: 'relative',
+            border: `1px solid ${isDarkMode ? '#333' : '#ddd'}`,
+          }}>
+            {canCloseAd ? (
+              <button
+                onClick={() => setShowInterstitialAd(false)}
+                style={{
+                  position: 'absolute',
+                  top: '0.5rem',
+                  right: '0.75rem',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: isDarkMode ? '#fff' : '#333',
+                }}
+              >
+                X
+              </button>
+            ) : (
+              <div style={{
+                position: 'absolute',
+                top: '0.75rem',
+                right: '0.75rem',
+                fontSize: '0.8rem',
+                color: '#999',
+              }}>
+                Close available in a moment...
+              </div>
+            )}
+            <p style={{
+              fontWeight: 700,
+              fontSize: '1rem',
+              marginBottom: '1rem',
+              color: isDarkMode ? '#fff' : '#333',
+            }}>
+              Thank you for using SVG Studio!
+            </p>
+            <AdUnit slot="8504504766" format="auto" style={{ display: 'block', minHeight: '250px' }} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

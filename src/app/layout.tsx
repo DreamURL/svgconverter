@@ -135,6 +135,11 @@ export default function RootLayout({
       <head>
         <JsonLd />
         <DefaultGoogleAnalytics />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2030441326964978"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body
         className={`${inter.variable} font-sans antialiased bg-black text-white`}
