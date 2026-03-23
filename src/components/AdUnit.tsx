@@ -24,7 +24,7 @@ export default function AdUnit({ slot, format = 'auto', layout, style, className
       if (adRef.current && adRef.current.querySelector('.adsbygoogle')?.childElementCount === 0) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
       }
-    } catch (e) {
+    } catch {
       // AdSense not loaded
     }
   }, [])
